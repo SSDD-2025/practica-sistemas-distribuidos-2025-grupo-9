@@ -7,8 +7,8 @@
   * E-mail:
   * GitHub:
 * HUGO FERNANDEZ SISQUELLA
-  * E-mail: 
-  * GitHub:
+  * E-mail: h.fernandez.2024@alumnos.urjc.es
+  * GitHub: @huugoox
 * RODRIGO LÓPEZ BARCA 
   * E-mail: r.lopezb.2019@alumnos.urjc.es
   * GitHub: @rodriLB
