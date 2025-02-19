@@ -1,8 +1,8 @@
 # Club de Tenis
 ## Integrantes
 * RUBÉN BARGUEÑO PRIETO
-  * E-mail:
-  * GitHub:
+  * E-mail: r.bargueno.2020@alumnos.urjc.es
+  * GitHub: @RuBaPr
 * ARIEL CARNÉS BLASCO
   * E-mail:
   * GitHub:
