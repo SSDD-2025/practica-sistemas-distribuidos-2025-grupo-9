@@ -1,9 +1,8 @@
 package es.urjc.club_tenis.model;
 
 import jakarta.persistence.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class User {
@@ -18,6 +17,8 @@ public class User {
     public List<User> followedBy;
     @OneToMany
     public List<User> followedUsers;
+    @OneToMany
+    public List<Match> playedMatchs;
 
     public User(String username, String name, String password) {
         this.username = username;
@@ -83,5 +84,13 @@ public class User {
 
     public void setFollowing(List<User> following) {
         this.followedUsers = following;
+    }
+
+    public List<Match> getPlayedMatchs() {
+        return playedMatchs;
+    }
+
+    public void setPlayedMatchs(List<Match> playedMatchs) {
+        this.playedMatchs = playedMatchs;
     }
 }
