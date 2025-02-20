@@ -1,0 +1,40 @@
+{{>navbar}}
+<table class="table container text-center">
+    <thead>
+    <tr>
+        <th scope="col">Jugador 1</th>
+        <th scope="col">Resultado</th>
+        <th scope="col">Jugador 2</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Mark</td>
+        <td>6/1 6/4</td>
+        <td>Hugo</td>
+    </tr>
+
+    </tbody>
+</table>
+
+<div class="container text-center"> Mark Winner
+</div>
+
+{{#owner}}
+<div class="container text-center">
+    <button type="button" class="btn btn-primary">Modificar</button>
+    <button type="button" class="btn btn-danger">Eliminar</button>
+</div>
+{{/owner}}
+
+{{#admin}}
+<div class="container text-center">
+    <button type="button" class="btn btn-primary">Modificar</button>
+    <button type="button" class="btn btn-danger">Eliminar</button>
+</div>
+{{/admin}}
+
+
+
+
+

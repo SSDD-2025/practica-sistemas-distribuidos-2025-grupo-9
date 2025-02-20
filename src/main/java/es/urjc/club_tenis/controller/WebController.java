@@ -13,4 +13,11 @@ public class WebController {
     public String getProfilePage(Model model){
         return "profile";
     }
+
+    @GetMapping("/match")
+    public String getMatchPage(Model model){
+        model.addAttribute("owner", true);
+        return "match";
+    }
+
 }
