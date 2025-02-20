@@ -8,6 +8,7 @@ import java.util.*;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     public String username;
     public String name;
