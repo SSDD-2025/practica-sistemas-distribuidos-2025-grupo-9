@@ -1,0 +1,37 @@
+{{>navbar}}
+{{#user}}
+<div class="container text-center">
+    <div class="row">
+        <div class="col">
+            <img src="" alt="Foto de Perfil">
+            {{username}}
+        </div>
+        <div class="col col-lg-2">
+            <span>Seguidores:{{followingMe}}</span>
+        </div>
+        <div class="col col-lg-2">
+            <span>Siguiendo:{{followingOthers}}</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {{name}}
+        </div>
+        <div class="col">
+            <span>Estadísticas</span>
+
+        </div>
+        {{#matches}}
+        <div class="col">
+            <!-- Prueba de macros -->
+            {{>match}}
+        </div>
+        {{/matches}}
+        {{^mathces}}
+        <div class="col">
+            <span>Aún no ha jugado ningún partido</span>
+        </div>
+        {{/mathces}}
+    </div>
+</div>
+{{/user}}
