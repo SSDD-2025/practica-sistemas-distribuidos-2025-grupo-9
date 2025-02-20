@@ -3,12 +3,25 @@
     <div class="row">
         <div class="col">
             User details
+            {{#user}}
+            {{/user}}
+            {{#followed}}
+            {{/followed}}
+            {{#otherPlayers}}
+            {{/otherPlayers}}
         </div>
         <div class="col-6">
             Ultimos torneos
+            {{#tournaments}}
+            {{/tournaments}}
+            {{^tournaments}}
+            <h4>Aún no se ha jugado ningún torneo</h4>
+            {{/tournaments}}
         </div>
         <div class="col">
             Invitaciones a amistosos
+            {{#invites}}
+            {{/invites}}
         </div>
     </div>
 </div>
