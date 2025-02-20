@@ -1,5 +1,6 @@
 package es.urjc.club_tenis.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.*;
 
@@ -10,23 +11,28 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @Column(unique=true)
     public String username;
     public String name;
     public String password;
     public String statistics;
     @OneToMany
+    @JsonIgnore
     public List<User> followedBy;
     @OneToMany
+    @JsonIgnore
     public List<User> followedUsers;
     @OneToMany
-    public List<Match> playedMatchs;
+    public List<Match> playedMatches;
 
     public User(String username, String name, String password) {
         this.username = username;
         this.name = name;
         this.password = password;
+        this.statistics = "Aún no ha jugado ningún partido";
         this.followedBy = new ArrayList<User>();
         this.followedUsers = new ArrayList<User>();
+        this.playedMatches = new ArrayList<Match>();
     }
 
     public User() {}
@@ -87,11 +93,11 @@ public class User {
         this.followedUsers = following;
     }
 
-    public List<Match> getPlayedMatchs() {
-        return playedMatchs;
+    public List<Match> getPlayedMatches() {
+        return playedMatches;
     }
 
-    public void setPlayedMatchs(List<Match> playedMatchs) {
-        this.playedMatchs = playedMatchs;
+    public void setPlayedMatches(List<Match> playedMatches) {
+        this.playedMatches = playedMatches;
     }
 }
