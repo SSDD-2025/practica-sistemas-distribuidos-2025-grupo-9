@@ -4,6 +4,7 @@ import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -18,5 +19,9 @@ public class UserService {
 
     public User findByUsername(String username){
         return repo.findByUsername(username);
+    }
+
+    public List <User> findAll(){
+        return repo.findAll();
     }
 }

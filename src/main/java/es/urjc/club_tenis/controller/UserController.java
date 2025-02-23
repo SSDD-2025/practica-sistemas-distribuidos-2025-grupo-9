@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.*;
 
 @Controller
 public class UserController {
@@ -27,6 +28,7 @@ public class UserController {
 
         model.addAttribute("user", newUser.getId());
 
-        return "redirect:/users/" + newUser.getId();
+        return "redirect:/profile/" + newUser.getUsername();
     }
+
 }
