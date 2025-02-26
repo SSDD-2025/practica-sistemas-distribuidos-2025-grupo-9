@@ -14,6 +14,15 @@ public class UserController {
     @Autowired
     private UserService service;
 
+    @GetMapping("/profile/{username}")
+    public String getProfilePage(Model model, @PathVariable String username){
+        User user = service.findByUsername(username);
+        model.addAttribute("user", user);
+        model.addAttribute("followingOthers", user.followedUsers.size());
+        model.addAttribute("followingMe", user.followedBy.size());
+        return "profile";
+    }
+
     @GetMapping("/users/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());

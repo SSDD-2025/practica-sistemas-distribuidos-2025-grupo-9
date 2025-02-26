@@ -17,15 +17,6 @@ public class WebController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/profile/{username}")
-    public String getProfilePage(Model model, @PathVariable String username){
-        User user = userService.findByUsername(username);
-        model.addAttribute("user", user);
-        model.addAttribute("followingOthers", user.followedUsers.size());
-        model.addAttribute("followingMe", user.followedBy.size());
-        return "profile";
-    }
-
     @GetMapping("/match")
     public String getMatchPage(Model model){
         model.addAttribute("owner", true);
