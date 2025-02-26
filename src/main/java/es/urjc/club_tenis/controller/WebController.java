@@ -30,5 +30,20 @@ public class WebController {
         return "index";  // O el nombre de tu plantilla principal
     }
 
+    @GetMapping("/tournaments")
+    public String getTournament(Model model) {
+        return "tournaments";
+    }
+
+    @GetMapping("/courts")
+    public String getCourts(Model model) {
+        return "courts";
+    }
+
+    @GetMapping("/matches")
+    public String getMatches(Model model) {
+        return "matches";
+    }
+
     //para resesrvar pista se puede hacer con un mapa con el tiempo como clave y con un usuario como booleano para reserva
 }
