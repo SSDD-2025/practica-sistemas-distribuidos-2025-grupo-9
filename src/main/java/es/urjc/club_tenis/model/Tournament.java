@@ -18,6 +18,9 @@ public class Tournament {
     @OneToMany
     private List <Match> matches;
 
+    @OneToMany
+    private List<User> participants;
+
     @ManyToOne
     private User winner;
 
