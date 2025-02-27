@@ -1,6 +1,7 @@
 package es.urjc.club_tenis.controller;
 
 import es.urjc.club_tenis.model.*;
+import es.urjc.club_tenis.service.TournamentService;
 import es.urjc.club_tenis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,8 @@ public class WebController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private TournamentService tournamentService;
 
     @GetMapping("/match")
     public String getMatchPage(Model model){
@@ -25,13 +28,17 @@ public class WebController {
 
     @GetMapping("/")
     public String homePage(Model model) {
-        List<User> users = userService.findAll();  // Obtén todos los usuarios
-        model.addAttribute("users", users);    // Pasa la lista de usuarios al modelo
-        return "index";  // O el nombre de tu plantilla principal
+        List<User> users = userService.findAll();
+        model.addAttribute("users", users);
+        List<Tournament> tournaments = tournamentService.findAll();
+        model.addAttribute("tournaments", tournaments);
+        return "index";
     }
 
     @GetMapping("/tournaments")
-    public String getTournament(Model model) {
+    public String getTournaments(Model model) {
+        List<Tournament> tournaments = tournamentService.findAll();
+        model.addAttribute("tournaments", tournaments);
         return "tournaments";
     }
 

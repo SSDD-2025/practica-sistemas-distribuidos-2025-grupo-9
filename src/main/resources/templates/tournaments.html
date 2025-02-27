@@ -1,0 +1,41 @@
+{{>navbar}}
+
+<div class="container mt-4">
+
+    <a href="/tournament/new" class="btn btn-primary">Crear Torneo</a>
+    <!--{{#user.admin}}-->
+
+    <!--{{/user.admin}}-->
+
+    <h2 class="mb-4">Lista de Torneos</h2>
+
+    {{#tournaments}}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#tournaments}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{initDate}}</td>
+            <td>{{endDate}}</td>
+            <td>
+                <a href="/tournament/{{id}}" class="btn btn-info">Ver Detalles</a>
+            </td>
+        </tr>
+        {{/tournaments}}
+        </tbody>
+    </table>
+    {{/tournaments}}
+
+    {{^tournaments}}
+    <p>No hay torneos disponibles en este momento.</p>
+    {{/tournaments}}
+</div>
+

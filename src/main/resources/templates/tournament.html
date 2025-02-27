@@ -1,0 +1,59 @@
+{{>navbar}}
+
+{{#id}}
+
+<div class="container text-center">
+    <div class="row">
+
+        <h2>{{name}}</h2>
+
+        <div class="col col-lg-2">
+            <span>{{initDate}} - {{endDate}}</span>
+        </div>
+
+    </div>
+    <div class="row">
+
+        <div class="col">
+            <span>Clasificación</span>
+
+        </div>
+        {{#participants}}
+        <div class="col">
+            <span>User: </span> {{username}}
+            <!-- Añadir clasificacion-->
+        </div>
+        {{/participants}}
+        {{^participants}}
+        <div class="col">
+            <span>Aún no hay jugadores </span>
+        </div>
+        {{/participants}}
+
+
+        <div class="col">
+            <span>Partidos</span>
+
+        </div>
+        {{#matches}}
+        <div class="col">
+            <span>Fecha: </span> {{date}}
+            <span>Local: </span> {{local.username}}
+            <span>Visitante: </span> {{visitor.username}}
+            <span>Pista: </span> {{court.id}}
+            <span>Resultado: </span> {{result}}
+            <span>Ganador: </span> {{winner.username}}
+
+        </div>
+        {{/matches}}
+        {{^matches}}
+        <div class="col">
+            <span>Aún no hay partidos </span>
+        </div>
+        {{/matches}}
+    </div>
+</div>
+
+{{/id}}
+
+{{}}

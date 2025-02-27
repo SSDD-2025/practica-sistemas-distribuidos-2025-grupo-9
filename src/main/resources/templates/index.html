@@ -2,10 +2,10 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            User details
+            <h4>Usuarios</h4>
             {{#users}}
                 <p><strong>Username:</strong> {{username}}</p>
-                <a href="/profile/{{username}}" class="btn btn-primary">View Profile</a>
+                <a href="/profile/{{username}}" class="btn btn-primary">Ver Perfil</a>
             {{/users}}
             {{^users}}
             <p>No users found.</p>
@@ -16,15 +16,22 @@
             {{/otherPlayers}}
         </div>
         <div class="col-6">
-            Ultimos torneos
+            <h4>Ultimos torneos</h4>
             {{#tournaments}}
+                <span>Nombre: </span> {{name}}
+                <span>Fecha inicio: </span> {{initDate}}
+                <span>Fecha fin: </span> {{endDate}}
+                <span>Límite de inscripción: </span> {{limitDate}}
+                <span>Precio: </span> {{price}}€
+                <span>Teléfono de inscripción: </span> 123456789
+                <a href="/tournament/{{id}}" class="btn btn-primary">Ver torneo</a>
             {{/tournaments}}
             {{^tournaments}}
-            <h4>Aún no se ha jugado ningún torneo</h4>
+            Aún no se ha jugado ningún torneo
             {{/tournaments}}
         </div>
         <div class="col">
-            Invitaciones a amistosos
+            <h4>Invitaciones a amistosos</h4>
             {{#invites}}
             {{/invites}}
         </div>
