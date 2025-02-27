@@ -1,59 +1,58 @@
 {{>navbar}}
 
-{{#id}}
+{{#tournament}}
+<body>
 
+</body>
 <div class="container text-center">
     <div class="row">
 
         <h2>{{name}}</h2>
 
-        <div class="col col-lg-2">
-            <span>{{initDate}} - {{endDate}}</span>
-        </div>
-
-    </div>
-    <div class="row">
-
-        <div class="col">
-            <span>Clasificación</span>
-
-        </div>
-        {{#participants}}
-        <div class="col">
-            <span>User: </span> {{username}}
-            <!-- Añadir clasificacion-->
-        </div>
-        {{/participants}}
-        {{^participants}}
-        <div class="col">
-            <span>Aún no hay jugadores </span>
-        </div>
-        {{/participants}}
-
-
-        <div class="col">
-            <span>Partidos</span>
+        <div class="row">
+            <div class="col">
+                <h4>Fechas</h4>
+                <p>Inicio: {{initDate}}</p>
+                <p>Fin: {{endDate}}</p>
+            </div>
+            <div class="col">
+                <h4>Precio</h4>
+                <p>${{price}}</p>
+            </div>
 
         </div>
-        {{#matches}}
-        <div class="col">
-            <span>Fecha: </span> {{date}}
-            <span>Local: </span> {{local.username}}
-            <span>Visitante: </span> {{visitor.username}}
-            <span>Pista: </span> {{court.id}}
-            <span>Resultado: </span> {{result}}
-            <span>Ganador: </span> {{winner.username}}
+        <div class="row">
+
+            <div class="col">
+                <h4>Clasificación</h4>
+                {{#participants}}
+                    <p>{{username}}</p>
+                {{/participants}}
+                {{^participants}}
+                    <p>No hay jugadores inscritos aún.</p>
+                {{/participants}}
+            </div>
+
+
+            <div class="col">
+                <h4>Partidos</h4>
+                {{#matches}}
+                <p>
+                    <strong>Fecha:</strong> {{date}} <br>
+                    <strong>Local:</strong> {{local.username}} <br>
+                    <strong>Visitante:</strong> {{visitor.username}} <br>
+                    <strong>Pista:</strong> {{court.id}} <br>
+                    <strong>Resultado:</strong> {{result}} <br>
+                    <strong>Ganador:</strong> {{winner.username}}
+                </p>
+                {{/matches}}
+                {{^matches}}
+                <p>No hay partidos.</p>
+                {{/matches}}
+            </div>
 
         </div>
-        {{/matches}}
-        {{^matches}}
-        <div class="col">
-            <span>Aún no hay partidos </span>
-        </div>
-        {{/matches}}
     </div>
 </div>
 
-{{/id}}
-
-{{}}
+{{/tournament}}

@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping("/tournament")
@@ -21,10 +22,17 @@ public class TournamentController {
 
     @GetMapping("/{id}")
     public String getTournament(Model model, @PathVariable long id) {
+
         Tournament tournament = tournamentService.findById(id);
+
+        if (tournament == null) {
+            return "redirect:/tournaments";
+        }
+
         model.addAttribute("tournament", tournament);
-        model.addAttribute("participants", tournament.getParticipants().size());
-        model.addAttribute("matches", tournament.getMatches().size());
+        model.addAttribute("participants", tournament.getParticipants());
+        model.addAttribute("matches", tournament.getMatches());
+
         return "tournament";
     }
 
