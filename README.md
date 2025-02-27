@@ -4,8 +4,8 @@
   * E-mail: r.bargueno.2020@alumnos.urjc.es
   * GitHub: @RuBaPr
 * ARIEL CARNÉS BLASCO
-  * E-mail:
-  * GitHub:
+  * E-mail: a.carnes.2021@alumnos.urjc.es
+  * GitHub: @ArielCB
 * HUGO FERNANDEZ SISQUELLA
   * E-mail: h.fernandez.2024@alumnos.urjc.es
   * GitHub: @huugoox
