@@ -1,0 +1,20 @@
+{{>navbar}}
+
+<body>
+<h1>Nuevo Torneo</h1>
+<form action="/tournament/new" method="post">
+  <label>Nombre:</label>
+  <input type="text" name="name" required><br>
+
+  <label>Fecha inicio:</label>
+  <input type="date" name="initDate" min=""><br>
+
+  <label>Fecha fin:</label>
+  <input type="date" name="endDate" required><br>
+
+  <label>Precio:</label>
+  <input type="number" name="price" required><br>
+
+  <button type="submit">Crear torneo</button>
+</form>
+</body>

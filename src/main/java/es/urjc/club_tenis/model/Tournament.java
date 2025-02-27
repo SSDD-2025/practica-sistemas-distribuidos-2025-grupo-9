@@ -13,9 +13,9 @@ public class Tournament {
     private long id;
 
     private String name;
-    private LocalDateTime initDate;
-    private LocalDateTime endDate;
-    private LocalDateTime limitDate;
+    private LocalDate initDate;
+    private LocalDate endDate;
+    private LocalDate limitDate;
     private int price;
 
     @OneToMany
@@ -27,7 +27,7 @@ public class Tournament {
     @ManyToOne
     private User winner;
 
-    public Tournament(String name, LocalDateTime initDate, LocalDateTime endDate, int price) {
+    public Tournament(String name, LocalDate initDate, LocalDate endDate, int price) {
 
         this.name = name;
         this.initDate = initDate;
@@ -49,19 +49,19 @@ public class Tournament {
         this.id = id;
     }
 
-    public LocalDateTime getInitDate() {
+    public LocalDate getInitDate() {
         return initDate;
     }
 
-    public void setInitDate(LocalDateTime initDate) {
+    public void setInitDate(LocalDate initDate) {
         this.initDate = initDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
@@ -79,5 +79,37 @@ public class Tournament {
 
     public void setWinner(User winner) {
         this.winner = winner;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDate getLimitDate() {
+        return limitDate;
+    }
+
+    public void setLimitDate(LocalDate limitDate) {
+        this.limitDate = limitDate;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public List<User> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(List<User> participants) {
+        this.participants = participants;
     }
 }

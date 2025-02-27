@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TournamentRespository extends JpaRepository<Tournament, Long>  {
 
+    Tournament findById(long id);
 }
