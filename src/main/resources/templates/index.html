@@ -18,12 +18,12 @@
         <div class="col-6">
             <h4>Ultimos torneos</h4>
             {{#tournaments}}
-                <span>Nombre: </span> {{name}}
-                <span>Fecha inicio: </span> {{initDate}}
-                <span>Fecha fin: </span> {{endDate}}
-                <span>Límite de inscripción: </span> {{limitDate}}
-                <span>Precio: </span> {{price}}€
-                <span>Teléfono de inscripción: </span> 123456789
+                <h4>Nombre: </h4> {{name}}
+                <h6>Fecha inicio: </h6> {{initDate}}
+                <h6>Fecha fin: </h6> {{endDate}}
+                <h6>Límite de inscripción: </h6> {{limitDate}}
+                <h6>Precio: </h6> {{price}}
+                <h6>Teléfono de inscripción: </h6> 123456789
                 <a href="/tournament/{{id}}" class="btn btn-primary">Ver torneo</a>
             {{/tournaments}}
             {{^tournaments}}
