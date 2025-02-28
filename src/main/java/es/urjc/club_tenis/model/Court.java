@@ -9,34 +9,34 @@ import java.time.*;
 public class Court {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private long id;
 
-    @ElementCollection
-    private ArrayList<LocalDateTime> schedule = new ArrayList<>();
+    private String name;
+
+    private float price;
 
     private LocalTime start;
     private LocalTime end;
-
-    public void setLimits(LocalTime start , LocalTime end) {
-
-        if (start.isAfter(end) || end.isBefore(start)) {
-            //error
-        }
-        this.start = start;
-        this.end = end;
-    }
 
     public long getId() {
         return id;
     }
 
-    public ArrayList<LocalDateTime> getSchedule() {
-        return schedule;
+    public String getName() {
+        return name;
     }
 
-    public void setSchedule(ArrayList<LocalDateTime> schedule) {
-        this.schedule = schedule;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     public LocalTime getStart() {

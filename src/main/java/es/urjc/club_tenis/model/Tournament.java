@@ -1,5 +1,6 @@
 package es.urjc.club_tenis.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import java.util.*;
 import java.time.*;
@@ -9,37 +10,41 @@ import java.time.*;
 public class Tournament {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private long id;
 
     private String name;
     private LocalDate initDate;
     private LocalDate endDate;
-    private LocalDate limitDate;
     private int price;
 
-    @OneToMany
-    private List <Match> matches;
+    //Ordered by ranking
+    @ManyToMany
+    @JoinTable(
+            name = "tournament_participants",
+            joinColumns = @JoinColumn(name = "tournament_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    public List<User> participants;
 
-    @OneToMany
-    private List<User> participants;
-
-    @ManyToOne
-    private User winner;
+    @ManyToMany
+    @JoinTable(
+            name = "tournament_matches",
+            joinColumns = @JoinColumn(name = "tournament_id"),
+            inverseJoinColumns = @JoinColumn(name = "match_id")
+    )
+    public List<TennisMatch> matches;
 
     public Tournament(String name, LocalDate initDate, LocalDate endDate, int price) {
-
         this.name = name;
         this.initDate = initDate;
         this.endDate = endDate;
-        this.limitDate = initDate.minusDays(3);
         this.price = price;
-        this.matches = new ArrayList<Match>();
-        this.participants = new ArrayList<User>();
-        this.winner = null;
     }
 
-    public Tournament() {}
+    public Tournament() {
+
+    }
 
     public long getId() {
         return id;
@@ -47,6 +52,14 @@ public class Tournament {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public LocalDate getInitDate() {
@@ -65,38 +78,6 @@ public class Tournament {
         this.endDate = endDate;
     }
 
-    public List<Match> getMatches() {
-        return matches;
-    }
-
-    public void setMatches(List<Match> matches) {
-        this.matches = matches;
-    }
-
-    public User getWinner() {
-        return winner;
-    }
-
-    public void setWinner(User winner) {
-        this.winner = winner;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getLimitDate() {
-        return limitDate;
-    }
-
-    public void setLimitDate(LocalDate limitDate) {
-        this.limitDate = limitDate;
-    }
-
     public int getPrice() {
         return price;
     }
@@ -111,5 +92,13 @@ public class Tournament {
 
     public void setParticipants(List<User> participants) {
         this.participants = participants;
+    }
+
+    public List<TennisMatch> getMatches() {
+        return matches;
+    }
+
+    public void setMatches(List<TennisMatch> matches) {
+        this.matches = matches;
     }
 }

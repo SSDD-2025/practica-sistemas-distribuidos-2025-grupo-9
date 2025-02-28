@@ -9,33 +9,33 @@ import java.util.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private long id;
     @Column(unique=true)
     public String username;
     public String name;
     public String password;
     public String statistics;
-    @OneToMany
+
+    @OneToMany(mappedBy = "owner")
     @JsonIgnore
-    public List<User> followedBy;
-    @OneToMany
-    @JsonIgnore
-    public List<User> followedUsers;
-    @OneToMany
-    public List<Match> playedMatches;
+    public List<TennisMatch> playedTennisMatches;
+
+    @ManyToMany(mappedBy = "participants")
+    public List<Tournament> tournaments;
 
     public User(String username, String name, String password) {
         this.username = username;
         this.name = name;
         this.password = password;
-        this.statistics = "Aún no ha jugado ningún partido";
-        this.followedBy = new ArrayList<User>();
-        this.followedUsers = new ArrayList<User>();
-        this.playedMatches = new ArrayList<Match>();
+        this.statistics = "Aun no ha jugado ningun partido";
     }
 
-    public User() {}
+
+    public User() {
+
+    }
+
 
     public long getId() {
         return id;
@@ -77,27 +77,19 @@ public class User {
         this.statistics = statistics;
     }
 
-    public List<User> getFollowedBy() {
-        return followedBy;
+    public List<TennisMatch> getPlayedMatches() {
+        return playedTennisMatches;
     }
 
-    public void setFollowedBy(List<User> followedBy) {
-        this.followedBy = followedBy;
+    public void setPlayedMatches(List<TennisMatch> playedTennisMatches) {
+        this.playedTennisMatches = playedTennisMatches;
     }
 
-    public List<User> getFollowing() {
-        return followedUsers;
+    public List<Tournament> getTournaments() {
+        return tournaments;
     }
 
-    public void setFollowing(List<User> following) {
-        this.followedUsers = following;
-    }
-
-    public List<Match> getPlayedMatches() {
-        return playedMatches;
-    }
-
-    public void setPlayedMatches(List<Match> playedMatches) {
-        this.playedMatches = playedMatches;
+    public void setTournaments(List<Tournament> tournaments) {
+        this.tournaments = tournaments;
     }
 }
