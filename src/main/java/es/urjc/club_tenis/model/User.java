@@ -24,6 +24,8 @@ public class User {
     @ManyToMany(mappedBy = "participants")
     public List<Tournament> tournaments;
 
+    private boolean admin;
+
     public User(String username, String name, String password) {
         this.username = username;
         this.name = name;
@@ -91,5 +93,21 @@ public class User {
 
     public void setTournaments(List<Tournament> tournaments) {
         this.tournaments = tournaments;
+    }
+
+    public List<User> getFollowedUsers() {
+        return followedUsers;
+    }
+
+    public void setFollowedUsers(List<User> followedUsers) {
+        this.followedUsers = followedUsers;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }
