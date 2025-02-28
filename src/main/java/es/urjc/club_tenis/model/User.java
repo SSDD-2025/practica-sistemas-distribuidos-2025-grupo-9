@@ -25,6 +25,8 @@ public class User {
     @OneToMany
     public List<Match> playedMatches;
 
+    private boolean admin;
+
     public User(String username, String name, String password) {
         this.username = username;
         this.name = name;
@@ -99,5 +101,21 @@ public class User {
 
     public void setPlayedMatches(List<Match> playedMatches) {
         this.playedMatches = playedMatches;
+    }
+
+    public List<User> getFollowedUsers() {
+        return followedUsers;
+    }
+
+    public void setFollowedUsers(List<User> followedUsers) {
+        this.followedUsers = followedUsers;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }
