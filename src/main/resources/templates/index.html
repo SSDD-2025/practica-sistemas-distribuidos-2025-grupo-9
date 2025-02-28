@@ -7,17 +7,7 @@
         </div>
         <div class="col-12 col-sm-6 col-md-8 border">
             <h4>Ultimos torneos</h4>
-            {{#tournaments}}
-            <h4>Nombre: </h4> {{name}}
-            <h6>Fecha inicio: </h6> {{initDate}}
-            <h6>Fecha fin: </h6> {{endDate}}
-            <h6>Precio: </h6> {{price}}
-            <h6>Teléfono de inscripción: </h6> 123456789
-            <a href="/tournament/{{id}}" class="btn btn-primary">Ver torneo</a>
-            {{/tournaments}}
-            {{^tournaments}}
-            Aún no se ha jugado ningún torneo
-            {{/tournaments}}
+            {{>tournaments_macro}}
         </div>
     </div>
 </div>

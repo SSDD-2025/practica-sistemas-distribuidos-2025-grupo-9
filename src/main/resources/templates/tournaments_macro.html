@@ -1,0 +1,36 @@
+<div class="container mt-4">
+    <h2 class="mb-4">Lista de Torneos</h2>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Precio</th>
+            <th>Teléfono</th>
+            <th>Detalles</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {{#tournaments}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{initDate}}</td>
+            <td>{{endDate}}</td>
+            <td>{{price}}</td>
+            <td>123456789</td>
+
+            <td>
+                <a href="/tournament/{{id}}" class="btn btn-info">Ver Detalles</a>
+            </td>
+        </tr>
+        {{/tournaments}}
+        </tbody>
+    </table>
+
+    {{^tournaments}}
+    <h4>No hay torneos disponibles en este momento.</h4>
+    {{/tournaments}}
+</div>
