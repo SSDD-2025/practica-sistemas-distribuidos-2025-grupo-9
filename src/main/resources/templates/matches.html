@@ -1,0 +1,12 @@
+{{>navbar}}
+{{#matches}}
+<div class="card text-bg-light mb-3" style="max-width: 18rem;">
+    <div class="card-header"><span>@{{local.username}} vs @{{visitor.username}}</span></div>
+    <div class="card-body align-text-center text-center">
+        <span>{{result}}</span>
+    </div>
+</div>
+{{/matches}}
+{{^matches}}
+<h4>Aún no hay partidos</h4>
+{{/matches}}
