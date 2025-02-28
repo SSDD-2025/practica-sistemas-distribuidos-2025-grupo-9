@@ -1,0 +1,15 @@
+{{#matches}}
+<a href="/match/{{id}}" class="m-2 card text-bg-light mb-3" style="max-width: 18rem;">
+    <div class="p-2 row">
+        <div class="col text-start">@{{local.username}}</div>
+        <div class="col text-center">Vs.</div>
+        <div class="col text-end">@{{visitor.username}}</div>
+    </div>
+    <div class="card-body align-text-center text-center">
+        <span>{{result}}</span>
+    </div>
+</a>
+{{/matches}}
+{{^matches}}
+<h4>Aún no hay partidos</h4>
+{{/matches}}

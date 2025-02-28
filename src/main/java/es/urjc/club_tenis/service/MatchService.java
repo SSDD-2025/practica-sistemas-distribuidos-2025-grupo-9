@@ -17,4 +17,11 @@ public class MatchService {
         return repo.findAll();
     }
 
+    public TennisMatch save(TennisMatch match){
+        return repo.save(match);
+    }
+
+    public TennisMatch findById(long id) {
+        return repo.findById(id).orElse(null);
+    }
 }

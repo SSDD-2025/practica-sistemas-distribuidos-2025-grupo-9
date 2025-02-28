@@ -21,19 +21,20 @@ public class WebController {
     @Autowired
     private MatchService matchService;
 
-    @GetMapping("/matches")
-    public String getMatches(Model model){
-        model.addAttribute("matches", matchService.findAll());
-        return "matches";
-    }
-
     @GetMapping("/")
     public String homePage(Model model) {
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
         List<Tournament> tournaments = tournamentService.findAll();
         model.addAttribute("tournaments", tournaments);
+        model.addAttribute("matches", matchService.findAll());
         return "index";
+    }
+
+    @GetMapping("/matches")
+    public String getMatches(Model model){
+        model.addAttribute("matches", matchService.findAll());
+        return "matches";
     }
 
     @GetMapping("/tournaments")

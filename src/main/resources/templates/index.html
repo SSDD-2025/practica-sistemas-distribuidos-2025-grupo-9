@@ -1,39 +1,23 @@
 {{>navbar}}
 <div class="container">
-    <div class="row">
-        <div class="col">
-            <h4>Usuarios</h4>
-            {{#users}}
-                <p><strong>Username:</strong> {{username}}</p>
-                <a href="/profile/{{username}}" class="btn btn-primary">Ver Perfil</a>
-            {{/users}}
-            {{^users}}
-            <p>No users found.</p>
-            {{/users}}
-            {{#followed}}
-            {{/followed}}
-            {{#otherPlayers}}
-            {{/otherPlayers}}
+    <div class="row no-gutters border">
+        <div class="col-6 col-md-4">
+            <h4>Últimos Partidos</h4>
+            {{>matches_macro}}
         </div>
-        <div class="col-6">
+        <div class="col-12 col-sm-6 col-md-8 border">
             <h4>Ultimos torneos</h4>
             {{#tournaments}}
-                <h4>Nombre: </h4> {{name}}
-                <h6>Fecha inicio: </h6> {{initDate}}
-                <h6>Fecha fin: </h6> {{endDate}}
-                <h6>Límite de inscripción: </h6> {{limitDate}}
-                <h6>Precio: </h6> {{price}}
-                <h6>Teléfono de inscripción: </h6> 123456789
-                <a href="/tournament/{{id}}" class="btn btn-primary">Ver torneo</a>
+            <h4>Nombre: </h4> {{name}}
+            <h6>Fecha inicio: </h6> {{initDate}}
+            <h6>Fecha fin: </h6> {{endDate}}
+            <h6>Precio: </h6> {{price}}
+            <h6>Teléfono de inscripción: </h6> 123456789
+            <a href="/tournament/{{id}}" class="btn btn-primary">Ver torneo</a>
             {{/tournaments}}
             {{^tournaments}}
             Aún no se ha jugado ningún torneo
             {{/tournaments}}
-        </div>
-        <div class="col">
-            <h4>Invitaciones a amistosos</h4>
-            {{#invites}}
-            {{/invites}}
         </div>
     </div>
 </div>
