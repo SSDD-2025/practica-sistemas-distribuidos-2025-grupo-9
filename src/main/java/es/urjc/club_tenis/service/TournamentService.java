@@ -21,7 +21,9 @@ public class TournamentService {
         return repo.save(newTournament);
     }
 
-    public Tournament findById(long id) { return repo.findById(id); }
+    public Tournament findById(long id) {
+        return repo.findById(id).orElseThrow();
+    }
 
     public List<Tournament> findAll(){
         return repo.findAll();
