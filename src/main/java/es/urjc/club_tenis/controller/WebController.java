@@ -1,14 +1,13 @@
 package es.urjc.club_tenis.controller;
 
 import es.urjc.club_tenis.model.*;
+import es.urjc.club_tenis.service.MatchService;
 import es.urjc.club_tenis.service.TournamentService;
 import es.urjc.club_tenis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.service.annotation.GetExchange;
 
 import java.util.List;
 
@@ -19,11 +18,13 @@ public class WebController {
     private UserService userService;
     @Autowired
     private TournamentService tournamentService;
+    @Autowired
+    private MatchService matchService;
 
-    @GetMapping("/match")
-    public String getMatchPage(Model model){
-        model.addAttribute("owner", true);
-        return "match";
+    @GetMapping("/matches")
+    public String getMatches(Model model){
+        model.addAttribute("matches", matchService.findAll());
+        return "matches";
     }
 
     @GetMapping("/")
@@ -45,11 +46,6 @@ public class WebController {
     @GetMapping("/courts")
     public String getCourts(Model model) {
         return "courts";
-    }
-
-    @GetMapping("/matches")
-    public String getMatches(Model model) {
-        return "matches";
     }
 
     //para resesrvar pista se puede hacer con un mapa con el tiempo como clave y con un usuario como booleano para reserva
