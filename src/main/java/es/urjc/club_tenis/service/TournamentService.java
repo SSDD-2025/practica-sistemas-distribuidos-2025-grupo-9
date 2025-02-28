@@ -15,14 +15,12 @@ public class TournamentService {
     @Autowired
     private TournamentRespository repo;
 
-    public Tournament save(String name, LocalDate initDate, LocalDate endDate, int price) {
-
-        Tournament newTournament = new Tournament(name, initDate, endDate, price);
-        return repo.save(newTournament);
+    public Tournament save(Tournament tournament) {
+        return repo.save(tournament);
     }
 
     public Tournament findById(long id) {
-        return repo.findById(id).orElseThrow();
+        return repo.findById(id).orElse(null);
     }
 
     public List<Tournament> findAll(){

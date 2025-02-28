@@ -33,6 +33,14 @@ public class User {
         this.statistics = "Aun no ha jugado ningun partido";
     }
 
+    public User(String username, String name, String password, boolean admin) {
+        this.username = username;
+        this.name = name;
+        this.password = password;
+        this.statistics = "Aun no ha jugado ningun partido";
+        this.admin = true;
+    }
+
 
     public User() {
 
@@ -93,14 +101,6 @@ public class User {
 
     public void setTournaments(List<Tournament> tournaments) {
         this.tournaments = tournaments;
-    }
-
-    public List<User> getFollowedUsers() {
-        return followedUsers;
-    }
-
-    public void setFollowedUsers(List<User> followedUsers) {
-        this.followedUsers = followedUsers;
     }
 
     public boolean isAdmin() {

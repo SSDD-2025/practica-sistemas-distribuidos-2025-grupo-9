@@ -24,22 +24,38 @@ public class DatabasePopulator {
     @PostConstruct
     public void init(){
         // Create dummys for demo version
-        if(userService.findByUsername("admin") == null) {
-            userService.save("admin", "Admin", "admin");
+
+        //Users
+        List<User> users = userService.findAll();
+        User admin = userService.findByUsername("admin");
+        if(admin == null) {
+            admin = new User("admin", "Admin", "admin", true);
+            userService.save(admin);
             userService.findByUsername("admin").setAdmin(true);
         }
         for(int i = 0; i < 10; i++){
-            if(userService.findByUsername("user"+i) == null)
-                userService.save("user"+i, "Usuario " + i, "user"+i);
+            if(userService.findByUsername("user"+i) == null){
+                User newUser = new User("user"+i, "Usuario " + i, "user"+i);
+                users.add(userService.save(newUser));
+            }
         }
 
         for(int i = 0; i < 2; i++){
             if(tournamentService.findById(i+1) == null) {
-                tournamentService.save("Tournament " + i, LocalDate.parse("2025-12-"+(12+i)), LocalDate.parse("2025-12-" +(15+i)), i);
-
+                tournamentService.save(new Tournament("Tournament " + i, LocalDate.parse("2025-12-"+(12+i)), LocalDate.parse("2025-12-" +(15+i)), i));
             }
         }
 
+        //Matches
+        if(matchService.findAll().isEmpty()) {
+            for(int i = 0; i < 10; i++){
+                User local = users.get((int) (Math.random() * users.size()));
+                User visitor = users.get((int) (Math.random() * users.size()));
+                User winner = Math.random() > 0.5? local: visitor;
+                TennisMatch match = new TennisMatch(admin, local, visitor, winner, "3-6, 6-4, 7-5");
+                matchService.save(match);
+            }
+        }
     }
 
 }

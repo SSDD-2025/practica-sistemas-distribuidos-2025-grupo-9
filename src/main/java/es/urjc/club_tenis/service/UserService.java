@@ -12,8 +12,7 @@ public class UserService {
     @Autowired
     private UserRepository repo;
 
-    public User save(String username, String name, String password){
-        User user = new User(username, name, password);
+    public User save(User user){
         return repo.save(user);
     }
 

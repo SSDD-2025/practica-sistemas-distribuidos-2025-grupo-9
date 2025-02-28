@@ -36,6 +36,16 @@ public class TennisMatch {
 
     public TennisMatch(){}
 
+    public TennisMatch(User owner, User local, User visitor, User winner, String result){
+        this.owner = owner;
+        this.local = local;
+        this.visitor = visitor;
+        this.winner = winner;
+        this.result = result;
+        this.tournament = null;
+        this.court = null;
+    }
+
     public User getOwner() {
         return owner;
     }

@@ -32,7 +32,7 @@ public class UserController {
     @PostMapping("/users/register")
     public String registerUser(Model model, String username, String name, String password) {
 
-        User newUser = userService.save(username, name, password);
+        User newUser = userService.save(new User(username, name, password));
 
         model.addAttribute("user", newUser.getId());
 

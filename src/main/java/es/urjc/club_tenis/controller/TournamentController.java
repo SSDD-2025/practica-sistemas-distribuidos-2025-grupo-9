@@ -44,7 +44,7 @@ public class TournamentController {
         LocalDate newInitDate = LocalDate.parse(initDate);
         LocalDate newEndDate = LocalDate.parse(endDate);
 
-        Tournament newTournament = tournamentService.save(name, newInitDate, newEndDate, price);
+        Tournament newTournament = tournamentService.save(new Tournament(name, newInitDate, newEndDate, price));
 
         model.addAttribute("tournament", newTournament.getId());
 
