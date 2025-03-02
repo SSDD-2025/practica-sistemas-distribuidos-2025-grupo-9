@@ -23,4 +23,13 @@ public class UserService {
     public List <User> findAll(){
         return repo.findAll();
     }
+
+    public void addPlayedMatch(TennisMatch match){
+        User local = match.getLocal();
+        User visitor = match.getVisitor();
+        local.playedTennisMatches.add(match);
+        save(local);
+        visitor.playedTennisMatches.add(match);
+        save(visitor);
+    }
 }
