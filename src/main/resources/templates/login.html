@@ -1,15 +1,21 @@
 {{>navbar}}
+<main class="form-signin w-25 m-auto my-5">
+    <form action="/login" method="post">
+        <h1 class="h3 mb-3 fw-normal">Inicio de Sesión</h1>
 
-<body>
-    <h1>Login</h1>
-    <form action="/users/register" method="post">
-        <label>Username:</label>
-        <input type="text" name="username" placeholder="User" required><br>
 
-        <label>Password:</label>
-        <input type="password" name="password" placeholder="Password" required><br>
-    
-        <button type="submit">Login</button>
+        <div class="form-floating my-2">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+
+            <label for="username">Username</label>
+        </div>
+        <div class="form-floating my-2">
+            <input type="password" class="form-control  {{#invalid}}is-invalid{{/invalid}}" id="password" name="password" placeholder="Contraseña">
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Contraseña Incorrecta
+            </div>
+            <label for="password">Contraseña</label>
+        </div>
+        <button class="btn btn-primary w-100 py-2" type="submit">Entrar</button>
     </form>
-    </body>
-    
+</main>

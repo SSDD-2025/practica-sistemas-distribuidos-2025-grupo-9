@@ -5,12 +5,11 @@
         <div class="col">
             <img class="profile-picture" src="" alt="Foto de Perfil">
             @{{username}}
-        </div>
-        <div class="col col-lg-2">
-            <span>Seguidores:{{followingMe}}</span>
-        </div>
-        <div class="col col-lg-2">
-            <span>Siguiendo:{{followingOthers}}</span>
+            {{#showModify}}
+            <div class="container text-center">
+                <button type="button" class="btn btn-primary" onclick="window.location.href='/profile/{{username}}/modify'">Modificar</button>
+            </div>
+            {{/showModify}}
         </div>
     </div>
     <div class="row">
@@ -19,11 +18,10 @@
         </div>
         <div class="col">
             <span>Estadísticas</span>
-
+            {{statistics}}
         </div>
         {{#matches}}
         <div class="col">
-            <!-- Prueba de macros -->
             {{>match}}
         </div>
         {{/matches}}

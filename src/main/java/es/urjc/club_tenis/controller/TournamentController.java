@@ -2,6 +2,8 @@ package es.urjc.club_tenis.controller;
 
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.service.TournamentService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,25 +18,23 @@ public class TournamentController {
 
     Logger logger = Logger.getLogger("es.urjc.club_tenis.controller");
 
-    private final TournamentService tournamentService;
-
-    public TournamentController(TournamentService tournamentService) {
-        this.tournamentService = tournamentService;
-    }
+    @Autowired
+    private TournamentService tournamentService;
 
     @GetMapping("/{id}")
-    public String getTournament(Model model, @PathVariable long id) {
+    public String getTournament(Model model, @PathVariable long id, HttpSession session) {
         logger.info("Searching for tournament");
         Tournament tournament = tournamentService.findById(id);
 
         logger.info("Torneo: " + tournament);
         model.addAttribute("tournament", tournament);
-
+        model.addAttribute("user", session.getAttribute("user"));
         return "tournament";
     }
 
     @GetMapping("/new")
-    public String newTournament(Model model) {
+    public String newTournament(Model model, HttpSession session) {
+        model.addAttribute("user", session.getAttribute("user"));
         return "tournament_new";
     }
 

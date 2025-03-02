@@ -29,8 +29,14 @@
             </ul>
 
             <div class="text-end">
+                {{#user}}
+                <button type="button" class="btn btn-outline-light me-2" onclick="window.location.href='/profile/{{username}}'">@{{username}}</button>
+                <button type="button" class="btn btn-warning" onclick="window.location.href='/logout'">Salir</button>
+                {{/user}}
+                {{^user}}
                 <button type="button" class="btn btn-outline-light me-2" onclick="window.location.href='/login'">Entrar</button>
-                <button type="button" class="btn btn-warning" onclick="window.location.href='/users/register'">Registrarse</button>
+                <button type="button" class="btn btn-warning" onclick="window.location.href='/signin'">Registrarse</button>
+                {{/user}}
             </div>
         </div>
     </div>

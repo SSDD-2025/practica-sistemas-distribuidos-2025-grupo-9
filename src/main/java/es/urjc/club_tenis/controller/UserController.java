@@ -8,29 +8,52 @@ import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 @Controller
 public class UserController {
+
+    Logger logger = Logger.getLogger("es.urjc.club_tenis.controller");
 
     @Autowired
     private UserService userService;
 
     @GetMapping("/profile/{username}")
-    public String getProfilePage(Model model, @PathVariable String username){
+    public String getProfilePage(Model model, HttpSession session, @PathVariable String username){
         User user = userService.findByUsername(username);
         model.addAttribute("user", user);
+        User sessionUser = (User) session.getAttribute("user");
+        if(sessionUser == null){
+            return "profile";
+        } else if( sessionUser.equals(user) || sessionUser.isAdmin()){
+            model.addAttribute("showModify", true);
+        }
         return "profile";
     }
 
-    @GetMapping("/users/register")
+    @GetMapping("/profile/{username}/modify")
+    public String getModifyPage(Model model, HttpSession session, @PathVariable String username){
+        User user = userService.findByUsername(username);
+        model.addAttribute("user", user);
+        return "modify_profile";
+    }
+
+    @GetMapping("/signin")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new User());
         return "register";
     }
 
 
-    @PostMapping("/users/register")
+    @PostMapping("/signin")
     public String registerUser(Model model, String username, String name, String password) {
+        logger.info("Username: " + username);
+        logger.info("Name: " + name);
+        logger.info("Password: " + password);
+        if(userService.findByUsername(username) != null){
+            logger.info(userService.findByUsername(username).toString());
+            model.addAttribute("invalid",true);
+            return "register";
+        }
 
         User newUser = userService.save(new User(username, name, password));
 
@@ -51,11 +74,10 @@ public class UserController {
         User user = userService.findByUsername(username);
 
         if (user != null && user.getPassword().equals(password)) {
-
             session.setAttribute("user", user);
             return "redirect:/";
         } else {
-            model.addAttribute("error", "Invalid credentials");
+            model.addAttribute("invalid", true);
             return "login";
         }
     }

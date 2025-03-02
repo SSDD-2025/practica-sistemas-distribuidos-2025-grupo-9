@@ -4,6 +4,7 @@ import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.service.MatchService;
 import es.urjc.club_tenis.service.TournamentService;
 import es.urjc.club_tenis.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,32 +23,32 @@ public class WebController {
     private MatchService matchService;
 
     @GetMapping("/")
-    public String homePage(Model model) {
-        List<User> users = userService.findAll();
-        model.addAttribute("users", users);
+    public String homePage(Model model, HttpSession session) {
         List<Tournament> tournaments = tournamentService.findAll();
         model.addAttribute("tournaments", tournaments);
         model.addAttribute("matches", matchService.findAll());
+        model.addAttribute("user", session.getAttribute("user"));
         return "index";
     }
 
     @GetMapping("/matches")
-    public String getMatches(Model model){
+    public String getMatches(Model model, HttpSession session){
         model.addAttribute("matches", matchService.findAll());
+        model.addAttribute("user", session.getAttribute("user"));
         return "matches";
     }
 
     @GetMapping("/tournaments")
-    public String getTournaments(Model model) {
+    public String getTournaments(Model model, HttpSession session) {
         List<Tournament> tournaments = tournamentService.findAll();
         model.addAttribute("tournaments", tournaments);
+        model.addAttribute("user", session.getAttribute("user"));
         return "tournaments";
     }
 
     @GetMapping("/courts")
-    public String getCourts(Model model) {
+    public String getCourts(Model model, HttpSession session) {
+        model.addAttribute("user", session.getAttribute("user"));
         return "courts";
     }
-
-    //para resesrvar pista se puede hacer con un mapa con el tiempo como clave y con un usuario como booleano para reserva
 }

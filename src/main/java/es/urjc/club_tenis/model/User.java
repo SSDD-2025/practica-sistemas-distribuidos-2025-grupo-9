@@ -24,13 +24,14 @@ public class User {
     @ManyToMany(mappedBy = "participants")
     public List<Tournament> tournaments;
 
-    private boolean admin;
+    public boolean admin;
 
     public User(String username, String name, String password) {
         this.username = username;
         this.name = name;
         this.password = password;
         this.statistics = "Aun no ha jugado ningun partido";
+        this.admin = false;
     }
 
     public User(String username, String name, String password, boolean admin) {
@@ -109,5 +110,27 @@ public class User {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return id == user.id && Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", admin=" + admin +
+                '}';
     }
 }
