@@ -20,16 +20,9 @@
             <span>Estadísticas</span>
             {{statistics}}
         </div>
-        {{#matches}}
         <div class="col">
-            {{>match}}
+            {{>matches_macro}}
         </div>
-        {{/matches}}
-        {{^mathces}}
-        <div class="col">
-            <span>Aún no ha jugado ningún partido</span>
-        </div>
-        {{/mathces}}
     </div>
 </div>
 {{/user}}
