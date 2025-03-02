@@ -1,17 +1,17 @@
 {{>navbar}}
 
 <body>
-    <form>
+    <form action="/court/book" method="post">
         <h1 class="h1">Pista Abierta 1</h1>
-        <h1 class="h3">Precio: 10</h1>
+        <h1 class="h3 fw-normal">Precio: 10</h1><br><br>
 
-        <label for="chooseDate">Fecha</label>
-        <input type="date" id="bookingDate" required><br>
-        <label for="startTime">Inicio</label>
-        <input type="datetime-local" id="startTime" required><br>
-        <label for="endTime">Fin</label>
-        <input type="datetime-local" id="endTime" required><br>
+        <label for="chooseDate">Fecha</label><br>
+        <input type="date" name= "date" id="bookingDate" required><br>
+        <label for="startTime">Inicio</label><br>
+        <input type="time" name= "start" id="startTime" required><br>
+        <label for="endTime">Fin</label><br>
+        <input type="time" name= "end" id="endTime" required><br>
 
-        <button type="submit">Reservar</button>
+        <button type="submit" >Reservar</button>
     </form>
 </body>
