@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -46,13 +47,20 @@ public class DatabasePopulator {
             }
         }
 
+        //Courts
+        if(courtService.findAll().isEmpty()){
+            for(int i = 0; i < 2; i++){
+                courtService.save(new Court("Court"+i, (float) (Math.random()*10), LocalTime.of(11,00), LocalTime.of(20,00)));
+            }
+        }
+
         //Matches
         if(matchService.findAll().isEmpty()) {
             for(int i = 0; i < 10; i++){
                 User local = users.get((int) (Math.random() * users.size()));
                 User visitor = users.get((int) (Math.random() * users.size()));
                 User winner = Math.random() > 0.5? local: visitor;
-                TennisMatch match = new TennisMatch(admin, local, visitor, winner, "3-6, 6-4, 7-5");
+                TennisMatch match = new TennisMatch(admin, local, visitor, winner, "3-6, 6-4, 7-5", courtService.findAll().getFirst());
                 matchService.save(match);
             }
         }
