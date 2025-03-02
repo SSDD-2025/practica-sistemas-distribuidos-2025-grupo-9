@@ -36,14 +36,14 @@ public class TennisMatch {
 
     public TennisMatch(){}
 
-    public TennisMatch(User owner, User local, User visitor, User winner, String result){
+    public TennisMatch(User owner, User local, User visitor, User winner, String result, Court court){
         this.owner = owner;
         this.local = local;
         this.visitor = visitor;
         this.winner = winner;
         this.result = result;
         this.tournament = null;
-        this.court = null;
+        this.court = court;
     }
 
     public User getOwner() {

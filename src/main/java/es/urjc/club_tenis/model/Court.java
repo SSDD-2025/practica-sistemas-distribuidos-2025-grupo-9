@@ -19,6 +19,13 @@ public class Court {
     private LocalTime start;
     private LocalTime end;
 
+    public Court(String name, float price, LocalTime start, LocalTime end) {
+        this.name = name;
+        this.price = price;
+        this.start = start;
+        this.end = end;
+    }
+
     public long getId() {
         return id;
     }
