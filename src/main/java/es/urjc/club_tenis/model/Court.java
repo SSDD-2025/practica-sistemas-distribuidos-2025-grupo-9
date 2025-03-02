@@ -26,6 +26,10 @@ public class Court {
         this.end = end;
     }
 
+    public Court(){
+
+    }
+
     public long getId() {
         return id;
     }
