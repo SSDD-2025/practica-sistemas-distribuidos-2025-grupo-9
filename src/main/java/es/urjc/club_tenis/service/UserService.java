@@ -2,12 +2,17 @@ package es.urjc.club_tenis.service;
 
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.logging.Logger;
 
 @Service
 public class UserService {
+
+    Logger logger = Logger.getLogger("es.urjc.club_tenis.controller");
+
 
     @Autowired
     private UserRepository repo;
@@ -24,12 +29,17 @@ public class UserService {
         return repo.findAll();
     }
 
-    public void addPlayedMatch(TennisMatch match){
-        User local = match.getLocal();
-        User visitor = match.getVisitor();
-        local.playedTennisMatches.add(match);
-        save(local);
-        visitor.playedTennisMatches.add(match);
-        save(visitor);
+    @Transactional
+    public void addPlayedMatch(TennisMatch match, User user){
+        User savedUser = findByUsername(user.getUsername());
+        logger.info(savedUser.toString());
+        if(savedUser.equals(user)){
+            logger.info(savedUser.getPlayedMatches().toString());
+            if(savedUser.playedTennisMatches == null){
+                savedUser.playedTennisMatches = new ArrayList<>();
+            }
+            savedUser.playedTennisMatches.add(match);
+            save(savedUser);
+        }
     }
 }

@@ -22,6 +22,7 @@ public class UserController {
     public String getProfilePage(Model model, HttpSession session, @PathVariable String username){
         User user = userService.findByUsername(username);
         model.addAttribute("user", user);
+        model.addAttribute("matches", user.getPlayedMatches());
         User sessionUser = (User) session.getAttribute("user");
         if(sessionUser == null){
             return "profile";

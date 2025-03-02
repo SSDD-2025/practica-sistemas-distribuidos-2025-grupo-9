@@ -17,8 +17,12 @@ public class User {
     public String password;
     public String statistics;
 
-    @OneToMany(mappedBy = "owner")
-    @JsonIgnore
+    @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "user_match",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "match_id") }
+    )
     public List<TennisMatch> playedTennisMatches;
 
     @ManyToMany(mappedBy = "participants")
