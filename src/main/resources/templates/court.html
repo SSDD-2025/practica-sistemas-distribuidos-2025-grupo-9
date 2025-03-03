@@ -1,19 +1,22 @@
 {{>navbar}}
-
-<body>
+<main class="w-25 m-auto my-5">
     {{#court}}
-    <form action="/court/book" method="post">
-        <h1 class="h1">{{name}}</h1>
-        <h1 class="h3 fw-normal">Precio: {{price}}</h1><br><br>
+    <form action="/court/{{id}}/book" method="post">
+        <h1 class="h3 mb-3 fw-normal">{{name}}</h1>
+        <h2 class="h4 mb-3 fw-normal">{{price}}</h2>
 
-        <label for="chooseDate">Fecha</label><br>
-        <input type="date" name= "date" id="bookingDate" required><br>
-        <label for="startTime">Inicio</label><br>
-        <input type="time" name= "start" id="startTime" required><br>
-        <label for="endTime">Fin</label><br>
-        <input type="time" name= "end" id="endTime" required><br>
-
-        <button type="submit" >Reservar</button>
+        <div class="form-floating my-2">
+            <input type="date" class="form-control" id="bookingDate" name="date" placeholder="Fecha">
+            <label for="bookingDate">Fecha</label>
+        </div>
+        <div class="form-floating my-2">
+            <input type="time" class="form-control {{#invalidStart}}is-invalid{{/invalidStart}}" id="startTime" name="start" min="{{start}}" max="{{end}}" step="3600" required placeholder="Hora de Inicio">
+            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                Fuera de horario.
+            </div>
+            <label for="startTime">Hora de Inicio</label>
+        </div>
+        <button class="btn btn-primary w-100 py-2" type="submit">Reservar</button>
     </form>
     {{/court}}
-</body>
+</main>

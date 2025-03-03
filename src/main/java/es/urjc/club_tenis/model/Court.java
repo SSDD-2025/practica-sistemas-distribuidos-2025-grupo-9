@@ -13,12 +13,7 @@ public class Court {
     private long id;
 
     @ManyToMany
-    @JoinTable(
-            name = "court_matches",
-            joinColumns = @JoinColumn(name = "court_id"),
-            inverseJoinColumns = @JoinColumn(name = "match_id")
-    )
-    public List<TennisMatch> matches;
+    public Map<LocalDateTime,User> reservations;
 
     private String name;
 
@@ -72,5 +67,13 @@ public class Court {
 
     public void setEnd(LocalTime end) {
         this.end = end;
+    }
+
+    public void addReservation(User currentUser, LocalDate newDate, LocalTime newStart) {
+        this.reservations.put(LocalDateTime.of(newDate, newStart), currentUser);
+    }
+
+    public Map<LocalDateTime, User> getReservations() {
+        return reservations;
     }
 }
