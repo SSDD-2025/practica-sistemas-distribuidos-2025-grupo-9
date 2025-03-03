@@ -97,9 +97,8 @@ public class MatchController {
             model.addAttribute("courts", courtService.findAll());
             return "match_form";
         }else {
-            TennisMatch match = new TennisMatch(local, visitor, courtObj, winner, result);
-            TennisMatch savedMatch = matchService.save(match);
-            return "redirect:/match/" + savedMatch.getId();
+            TennisMatch newMatch = matchService.createMatch(local, visitor, courtObj, winner, result);
+            return "redirect:/match/" + newMatch.getId();
         }
     }
 

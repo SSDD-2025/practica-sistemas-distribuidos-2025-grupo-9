@@ -1,5 +1,6 @@
 package es.urjc.club_tenis.service;
 
+import es.urjc.club_tenis.model.Court;
 import es.urjc.club_tenis.model.TennisMatch;
 import es.urjc.club_tenis.model.User;
 import es.urjc.club_tenis.repositories.MatchRepository;
@@ -64,5 +65,10 @@ public class MatchService {
         userService.save(localUser);
         userService.save(visitorUser);
         repo.delete(match);
+    }
+
+    public TennisMatch createMatch(User local, User visitor, Court courtObj, User winner, String result) {
+        TennisMatch newMatch = new TennisMatch(local, visitor, courtObj, winner, result);
+        return repo.save(newMatch);
     }
 }
