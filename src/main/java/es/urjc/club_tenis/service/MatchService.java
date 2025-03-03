@@ -73,6 +73,11 @@ public class MatchService {
         return repo.save(newMatch);
     }
 
+    public TennisMatch createMatch(User owner, User local, User visitor, Court courtObj, User winner, String result) {
+        TennisMatch newMatch = new TennisMatch(owner, local, visitor,  winner, result, courtObj);
+        return repo.save(newMatch);
+    }
+
     public TennisMatch modify(TennisMatch oldMatch, User local, User visitor, Court court, User winner, String result) throws ChangeSetPersister.NotFoundException {
         TennisMatch match = findById(oldMatch.getId());
         if(match == null){

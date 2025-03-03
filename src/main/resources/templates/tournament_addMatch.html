@@ -1,0 +1,52 @@
+{{>navbar}}
+
+<main class="w-25 m-auto my-5">
+  <form action="/{{id}}/{{action}}" method="post">
+    <h1 class="h3 mb-3 fw-normal">{{actionName}} Partido</h1>
+
+    {{#tournament}}
+    <h2 class="h4 mb-4 fw-normal" id="tournament_id">Id: {{id}}</h2>
+    <h2 class="h4 mb-4 fw-normal"> {{name}}</h2>
+    {{/tournament}}
+
+    <div class="form-floating my-2">
+      <input type="text" required class="form-control {{#invalidLocalUsername}}is-invalid{{/invalidLocalUsername}}" id="localUsername" name="localUsername" placeholder="Username Local" {{#match}}value="{{local.username}}"{{/match}}>
+      <div class="invalid-feedback">
+        Este username no pertenece a ningún Usuario.
+      </div>
+      <label for="localUsername">Username Local</label>
+    </div>
+    <div class="form-floating my-2">
+      <input type="text" required class="form-control  {{#invalidVisitorUsername}}is-invalid{{/invalidVisitorUsername}}" id="visitorUsername" name="visitorUsername" placeholder="Username Visitante" {{#match}}value="{{visitor.username}}"{{/match}}>
+      <div class="invalid-feedback">
+        Este username no pertenece a ningún Usuario.
+      </div>
+      <label for="visitorUsername">Username Visitante</label>
+    </div>
+    <div class="form-floating my-2">
+      <select id="court" name="court" required class="form-select" {{#match}}value="{{court.id}}"{{/match}}>
+      {{#courts}}
+      <option value="{{id}}">{{name}}</option>
+      {{/courts}}
+      </select><br>
+      <label for="court">Pista</label>
+    </div>
+    <div class="form-floating my-2">
+      <input type="text" class="form-control  {{#invalidWinnerUsername}}is-invalid{{/invalidWinnerUsername}}" id="winnerUsername" name="winnerUsername" placeholder="Username Ganador" {{#match}}value="{{winner.username}}"{{/match}}>
+      <div class="invalid-feedback">
+        Este username no pertenece a ningún Usuario.
+      </div>
+      <label for="visitorUsername">Username Ganador</label>
+    </div>
+    <div class="form-floating my-2">
+      <input type="text" class="form-control" id="result" name="result" placeholder="Resultado" {{#match}}value="{{result}}"{{/match}}>
+      <label for="result">Resultado</label>
+    </div>
+    <button class="btn btn-primary w-100 py-2" type="submit">Enviar</button>
+  </form>
+</main>
+
+<script>
+  // Verifica la URL generada para el formulario
+  console.log("URL generada para el formulario:", document.querySelector("form").action);
+</script>

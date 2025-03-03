@@ -46,6 +46,18 @@ public class Tournament {
 
     }
 
+    public void addMatch(TennisMatch match) {
+        if(!matches.contains(match)) {
+            matches.add(match);
+            if(!participants.contains(match.getLocal())) {
+                participants.add(match.getLocal());
+            }
+            if(!participants.contains(match.getVisitor())) {
+                participants.add(match.getVisitor());
+            }
+        }
+    }
+
     public long getId() {
         return id;
     }

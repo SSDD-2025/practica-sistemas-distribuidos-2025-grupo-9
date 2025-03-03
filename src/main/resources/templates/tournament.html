@@ -17,6 +17,7 @@
                 <p>${{price}}</p>
             </div>
 
+
         </div>
         <div class="row">
 
@@ -32,6 +33,9 @@
 
 
             <div class="col">
+                {{#showAdd}}
+                <a href="/tournament/{{id}}/addMatch" class="btn btn-primary">Añadir Partido</a>
+                {{/showAdd}}
                 <h4>Partidos</h4>
                 {{#matches}}
                 <p>
