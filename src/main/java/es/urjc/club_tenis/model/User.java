@@ -44,7 +44,7 @@ public class User {
         this.password = password;
         this.statistics = "Aun no ha jugado ningun partido";
         this.admin = false;
-        if(!profilePicture.isEmpty()) {
+        if(profilePicture!=null) {
             try {
                 this.profilePicture = (BlobProxy.generateProxy(profilePicture.getInputStream(),
                         profilePicture.getSize()));
