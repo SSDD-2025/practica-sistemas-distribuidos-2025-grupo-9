@@ -1,0 +1,8 @@
+{{>navbar}}
+<h1>Error</h1>
+{{#errorMessage}}
+<span>{{errorMessage}}</span>
+{{/errorMessage}}
+{{^errorMessage}}
+<span>Algo salió mal</span>
+{{/errorMessage}}

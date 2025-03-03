@@ -31,6 +31,11 @@ public class WebController {
         return "index";
     }
 
+    @GetMapping("/error")
+    public String errorPage(Model model, HttpSession session) {
+        return "error";
+    }
+
     @GetMapping("/matches")
     public String getMatches(Model model, HttpSession session){
         model.addAttribute("matches", matchService.findAll());
