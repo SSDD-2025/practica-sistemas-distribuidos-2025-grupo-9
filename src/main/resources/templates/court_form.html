@@ -1,0 +1,23 @@
+{{>navbar}}
+<main class="w-25 m-auto my-5">
+    <form action="/court/{{action}}" method="post">
+        <h1 class="h3 mb-3 fw-normal">{{actionName}} Pista</h1>
+        <div class="form-floating my-2">
+            <input required type="text" class="form-control" id="name" name="name" placeholder="Nombre" {{#court}}value="{{name}}"{{/court}}>
+            <label for="name">Nombre</label>
+        </div>
+        <div class="form-floating my-2">
+            <input required type="text" class="form-control" id="price" name="price" placeholder="Precio" {{#court}}value="{{price}}"{{/court}}>
+            <label for="price">Precio</label>
+        </div>
+        <div class="form-floating my-2">
+            <input type="time" class="form-control" id="startTime" name="start"  step="3600" required placeholder="Inicio de horario" {{#court}}value="{{start}}"{{/court}}>
+            <label for="startTime">Inicio de Horario</label>
+        </div>
+        <div class="form-floating my-2">
+            <input type="time" class="form-control" id="endTime" name="end"  step="3600" required placeholder="Fin de horario" {{#court}}value="{{end}}"{{/court}}>
+            <label for="endTime">Fin de Horario</label>
+        </div>
+        <button class="btn btn-primary w-100 py-2" type="submit">{{actionName}} Pista</button>
+    </form>
+</main>

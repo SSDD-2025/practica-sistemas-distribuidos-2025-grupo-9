@@ -53,9 +53,13 @@ public class WebController {
 
     @GetMapping("/courts")
     public String getCourts(Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
         List<Court> courts = courtService.findAll();
         model.addAttribute("courts",courts);
-        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", currentUser);
+        if(currentUser != null && currentUser.isAdmin()){
+            model.addAttribute("showModify", true);
+        }
         return "courts";
     }
 }
