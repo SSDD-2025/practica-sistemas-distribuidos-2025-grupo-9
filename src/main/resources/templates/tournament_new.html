@@ -1,20 +1,28 @@
 {{>navbar}}
 
-<body>
+<main class="form-signin w-25 m-auto my-5">
 <h1>Nuevo Torneo</h1>
 <form action="/tournament/new" method="post">
-  <label>Nombre:</label>
-  <input type="text" name="name" required><br>
+  <div class="form-floating my-2">
+    <input required type="text" class="form-control" id="name" name="name" placeholder="Nombre" {{#tournament}}value="{{name}}"{{/tournament}}>
+    <label for="name">Nombre</label>
+  </div>
 
-  <label>Fecha inicio:</label>
-  <input type="date" name="initDate" min=""><br>
+  <div class="form-floating my-2">
+    <input required type="date" class="form-control" id="initDate" name="initDate" placeholder="Fecha inicio" {{#tournament}}value="{{initDate}}"{{/tournament}}>
+    <label for="name">Fecha inicio</label>
+  </div>
 
-  <label>Fecha fin:</label>
-  <input type="date" name="endDate" required><br>
+  <div class="form-floating my-2">
+    <input required type="date" class="form-control" id="endDate" name="endDate" placeholder="Fecha fin" {{#tournament}}value="{{endDate}}"{{/tournament}}>
+    <label for="name">Fecha fin</label>
+  </div>
 
-  <label>Precio:</label>
-  <input type="number" name="price" required><br>
+  <div class="form-floating my-2">
+    <input required type="int" class="form-control" id="price" name="price" placeholder="Precio" {{#tournament}}value="{{price}}"{{/tournament}}>
+    <label for="name">Precio</label>
+  </div>
 
   <button type="submit">Crear torneo</button>
 </form>
-</body>
+</main>

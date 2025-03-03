@@ -1,7 +1,9 @@
 {{>navbar}}
 
-{{#admin}}
-<a href="/tournament/new" class="btn btn-primary">Crear Torneo</a>
-{{/admin}}
+{{#showNew}}
+<main class="form-signin w-25 m-auto my-5">
+    <a href="/tournament/new" class="btn btn-warning">Nuevo Torneo</a>
+</main>
+{{/showNew}}
 
 {{>tournaments_macro}}

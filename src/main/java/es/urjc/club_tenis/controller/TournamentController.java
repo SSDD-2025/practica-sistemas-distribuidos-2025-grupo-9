@@ -35,6 +35,16 @@ public class TournamentController {
     @GetMapping("/new")
     public String newTournament(Model model, HttpSession session) {
         model.addAttribute("user", session.getAttribute("user"));
+        User currentUser = (User) session.getAttribute("user");
+        if(currentUser == null){
+            model.addAttribute("errorMessage", "No se puede crear un torneo sin ser administrador");
+            return "error";
+        }
+        if(!currentUser.isAdmin()){
+            model.addAttribute("errorMessage", "Un usuario sin privilegios no puede crear un torneo");
+            model.addAttribute("user", currentUser);
+            return "error";
+        }
         return "tournament_new";
     }
 

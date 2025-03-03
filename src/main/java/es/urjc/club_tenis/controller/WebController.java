@@ -46,6 +46,10 @@ public class WebController {
     @GetMapping("/tournaments")
     public String getTournaments(Model model, HttpSession session) {
         List<Tournament> tournaments = tournamentService.findAll();
+        User currentUser = (User) session.getAttribute("user");
+        if(currentUser != null && currentUser.isAdmin()){
+            model.addAttribute("showNew", true);
+        }
         model.addAttribute("tournaments", tournaments);
         model.addAttribute("user", session.getAttribute("user"));
         return "tournaments";
