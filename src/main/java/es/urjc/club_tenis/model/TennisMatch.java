@@ -47,6 +47,16 @@ public class TennisMatch {
         this.court = court;
     }
 
+    public TennisMatch(User local, User visitor, Court court, User winner, String result){
+        this.local = local;
+        this.owner = local;
+        this.visitor = visitor;
+        this.court = court;
+        this.winner = winner;
+        this.result = result.equals("")? "Aun no se ha jugado." : result;
+        this.tournament = null;
+    }
+
     public User getOwner() {
         return owner;
     }
@@ -101,6 +111,10 @@ public class TennisMatch {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public long getId() {
+        return id;
     }
 }
 
