@@ -53,6 +53,23 @@ public class MatchController {
         return "match_form";
     }
 
+    @GetMapping("/{id}/delete")
+    public String delete(Model model, @PathVariable long id, HttpSession session){
+        User currentUser = (User) session.getAttribute("user");
+        if(currentUser == null){
+            return "redirect:/login";
+        }
+        TennisMatch match = matchService.findById(id);
+        if(currentUser.equals(match.getOwner()) || currentUser.isAdmin() || currentUser.equals(match.getLocal())){
+            //Delete
+            matchService.delete(match);
+            return "redirect:/matches";
+        }else{
+            model.addAttribute("errorMessage", "No tines permiso para eliminar este partido");
+            return "error";
+        }
+    }
+
     @PostMapping("/")
     public String createMatch(String localUsername, String visitorUsername, long court, String winnerUsername, String result, Model model, HttpSession session){
         Court courtObj = courtService.findById(court);
@@ -156,6 +173,7 @@ public class MatchController {
             model.addAttribute("errorMessage", "No tines permiso para modificar este partido");
             return "error";
         }
+
     }
 
 }

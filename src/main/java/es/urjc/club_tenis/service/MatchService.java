@@ -55,4 +55,14 @@ public class MatchService {
     public TennisMatch findById(long id) {
         return repo.findById(id).orElse(null);
     }
+
+    public void delete(TennisMatch match) {
+        User localUser = userService.findByUsername(match.getLocal().getUsername());
+        User visitorUser = userService.findByUsername(match.getVisitor().getUsername());
+        localUser.getPlayedMatches().remove(match);
+        visitorUser.getPlayedMatches().remove(match);
+        userService.save(localUser);
+        userService.save(visitorUser);
+        repo.delete(match);
+    }
 }
