@@ -76,7 +76,7 @@ public class MatchService {
     public TennisMatch modify(TennisMatch oldMatch, User local, User visitor, Court court, User winner, String result) throws ChangeSetPersister.NotFoundException {
         TennisMatch match = findById(oldMatch.getId());
         if(match == null){
-            throw(ChangeSetPersister.NotFoundException)new ChangeSetPersister.NotFoundException();
+            throw new ChangeSetPersister.NotFoundException();
         }
         match.setCourt(court);
         match.setLocal(local);

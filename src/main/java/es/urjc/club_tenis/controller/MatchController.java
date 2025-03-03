@@ -7,6 +7,7 @@ import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -162,8 +163,13 @@ public class MatchController {
                 model.addAttribute("courts", courtService.findAll());
                 return "match_form";
             }else {
-                TennisMatch updatedMatch = matchService.modify(match, local, visitor, courtService.findById(court), winner, result);
-                return "redirect:/match/" + updatedMatch.getId();
+                try{
+                    TennisMatch updatedMatch = matchService.modify(match, local, visitor, courtService.findById(court), winner, result);
+                    return "redirect:/match/" + updatedMatch.getId();
+                }catch (ChangeSetPersister.NotFoundException e) {
+                    model.addAttribute("errorMessage", "No se ha encontrado este partido");
+                    return "error";
+                }
             }
         }else{
             model.addAttribute("errorMessage", "No tines permiso para modificar este partido");
