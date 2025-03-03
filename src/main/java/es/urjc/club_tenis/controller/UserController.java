@@ -41,8 +41,12 @@ public class UserController {
             return "redirect:/login";
         }
         if(currentUser.isAdmin() || currentUser.equals(user)){
-            model.addAttribute("user", user);
             model.addAttribute("showPasswordInput", false);
+            if(currentUser.equals(user)){
+                model.addAttribute("showPasswordInput", true);
+                model.addAttribute("showPasswordChange", true);
+            }
+            model.addAttribute("user", user);
             model.addAttribute("actionName", "Actualizar ");
             model.addAttribute("action", "/profile/" + username + "/modify");
             return "register";
@@ -53,17 +57,23 @@ public class UserController {
     }
 
     @PostMapping("/profile/{oldUsername}/modify")
-    public String modifyProfilePage(Model model, HttpSession session, @PathVariable String oldUsername, String username, String name){
+    public String modifyProfilePage(Model model, HttpSession session, @PathVariable String oldUsername, String username, String name,String password, String newPassword){
         User currentUser = (User) session.getAttribute("user");
         User user = userService.findByUsername(oldUsername);
         if(currentUser == null){
             return "redirect:/login";
         }
         if(currentUser.isAdmin() || currentUser.equals(user)){
-
+            User modify;
             try {
-                User modify = userService.modify(user, username, name);
-                logger.info(modify.toString());
+                if(password.isEmpty()){
+                    modify = userService.modify(user, username, name);
+                }else if(password.equals(user.getPassword())){
+                    modify = userService.modify(user, username, name, password, newPassword);
+                }else{
+                    model.addAttribute("invalidPassword", true);
+                    return getModifyPage(model, session, oldUsername);
+                }
                 return "redirect:/profile/" + modify.getUsername();
             } catch (ChangeSetPersister.NotFoundException e) {
                 model.addAttribute("errorMessage", "No se ha encontrado este usuario");

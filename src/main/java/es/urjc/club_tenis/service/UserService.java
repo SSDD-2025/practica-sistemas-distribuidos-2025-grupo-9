@@ -55,4 +55,17 @@ public class UserService {
         user.setName(newName);
         return repo.save(user);
     }
+
+    public User modify(User oldUser, String newUsername, String newName, String oldPassword, String newPassword) throws ChangeSetPersister.NotFoundException {
+        User user = findByUsername(oldUser.username);
+        if(user == null){
+            throw new ChangeSetPersister.NotFoundException();
+        }
+        if(oldPassword.equals(user.getPassword())){
+            user.setPassword(newPassword);
+        }
+        user.setUsername(newUsername);
+        user.setName(newName);
+        return repo.save(user);
+    }
 }
