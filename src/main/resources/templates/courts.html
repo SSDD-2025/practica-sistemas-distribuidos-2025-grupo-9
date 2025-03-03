@@ -13,15 +13,17 @@
         </tr>
         </thead>
         <tbody>
+        {{#courts}}
         <tr>
-            <td>Pista Abierta 1</td>
-            <td>12:00 - 8:00</td>
-            <td>10</td>
+            <td>{{name}}</td>
+            <td>{{start}} - {{end}}</td>
+            <td>{{price}}</td>
             <td>
-                <a href="/court/" class="btn btn-warning">Reservar</a>
+                <a href="/court/{{id}}" class="btn btn-warning">Reservar</a>
             </td>
 
         </tr>
+        {{/courts}}
         </tbody>
     </table>
 </div>

@@ -30,6 +30,7 @@ public class TennisMatch {
     private Tournament tournament;
 
     @ManyToOne
+    @JoinColumn(name = "court_id")
     private Court court;
 
     private String result;

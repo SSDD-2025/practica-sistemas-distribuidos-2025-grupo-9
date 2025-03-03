@@ -12,6 +12,14 @@ public class Court {
     @GeneratedValue
     private long id;
 
+    @ManyToMany
+    @JoinTable(
+            name = "court_matches",
+            joinColumns = @JoinColumn(name = "court_id"),
+            inverseJoinColumns = @JoinColumn(name = "match_id")
+    )
+    public List<TennisMatch> matches;
+
     private String name;
 
     private float price;

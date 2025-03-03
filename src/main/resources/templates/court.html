@@ -1,9 +1,10 @@
 {{>navbar}}
 
 <body>
+    {{#court}}
     <form action="/court/book" method="post">
-        <h1 class="h1">Pista Abierta 1</h1>
-        <h1 class="h3 fw-normal">Precio: 10</h1><br><br>
+        <h1 class="h1">{{name}}</h1>
+        <h1 class="h3 fw-normal">Precio: {{price}}</h1><br><br>
 
         <label for="chooseDate">Fecha</label><br>
         <input type="date" name= "date" id="bookingDate" required><br>
@@ -14,4 +15,5 @@
 
         <button type="submit" >Reservar</button>
     </form>
+    {{/court}}
 </body>

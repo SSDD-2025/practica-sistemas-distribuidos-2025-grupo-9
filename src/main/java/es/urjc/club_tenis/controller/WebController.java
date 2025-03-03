@@ -1,9 +1,7 @@
 package es.urjc.club_tenis.controller;
 
 import es.urjc.club_tenis.model.*;
-import es.urjc.club_tenis.service.MatchService;
-import es.urjc.club_tenis.service.TournamentService;
-import es.urjc.club_tenis.service.UserService;
+import es.urjc.club_tenis.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +19,8 @@ public class WebController {
     private TournamentService tournamentService;
     @Autowired
     private MatchService matchService;
+    @Autowired
+    private CourtService courtService;
 
     @GetMapping("/")
     public String homePage(Model model, HttpSession session) {
@@ -48,6 +48,8 @@ public class WebController {
 
     @GetMapping("/courts")
     public String getCourts(Model model, HttpSession session) {
+        List<Court> courts = courtService.findAll();
+        model.addAttribute("courts",courts);
         model.addAttribute("user", session.getAttribute("user"));
         return "courts";
     }
