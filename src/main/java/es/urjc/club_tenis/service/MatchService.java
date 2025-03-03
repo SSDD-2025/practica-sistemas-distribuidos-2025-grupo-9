@@ -6,6 +6,7 @@ import es.urjc.club_tenis.model.User;
 import es.urjc.club_tenis.repositories.MatchRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
 
@@ -70,5 +71,18 @@ public class MatchService {
     public TennisMatch createMatch(User local, User visitor, Court courtObj, User winner, String result) {
         TennisMatch newMatch = new TennisMatch(local, visitor, courtObj, winner, result);
         return repo.save(newMatch);
+    }
+
+    public TennisMatch modify(TennisMatch oldMatch, User local, User visitor, Court court, User winner, String result) throws ChangeSetPersister.NotFoundException {
+        TennisMatch match = findById(oldMatch.getId());
+        if(match == null){
+            throw(ChangeSetPersister.NotFoundException)new ChangeSetPersister.NotFoundException();
+        }
+        match.setCourt(court);
+        match.setLocal(local);
+        match.setVisitor(visitor);
+        match.setWinner(winner);
+        match.setResult(result);
+        return repo.save(match);
     }
 }

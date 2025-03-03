@@ -162,11 +162,8 @@ public class MatchController {
                 model.addAttribute("courts", courtService.findAll());
                 return "match_form";
             }else {
-                match.setCourt(courtService.findById(court));
-                match.setLocal(userService.findByUsername(localUsername));
-                match.setVisitor(userService.findByUsername(visitorUsername));
-                TennisMatch savedMatch = matchService.save(match);
-                return "redirect:/match/" + savedMatch.getId();
+                TennisMatch updatedMatch = matchService.modify(match, local, visitor, courtService.findById(court), winner, result);
+                return "redirect:/match/" + updatedMatch.getId();
             }
         }else{
             model.addAttribute("errorMessage", "No tines permiso para modificar este partido");
