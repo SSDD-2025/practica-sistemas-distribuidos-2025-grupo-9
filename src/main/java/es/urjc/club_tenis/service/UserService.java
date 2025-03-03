@@ -4,7 +4,10 @@ import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -41,5 +44,15 @@ public class UserService {
             savedUser.playedTennisMatches.add(match);
             save(savedUser);
         }
+    }
+
+    public User modify(User oldUser, String newUsername, String newName) throws ChangeSetPersister.NotFoundException {
+        User user = findByUsername(oldUser.username);
+        if(user == null){
+            throw new ChangeSetPersister.NotFoundException();
+        }
+        user.setUsername(newUsername);
+        user.setName(newName);
+        return repo.save(user);
     }
 }

@@ -4,10 +4,11 @@ import es.urjc.club_tenis.model.User;
 import es.urjc.club_tenis.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import java.util.*;
+
 import java.util.logging.Logger;
 
 @Controller
@@ -34,13 +35,51 @@ public class UserController {
 
     @GetMapping("/profile/{username}/modify")
     public String getModifyPage(Model model, HttpSession session, @PathVariable String username){
+        User currentUser = (User) session.getAttribute("user");
         User user = userService.findByUsername(username);
-        model.addAttribute("user", user);
-        return "modify_profile";
+        if(currentUser == null){
+            return "redirect:/login";
+        }
+        if(currentUser.isAdmin() || currentUser.equals(user)){
+            model.addAttribute("user", user);
+            model.addAttribute("showPasswordInput", false);
+            model.addAttribute("actionName", "Actualizar ");
+            model.addAttribute("action", "/profile/" + username + "/modify");
+            return "register";
+        }else{
+            model.addAttribute("errorMessage", "No tines permiso para eliminar este usuario");
+            return "error";
+        }
+    }
+
+    @PostMapping("/profile/{oldUsername}/modify")
+    public String modifyProfilePage(Model model, HttpSession session, @PathVariable String oldUsername, String username, String name){
+        User currentUser = (User) session.getAttribute("user");
+        User user = userService.findByUsername(oldUsername);
+        if(currentUser == null){
+            return "redirect:/login";
+        }
+        if(currentUser.isAdmin() || currentUser.equals(user)){
+
+            try {
+                User modify = userService.modify(user, username, name);
+                logger.info(modify.toString());
+                return "redirect:/profile/" + modify.getUsername();
+            } catch (ChangeSetPersister.NotFoundException e) {
+                model.addAttribute("errorMessage", "No se ha encontrado este usuario");
+                return "error";
+            }
+        }else{
+            model.addAttribute("errorMessage", "No tines permiso para eliminar este usuario");
+            return "error";
+        }
     }
 
     @GetMapping("/signin")
     public String showRegistrationForm(Model model) {
+        model.addAttribute("actionName", "Registrar ");
+        model.addAttribute("action", "/signin");
+        model.addAttribute("showPasswordInput", true);
         return "register";
     }
 
