@@ -4,11 +4,18 @@ import es.urjc.club_tenis.model.User;
 import es.urjc.club_tenis.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 @Controller
@@ -22,6 +29,9 @@ public class UserController {
     @GetMapping("/profile/{username}")
     public String getProfilePage(Model model, HttpSession session, @PathVariable String username){
         User user = userService.findByUsername(username);
+        if (user.getProfilePicture() != null) {
+            model.addAttribute("profilePictureUrl" ,"/profile-picture/" + user.getUsername());
+        }
         model.addAttribute("user", user);
         model.addAttribute("matches", user.getPlayedMatches());
         User sessionUser = (User) session.getAttribute("user");
@@ -31,6 +41,19 @@ public class UserController {
             model.addAttribute("showModify", true);
         }
         return "profile";
+    }
+
+    @GetMapping("/profile-picture/{username}")
+    public ResponseEntity<byte[]> getProfilePicture(@PathVariable String username) {
+        byte[] imageData = userService.getProfilePicture(username);
+
+        if (imageData != null) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG) // Or determine the correct MIME type
+                    .body(imageData);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/profile/{username}/modify")
@@ -57,9 +80,10 @@ public class UserController {
     }
 
     @PostMapping("/profile/{oldUsername}/modify")
-    public String modifyProfilePage(Model model, HttpSession session, @PathVariable String oldUsername, String username, String name,String password, String newPassword){
+    public String modifyProfilePage(Model model, HttpSession session, @PathVariable String oldUsername, String username, String name, String password, String newPassword, MultipartFile profilePicture){
         User currentUser = (User) session.getAttribute("user");
         User user = userService.findByUsername(oldUsername);
+        logger.info(profilePicture.toString());
         if(currentUser == null){
             return "redirect:/login";
         }
@@ -67,9 +91,9 @@ public class UserController {
             User modify;
             try {
                 if(password.isEmpty()){
-                    modify = userService.modify(user, username, name);
+                    modify = userService.modify(user, username, name, profilePicture);
                 }else if(password.equals(user.getPassword())){
-                    modify = userService.modify(user, username, name, password, newPassword);
+                    modify = userService.modify(user, username, name, password, newPassword, profilePicture);
                 }else{
                     model.addAttribute("invalidPassword", true);
                     return getModifyPage(model, session, oldUsername);
@@ -95,7 +119,7 @@ public class UserController {
 
 
     @PostMapping("/signin")
-    public String registerUser(Model model, String username, String name, String password) {
+    public String registerUser(Model model, String username, String name, String password, MultipartFile profilePicture) {
         logger.info("Username: " + username);
         logger.info("Name: " + name);
         logger.info("Password: " + password);
@@ -105,7 +129,7 @@ public class UserController {
             return "register";
         }
 
-        User newUser = userService.save(new User(username, name, password));
+        User newUser = userService.save(new User(username, name, password, profilePicture));
 
         model.addAttribute("user", newUser.getId());
 

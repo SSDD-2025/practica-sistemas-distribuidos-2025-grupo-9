@@ -1,7 +1,11 @@
 package es.urjc.club_tenis.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.IOException;
+import java.sql.Blob;
 import jakarta.persistence.*;
+import org.hibernate.engine.jdbc.BlobProxy;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.*;
 
 
@@ -17,6 +21,10 @@ public class User {
     public String password;
     public String statistics;
 
+    @Lob
+    private Blob profilePicture;
+
+
     @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "user_match",
@@ -30,12 +38,22 @@ public class User {
 
     public boolean admin;
 
-    public User(String username, String name, String password) {
+    public User(String username, String name, String password, MultipartFile profilePicture) {
         this.username = username;
         this.name = name;
         this.password = password;
         this.statistics = "Aun no ha jugado ningun partido";
         this.admin = false;
+        if(!profilePicture.isEmpty()) {
+            try {
+                this.profilePicture = (BlobProxy.generateProxy(profilePicture.getInputStream(),
+                        profilePicture.getSize()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            this.profilePicture = null;
+        }
     }
 
     public User(String username, String name, String password, boolean admin) {
@@ -114,6 +132,14 @@ public class User {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public Blob getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(Blob profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     @Override

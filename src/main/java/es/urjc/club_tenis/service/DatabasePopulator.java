@@ -36,7 +36,7 @@ public class DatabasePopulator {
         }
         for(int i = 0; i < 10; i++){
             if(userService.findByUsername("user"+i) == null){
-                User newUser = new User("user"+i, "Usuario " + i, "user"+i);
+                User newUser = new User("user"+i, "Usuario " + i, "user"+i, null);
                 users.add(userService.save(newUser));
             }
         }

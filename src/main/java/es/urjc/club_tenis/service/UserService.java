@@ -3,11 +3,16 @@ package es.urjc.club_tenis.service;
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.repositories.UserRepository;
 import jakarta.transaction.Transactional;
+import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
+import org.apache.commons.io.IOUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -46,17 +51,27 @@ public class UserService {
         }
     }
 
-    public User modify(User oldUser, String newUsername, String newName) throws ChangeSetPersister.NotFoundException {
+    public User modify(User oldUser, String newUsername, String newName, MultipartFile profilePicture) throws ChangeSetPersister.NotFoundException {
         User user = findByUsername(oldUser.username);
         if(user == null){
             throw new ChangeSetPersister.NotFoundException();
         }
         user.setUsername(newUsername);
         user.setName(newName);
+        if(!profilePicture.isEmpty()) {
+            try {
+                user.setProfilePicture(BlobProxy.generateProxy(profilePicture.getInputStream(),
+                        profilePicture.getSize()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            user.setProfilePicture(null);
+        }
         return repo.save(user);
     }
 
-    public User modify(User oldUser, String newUsername, String newName, String oldPassword, String newPassword) throws ChangeSetPersister.NotFoundException {
+    public User modify(User oldUser, String newUsername, String newName, String oldPassword, String newPassword, MultipartFile profilePicture) throws ChangeSetPersister.NotFoundException {
         User user = findByUsername(oldUser.username);
         if(user == null){
             throw new ChangeSetPersister.NotFoundException();
@@ -66,6 +81,32 @@ public class UserService {
         }
         user.setUsername(newUsername);
         user.setName(newName);
+        if(!profilePicture.isEmpty()) {
+            try {
+                user.setProfilePicture(BlobProxy.generateProxy(profilePicture.getInputStream(),
+                        profilePicture.getSize()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            user.setProfilePicture(null);
+        }
         return repo.save(user);
+    }
+
+
+    public byte[] getProfilePicture(String username) {
+        Blob profilePictureBlob = repo.findByUsername(username).getProfilePicture();
+        if(profilePictureBlob == null){
+            return null;
+        }
+
+        try {
+            return IOUtils.toByteArray(profilePictureBlob.getBinaryStream());
+        } catch (SQLException | IOException e) {
+            // Handle exceptions appropriately (e.g., log them, return null, or throw a custom exception).
+            e.printStackTrace();
+            return null;
+        }
     }
 }
