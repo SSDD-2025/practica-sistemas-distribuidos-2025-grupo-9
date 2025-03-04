@@ -26,4 +26,13 @@ public class TournamentService {
     public List<Tournament> findAll(){
         return repo.findAll();
     }
+
+    public void modify(Tournament tournament, String name, String initDate, String endDate, int price) {
+        Tournament saved = findById(tournament.getId());
+        saved.setName(name);
+        saved.setPrice(price);
+        saved.setInitDate(LocalDate.parse(initDate));
+        saved.setEndDate(LocalDate.parse(endDate));
+        repo.save(saved);
+    }
 }

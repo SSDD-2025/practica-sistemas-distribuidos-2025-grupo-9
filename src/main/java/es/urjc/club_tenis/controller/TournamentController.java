@@ -124,6 +124,8 @@ public class TournamentController {
             model.addAttribute("user", currentUser);
             return "error";
         }
+        model.addAttribute("action", "new");
+        model.addAttribute("actionName", "Crear ");
         return "tournament_new";
     }
 
@@ -137,6 +139,33 @@ public class TournamentController {
 
         model.addAttribute("tournament", newTournament.getId());
 
+        return "redirect:/tournaments";
+    }
+
+    @GetMapping("/{id}/modify")
+    public String getModifyForm(Model model, HttpSession session, @PathVariable long id){
+        User currentUser = (User) session.getAttribute("user");
+        if(currentUser == null || !currentUser.isAdmin()){
+            model.addAttribute("errorMessage", "No se puede editar un torneo sin ser administrador");
+            return "error";
+        }
+
+        Tournament tournament = tournamentService.findById(id);
+        model.addAttribute("tournament", tournament);
+        model.addAttribute("actionName", "Modificar ");
+        model.addAttribute("action", id +"/modify");
+        return "tournament_new";
+    }
+
+    @PostMapping("/{id}/modify")
+    public String modifyTorunament(Model model, HttpSession session, @PathVariable long id, String name, String initDate, String endDate, int price){
+        User currentUser = (User) session.getAttribute("user");
+        if(currentUser == null || !currentUser.isAdmin()){
+            model.addAttribute("errorMessage", "No se ha podido modificar el torneo");
+            return "error";
+        }
+        Tournament tournament = tournamentService.findById(id);
+        tournamentService.modify(tournament, name, initDate, endDate, price);
         return "redirect:/tournaments";
     }
 }

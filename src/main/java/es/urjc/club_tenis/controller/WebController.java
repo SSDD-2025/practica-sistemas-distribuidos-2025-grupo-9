@@ -49,6 +49,7 @@ public class WebController {
         User currentUser = (User) session.getAttribute("user");
         if(currentUser != null && currentUser.isAdmin()){
             model.addAttribute("showNew", true);
+            model.addAttribute("showModify", true);
         }
         model.addAttribute("tournaments", tournaments);
         model.addAttribute("user", session.getAttribute("user"));

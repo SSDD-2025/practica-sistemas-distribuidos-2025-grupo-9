@@ -2,7 +2,8 @@
 
 <main class="form-signin w-25 m-auto my-5">
 <h1>Nuevo Torneo</h1>
-<form action="/tournament/new" method="post">
+<form action="/tournament/{{action}}" method="post">
+  <h1 class="h3 mb-3 fw-normal">{{actionName}} Torneo</h1>
   <div class="form-floating my-2">
     <input required type="text" class="form-control" id="name" name="name" placeholder="Nombre" {{#tournament}}value="{{name}}"{{/tournament}}>
     <label for="name">Nombre</label>
@@ -23,6 +24,6 @@
     <label for="name">Precio</label>
   </div>
 
-  <button class="btn btn-primary w-100 py-2" type="submit">Crear torneo</button>
+  <button class="btn btn-primary w-100 py-2" type="submit">{{actionName}} Torneo</button>
 </form>
 </main>

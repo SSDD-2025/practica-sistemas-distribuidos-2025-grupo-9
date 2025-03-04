@@ -10,7 +10,10 @@
             <th>Precio</th>
             <th>Teléfono</th>
             <th>Detalles</th>
-
+            {{#showModify}}
+            <th>Modificar</th>
+            <th>Borrar</th>
+            {{/showModify}}
         </tr>
         </thead>
         <tbody>
@@ -25,6 +28,14 @@
             <td>
                 <a href="/tournament/{{id}}" class="btn btn-info">Ver Detalles</a>
             </td>
+            {{#showModify}}
+            <td>
+                <a href="/tournament/{{id}}/modify" class="btn btn-warning">Modificar</a>
+            </td>
+            <td>
+                <a href="/tournament/{{id}}/delete" class="btn btn-danger">Borrar</a>
+            </td>
+            {{/showModify}}
         </tr>
         {{/tournaments}}
         </tbody>
