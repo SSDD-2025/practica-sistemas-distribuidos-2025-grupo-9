@@ -42,17 +42,7 @@ public class MatchService {
         if (localUser != null && visitorUser != null) {
             TennisMatch aux = repo.save(match);
 
-            logger.info(localUser.toString());
-            logger.info(localUser.getPlayedMatches().toString());
-            localUser.getPlayedMatches().add(match);
-
-            logger.info(visitorUser.toString());
-            logger.info(visitorUser.getPlayedMatches().toString());
-            visitorUser.getPlayedMatches().add(match);
-
-            userService.save(localUser);
-            userService.save(visitorUser);
-
+            userService.addPlayedMatch(aux);
             return aux;
         }
         return null;
@@ -70,7 +60,7 @@ public class MatchService {
         visitorUser.getPlayedMatches().remove(saved);
         userService.save(localUser);
         userService.save(visitorUser);
-        detachTournament(match);
+        detachTournament(match, match.getTournament());
         repo.delete(saved);
     }
 
@@ -116,19 +106,20 @@ public class MatchService {
 
     public TennisMatch createMatch(User currentUser, User local, User visitor, Court courtObj, User winner, String result, Tournament currentTournament) {
         TennisMatch newMatch = new TennisMatch(currentUser, local, visitor,  winner, result, courtObj);
-        newMatch.setTournament(currentTournament);
+        newMatch.setTournament(tournamentService.findById(currentTournament.getId()));
         userService.addPlayedMatch(newMatch);
-        return repo.save(newMatch);
+        TennisMatch savedMatch = save(newMatch);
+        return savedMatch;
     }
 
-    public void detachTournament(TennisMatch t) {
+    public void detachTournament(TennisMatch t, Tournament tournament) {
         if(t.getTournament() != null){
             TennisMatch saved = findById(t.getId());
-            Tournament tournament = tournamentService.findById(saved.getTournament().getId());
+            Tournament savedTournament = tournamentService.findById(tournament.getId());
             saved.setTournament(null);
             save(saved);
             tournament.getMatches().remove(saved);
-            tournamentService.save(tournament);
+            tournamentService.save(savedTournament);
         }
     }
 }

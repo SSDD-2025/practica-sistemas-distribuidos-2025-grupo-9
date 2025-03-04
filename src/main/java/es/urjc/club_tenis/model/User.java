@@ -30,7 +30,7 @@ public class User {
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "match_id") }
     )
-    public List<TennisMatch> playedTennisMatches;
+    public Set<TennisMatch> playedTennisMatches;
 
     @ManyToMany(mappedBy = "participants")
     public Set<Tournament> tournaments;
@@ -99,11 +99,11 @@ public class User {
         this.password = password;
     }
 
-    public List<TennisMatch> getPlayedMatches() {
+    public Set<TennisMatch> getPlayedMatches() {
         return playedTennisMatches;
     }
 
-    public void setPlayedMatches(List<TennisMatch> playedTennisMatches) {
+    public void setPlayedMatches(Set<TennisMatch> playedTennisMatches) {
         this.playedTennisMatches = playedTennisMatches;
     }
 

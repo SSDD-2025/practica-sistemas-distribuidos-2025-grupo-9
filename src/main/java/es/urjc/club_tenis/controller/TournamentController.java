@@ -181,8 +181,6 @@ public class TournamentController {
             return "error";
         }
         Tournament currentTournament = tournamentService.findById(id);
-        tournamentService.removeParticipants(currentTournament);
-        tournamentService.removeMatches(currentTournament);
         tournamentService.delete(currentTournament);
         return "redirect:/tournaments";
     }

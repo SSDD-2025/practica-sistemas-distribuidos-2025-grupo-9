@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @Controller
@@ -213,11 +214,12 @@ public class UserController {
         }
 
         User deleteUser = userService.findByUsername(username);
-        List<TennisMatch> matches = deleteUser.getPlayedMatches();
+        Set<TennisMatch> matches = deleteUser.getPlayedMatches();
 
-        for(int i=0; i<matches.size();i++){
-            matchService.deleteUser(deleteUser,matches.get(i));
+        for(TennisMatch match:matches){
+            matchService.deleteUser(deleteUser, match);
         }
+
         userService.delete(deleteUser);
 
         return "redirect:/users";

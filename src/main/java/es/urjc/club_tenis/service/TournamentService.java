@@ -48,7 +48,16 @@ public class TournamentService {
     public void addMatch(Tournament tournament, TennisMatch match) {
         Tournament saved = findById(tournament.getId());
         TennisMatch savedMatch = matchService.findById(match.getId());
-        matchService.save(saved.addMatch(savedMatch));
+        saved.getMatches().add(savedMatch);
+        addParticipant(saved, userService.findByUsername(savedMatch.getLocal().getUsername()));
+        addParticipant(saved,userService.findByUsername(savedMatch.getVisitor().getUsername()));
+        save(saved);
+    }
+
+    @Transactional
+    public void addParticipant(Tournament t, User user){
+        Tournament saved = findById(t.getId());
+        saved.getParticipants().add(user);
         save(saved);
     }
 
@@ -70,27 +79,36 @@ public class TournamentService {
         return findById(t.getId()).getParticipants();
     }
 
+    @Transactional
     public void removeParticipants(Tournament t){
         Set<User> users = new HashSet<>(getParticipants(t));
         logger.info("Users " + users);
         for(User u : users){
             userService.removeTournament(u, t);
         }
+        t.getParticipants().clear();
         save(t);
     }
 
+    @Transactional
     public void removeMatches(Tournament t){
         Set<TennisMatch> matches = new HashSet<>(getMatches(t));
         for (TennisMatch m : matches) {
-            matchService.detachTournament(m);
+            matchService.detachTournament(m, t);
             matchService.delete(m);
         }
+        t.getMatches().clear();
         save(t);
     }
 
     @Transactional
     public void delete(Tournament tournament) {
         Tournament saved = findById(tournament.getId());
-        repo.delete(saved);
+        if (saved != null) {
+            removeParticipants(saved);
+            removeMatches(saved);
+            save(saved);
+            repo.delete(saved);
+        }
     }
 }

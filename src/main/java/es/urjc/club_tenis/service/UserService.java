@@ -51,7 +51,7 @@ public class UserService {
     private void addMatch(TennisMatch match, User user){
         User savedUser = findByUsername(user.getUsername());
         if(savedUser.getPlayedMatches() == null){
-            savedUser.setPlayedMatches(new ArrayList<>());
+            savedUser.setPlayedMatches(new HashSet<>());
         }
         if(!savedUser.getPlayedMatches().contains(match)){
             savedUser.getPlayedMatches().add(match);
