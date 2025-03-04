@@ -15,6 +15,7 @@
             <th>Reservas</th>
             {{#showModify}}
            <th>Modificar</th>
+            <th>Eliminar</th>
             {{/showModify}}
 
         </tr>
@@ -31,6 +32,9 @@
             {{#showModify}}
             <td>
                 <a href="/court/{{id}}/modify" class="btn btn-warning">Modificar</a>
+            </td>
+            <td>
+                <a href="/court/{{id}}/delete" class="btn btn-danger">Eliminar</a>
             </td>
             {{/showModify}}
         </tr>

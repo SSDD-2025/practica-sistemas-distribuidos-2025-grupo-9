@@ -43,4 +43,8 @@ public class CourtService {
     public boolean checkAvailability(Court court, LocalDate newDate, LocalTime newStart) {
         return court.getReservations().get(LocalDateTime.of(newDate, newStart)) == null;
     }
+
+    public void delete(Court court) {
+        repo.delete(court);
+    }
 }

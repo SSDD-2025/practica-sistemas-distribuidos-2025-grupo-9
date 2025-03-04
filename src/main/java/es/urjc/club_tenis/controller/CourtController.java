@@ -97,6 +97,18 @@ public class CourtController {
         return "redirect:/courts";
     }
 
+    @GetMapping("/{id}/delete")
+    public String deleteCourt(Model model, HttpSession session, @PathVariable long id){
+        User currentUser = (User) session.getAttribute("user");
+        model.addAttribute("user", currentUser);
+        if(currentUser == null || !currentUser.isAdmin()) {
+            model.addAttribute("errorMessage", "No se puede borrar una pista sin ser administrador");
+            return "error";
+        }
+        courtService.delete(courtService.findById(id));
+        return "redirect:/courts";
+    }
+
 
     @GetMapping("/{id}")
     public String getCourts(Model model, @PathVariable long id, HttpSession session){
