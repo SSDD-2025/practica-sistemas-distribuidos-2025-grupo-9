@@ -44,7 +44,7 @@ public class TennisMatch {
         this.local = local;
         this.visitor = visitor;
         this.winner = winner;
-        this.result = result;
+        this.result = result.isEmpty() ? "Aun no se ha jugado." : result;
         this.tournament = null;
         this.court = court;
     }
@@ -55,7 +55,7 @@ public class TennisMatch {
         this.visitor = visitor;
         this.court = court;
         this.winner = winner;
-        this.result = result.equals("")? "Aun no se ha jugado." : result;
+        this.result = result.isEmpty() ? "Aun no se ha jugado." : result;
         this.tournament = null;
     }
 
