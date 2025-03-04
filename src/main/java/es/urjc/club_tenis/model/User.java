@@ -33,7 +33,7 @@ public class User {
     public List<TennisMatch> playedTennisMatches;
 
     @ManyToMany(mappedBy = "participants")
-    public List<Tournament> tournaments;
+    public Set<Tournament> tournaments;
 
     public boolean admin;
 
@@ -107,11 +107,11 @@ public class User {
         this.playedTennisMatches = playedTennisMatches;
     }
 
-    public List<Tournament> getTournaments() {
+    public Set<Tournament> getTournaments() {
         return tournaments;
     }
 
-    public void setTournaments(List<Tournament> tournaments) {
+    public void setTournaments(Set<Tournament> tournaments) {
         this.tournaments = tournaments;
     }
 

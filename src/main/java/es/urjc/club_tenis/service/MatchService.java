@@ -23,6 +23,9 @@ public class MatchService {
     private MatchRepository repo;
 
     @Autowired
+    private TournamentService tournamentService;
+
+    @Autowired
     private UserService userService;
     @Autowired
     private ResourceUrlProvider mvcResourceUrlProvider;
@@ -67,7 +70,7 @@ public class MatchService {
         visitorUser.getPlayedMatches().remove(saved);
         userService.save(localUser);
         userService.save(visitorUser);
-        saved.setTournament(null);
+        detachTournament(match);
         repo.delete(saved);
     }
 
@@ -119,8 +122,13 @@ public class MatchService {
     }
 
     public void detachTournament(TennisMatch t) {
-        TennisMatch saved = findById(t.getId());
-        saved.setTournament(null);
-        save(saved);
+        if(t.getTournament() != null){
+            TennisMatch saved = findById(t.getId());
+            Tournament tournament = tournamentService.findById(saved.getTournament().getId());
+            saved.setTournament(null);
+            save(saved);
+            tournament.getMatches().remove(saved);
+            tournamentService.save(tournament);
+        }
     }
 }

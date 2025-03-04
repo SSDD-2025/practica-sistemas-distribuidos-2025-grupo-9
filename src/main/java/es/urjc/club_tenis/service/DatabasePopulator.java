@@ -73,11 +73,6 @@ public class DatabasePopulator {
                     TennisMatch match = matchService.createMatch(admin, local, visitor, courtService.findAll().getFirst(), winner, "3-6, 6-4, 7-5", t);
                     tournamentService.addMatch(t, match);
                 }
-                List<TennisMatch> matches = tournamentService.getMatches(t);
-                logger.warning("Partidos de t:" + t.toString());
-                for(TennisMatch tm : matches) {
-                    logger.info(tm.toString());
-                }
             }
         }
 

@@ -20,40 +20,39 @@ public class Tournament {
     private LocalDate endDate;
     private int price;
 
-    //Ordered by ranking
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "tournament_participants",
             joinColumns = @JoinColumn(name = "tournament_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    public List<User> participants;
+    public Set<User> participants;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.REMOVE)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "tournament_matches",
             joinColumns = @JoinColumn(name = "tournament_id"),
             inverseJoinColumns = @JoinColumn(name = "match_id")
     )
-    public List<TennisMatch> matches;
+    public Set<TennisMatch> matches;
 
     public Tournament(String name, LocalDate initDate, LocalDate endDate, int price) {
         this.name = name;
         this.initDate = initDate;
         this.endDate = endDate;
         this.price = price;
-        this.matches = new ArrayList<>();
+        this.matches = new HashSet<>();
+        this.participants = new HashSet<>();
     }
 
     public Tournament() {
 
     }
 
-    @Transactional
-    public void addMatch(TennisMatch match) {
-        List<TennisMatch> matches = this.getMatches();
+    public TennisMatch addMatch(TennisMatch match) {
+        Set<TennisMatch> matches = this.getMatches();
         if(matches == null){
-            matches = new ArrayList<>();
+            matches = new HashSet<>();
         }
         if(matches.isEmpty()){
             matches.add(match);
@@ -66,6 +65,8 @@ public class Tournament {
                 participants.add(match.getVisitor());
             }
         }
+        match.setTournament(this);
+        return match;
     }
 
     public long getId() {
@@ -108,19 +109,32 @@ public class Tournament {
         this.price = price;
     }
 
-    public List<User> getParticipants() {
+    public Set<User> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<User> participants) {
+    public void setParticipants(Set<User> participants) {
         this.participants = participants;
     }
 
-    public List<TennisMatch> getMatches() {
+    public Set<TennisMatch> getMatches() {
         return matches;
     }
 
-    public void setMatches(List<TennisMatch> matches) {
+    public void setMatches(Set<TennisMatch> matches) {
         this.matches = matches;
+    }
+
+    @Override
+    public String toString() {
+        return "Tournament{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", initDate=" + initDate +
+                ", endDate=" + endDate +
+                ", price=" + price +
+                ", matchesSize=" + matches.size()+
+                ", participantSize=" + participants.size()+
+                '}';
     }
 }

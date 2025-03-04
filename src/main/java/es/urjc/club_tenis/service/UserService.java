@@ -5,12 +5,14 @@ import es.urjc.club_tenis.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.apache.commons.io.IOUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.*;
@@ -122,14 +124,12 @@ public class UserService {
     public void delete(User user) {
         User deleted = findByUsername("deleted_user");
 
-        List<Tournament> tournaments = user.getTournaments();
-        for(int i=0; i<tournaments.size();i++){
-            Tournament currentTournament = tournaments.get(i);
+        Set<Tournament> tournaments = user.getTournaments();
+        for(Tournament t : tournaments){
+            t.getParticipants().remove(user);
+            t.getParticipants().add(deleted);
 
-            currentTournament.getParticipants().remove(user);
-            currentTournament.getParticipants().add(deleted);
-
-            tournamentService.save(currentTournament);
+            tournamentService.save(t);
         }
 
         repo.delete(user);
@@ -138,7 +138,10 @@ public class UserService {
     @Transactional
     public void removeTournament(User user, Tournament tournament) {
         User saved = findByUsername(user.getUsername());
+        Tournament t = tournamentService.findById(tournament.getId());
+        t.getParticipants().remove(saved);
+        tournamentService.save(t);
         saved.getTournaments().remove(tournament);
-        repo.save(saved);
+        save(saved);
     }
 }

@@ -139,7 +139,6 @@ public class TennisMatch {
                 ", winner=" + winner +
                 ", local=" + local +
                 ", visitor=" + visitor +
-                ", tournament=" + tournament +
                 ", court=" + court +
                 ", result='" + result + '\'' +
                 '}';

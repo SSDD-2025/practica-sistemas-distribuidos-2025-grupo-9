@@ -5,7 +5,10 @@ import es.urjc.club_tenis.service.CourtService;
 import es.urjc.club_tenis.service.MatchService;
 import es.urjc.club_tenis.service.TournamentService;
 import es.urjc.club_tenis.service.UserService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +32,9 @@ public class TournamentController {
     private MatchService matchService;
     @Autowired
     private UserService userService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @GetMapping("/{id}")
     public String getTournament(Model model, @PathVariable long id, HttpSession session) {
@@ -168,13 +174,16 @@ public class TournamentController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteTorunament(Model model, HttpSession session, @PathVariable long id){
+    public String deleteTournament(Model model, HttpSession session, @PathVariable long id){
         User currentUser = (User) session.getAttribute("user");
         if(currentUser == null || !currentUser.isAdmin()){
             model.addAttribute("errorMessage", "No se ha podido eliminar el torneo");
             return "error";
         }
-        tournamentService.delete(tournamentService.findById(id));
+        Tournament currentTournament = tournamentService.findById(id);
+        tournamentService.removeParticipants(currentTournament);
+        tournamentService.removeMatches(currentTournament);
+        tournamentService.delete(currentTournament);
         return "redirect:/tournaments";
     }
 }

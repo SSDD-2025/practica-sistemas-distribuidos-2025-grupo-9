@@ -4,6 +4,8 @@ import es.urjc.club_tenis.model.TennisMatch;
 import es.urjc.club_tenis.model.Tournament;
 import es.urjc.club_tenis.model.User;
 import es.urjc.club_tenis.repositories.TournamentRespository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
@@ -18,6 +20,8 @@ public class TournamentService {
 
     Logger logger = Logger.getLogger("es.urjc.club_tenis.controller");
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private TournamentRespository repo;
@@ -44,12 +48,12 @@ public class TournamentService {
     public void addMatch(Tournament tournament, TennisMatch match) {
         Tournament saved = findById(tournament.getId());
         TennisMatch savedMatch = matchService.findById(match.getId());
-        saved.addMatch(savedMatch);
+        matchService.save(saved.addMatch(savedMatch));
         save(saved);
     }
 
     @Transactional
-    public List<TennisMatch> getMatches(Tournament t){
+    public Set<TennisMatch> getMatches(Tournament t){
         return findById(t.getId()).getMatches();
     }
 
@@ -62,20 +66,31 @@ public class TournamentService {
         repo.save(saved);
     }
 
+    public Set<User> getParticipants(Tournament t){
+        return findById(t.getId()).getParticipants();
+    }
+
+    public void removeParticipants(Tournament t){
+        Set<User> users = new HashSet<>(getParticipants(t));
+        logger.info("Users " + users);
+        for(User u : users){
+            userService.removeTournament(u, t);
+        }
+        save(t);
+    }
+
+    public void removeMatches(Tournament t){
+        Set<TennisMatch> matches = new HashSet<>(getMatches(t));
+        for (TennisMatch m : matches) {
+            matchService.detachTournament(m);
+            matchService.delete(m);
+        }
+        save(t);
+    }
+
+    @Transactional
     public void delete(Tournament tournament) {
         Tournament saved = findById(tournament.getId());
-        for(User u : saved.getParticipants()){
-            userService.removeTournament(u, tournament);
-        }
-        List<TennisMatch> matches = getMatches(saved);
-        saved.setMatches(null);
-        logger.info("Numero de partidos del torneo: " + matches.size());
-        for (TennisMatch t : matches) {
-            matchService.detachTournament(t);
-            matchService.delete(t);
-        }
-        saved.setMatches(null);
-        repo.save(saved);
         repo.delete(saved);
     }
 }
