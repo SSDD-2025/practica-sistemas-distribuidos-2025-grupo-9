@@ -132,9 +132,19 @@ mvn spring-boot:run
 
 ## Participación:
 * RUBÉN BARGUEÑO PRIETO
-  * Tareas:
+  * Tareas: he participado en el diagrama de navegación, diagrama de la base de datos y en diversos puntos en las entidades, controladores, servicios y html.
   * Commits más Significativos:
-  * Ficheros en los que participa: 
+    * [First implementation of serice, controller and repository of Tournament](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/1b5add60207e61ec12b2ae8c72302bac6e3276b2)
+    * [Implementation of create tournament](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/9262369114fbf036a42746c30ea8ef480bcda545)
+    * [Firs implementation of add Match and Participants to Tournament](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/47520b4894171e831bf09f0bd90fbfdade6b5dee)
+    * [Update tournament_new.html y tournaments](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/959c13ea950386a1193b3ab837d5ad0bdc6b86e7)
+    * [Updated index, WebController, UserService and UserRepository](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/9458e346de1a6b7331bd5799df70a4bc4a790e93)
+  * Ficheros en los que participa:
+    * [TournamentController.java](src/main/java/es/urjc/club_tenis/controller/TournamentController.java)
+    * [Tournament.java](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/model/Tournament.java)
+    * [UserControler.java](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/controller/UserController.java)
+    * [Tournament_addMatch.html](src/main/resources/templates/tournament_addMatch.html)
+    * [Court.java](src/main/java/es/urjc/club_tenis/model/Court.java)
 * ARIEL CARNÉS BLASCO
   * Tareas:
   * Commits más Significativos:
