@@ -17,12 +17,10 @@
         {{#users}}
         {{^admin}}
         <tr>
-            <td>{{username}}</td>
+            <td><a href="/profile/{{username}}">@{{username}}</a></td>
             <td>{{name}}</td>
             <td>
-                {{#profilePicture}}
-                <img class="profile-picture" src="{{.}}" alt="Foto de Perfil">
-                {{/profilePicture}}
+                <img class="profile-picture" src="/profile-picture/{{username}}" alt="Foto de Perfil">
             </td>
             <td>
                 <a href="/users/delete/{{username}}" class="btn btn-danger">Borrar</a>

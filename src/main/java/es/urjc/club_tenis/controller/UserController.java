@@ -34,9 +34,7 @@ public class UserController {
     @GetMapping("/profile/{username}")
     public String getProfilePage(Model model, HttpSession session, @PathVariable String username){
         User user = userService.findByUsername(username);
-        if (user.getProfilePicture() != null) {
-            model.addAttribute("profilePictureUrl" ,"/profile-picture/" + user.getUsername());
-        }
+        model.addAttribute("profilePictureUrl" ,"/profile-picture/" + user.getUsername());
         model.addAttribute("user", user);
         model.addAttribute("matches", user.getPlayedMatches());
         User sessionUser = (User) session.getAttribute("user");

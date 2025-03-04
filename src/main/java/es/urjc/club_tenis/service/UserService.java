@@ -104,13 +104,16 @@ public class UserService {
     public byte[] getProfilePicture(String username) {
         Blob profilePictureBlob = repo.findByUsername(username).getProfilePicture();
         if(profilePictureBlob == null){
-            return null;
+            try {
+                return IOUtils.toByteArray(new ClassPathResource("static/images/default_profile.png").getInputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
-
         try {
             return IOUtils.toByteArray(profilePictureBlob.getBinaryStream());
         } catch (SQLException | IOException e) {
-            // Handle exceptions appropriately (e.g., log them, return null, or throw a custom exception).
             e.printStackTrace();
             return null;
         }
