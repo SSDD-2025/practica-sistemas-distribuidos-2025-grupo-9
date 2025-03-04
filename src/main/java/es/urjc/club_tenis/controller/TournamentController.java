@@ -101,9 +101,12 @@ public class TournamentController {
             return "tournament_addMatch";
         }else {
             User currentUser = (User) session.getAttribute("user");
+            Tournament currentTournament = tournamentService.findById(id);
             TennisMatch newMatch = matchService.createMatch(currentUser,local, visitor, courtObj, winner, result);
-            //newMatch.setTournament(actualTournament);
-            //actualTournament.addMatch(newMatch);
+            newMatch.setTournament(currentTournament);
+            currentTournament.addMatch(newMatch);
+            matchService.save(newMatch);
+            tournamentService.save(currentTournament);
             return "redirect:/tournament/" + id;
         }
     }

@@ -37,19 +37,7 @@
                 <a href="/tournament/{{id}}/addMatch" class="btn btn-primary">Añadir Partido</a>
                 {{/showAdd}}
                 <h4>Partidos</h4>
-                {{#matches}}
-                <p>
-                    <strong>Fecha:</strong> {{date}} <br>
-                    <strong>Local:</strong> {{local.username}} <br>
-                    <strong>Visitante:</strong> {{visitor.username}} <br>
-                    <strong>Pista:</strong> {{court.id}} <br>
-                    <strong>Resultado:</strong> {{result}} <br>
-                    <strong>Ganador:</strong> {{winner.username}}
-                </p>
-                {{/matches}}
-                {{^matches}}
-                <p>No hay partidos.</p>
-                {{/matches}}
+                {{>matches_macro}}
             </div>
 
         </div>
