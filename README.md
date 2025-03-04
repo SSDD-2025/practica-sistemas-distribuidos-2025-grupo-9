@@ -96,6 +96,11 @@ Está pagina será solo visible para los administradores y es accesible desde la
 
 Esta página será la que veremos cuando vayamos a una página inexistente u otros errores ocasionados en alguno de estos se cambiará el texto para indicar el error. Ej. Al intentar acceder a “/tournament/new” sin ser administrador nos dará el texto “Un usuario sin privilegios no puede crear un torneo”.
 ## Diagrama de navegación
+ * Las flechas verdes representan las páginas a las que pueden acceder todos los usuarios.
+ * Las flechas rojas representan las páginas a las que solo pueden acceder los usuarios con sesión iniciada.
+ * Las flechas amarillas representan las páginas a las que solo pueden acceder los usuarios que son administradores.
+ * A la página de error se puede acceder desde cualquier página.
+ ![Diagrama_Navegacion.jpg](Diagrama_Navegacion.jpg)
 ## Diagrama de entidades
 ![Diagrama_BD.png](Diagrama_BD.png)
 ## Diagrama de Clases
