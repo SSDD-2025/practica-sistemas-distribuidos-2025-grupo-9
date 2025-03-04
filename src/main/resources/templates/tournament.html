@@ -24,7 +24,7 @@
             <div class="col">
                 <h4>Clasificación</h4>
                 {{#participants}}
-                    <p>{{username}}</p>
+                    <p><a href="/profile/{{username}}">@{{username}}</a></p>
                 {{/participants}}
                 {{^participants}}
                     <p>No hay jugadores inscritos aún.</p>
