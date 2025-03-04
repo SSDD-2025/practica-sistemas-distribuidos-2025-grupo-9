@@ -104,6 +104,7 @@ Esta página será la que veremos cuando vayamos a una página inexistente u otr
 ## Diagrama de entidades
 ![Diagrama_BD.png](Diagrama_BD.png)
 ## Diagrama de Clases
+![Diagrama_Clases.png](Diagrama_Clases.png)
 ## Instrucciones de Ejecución
 1. Tener instalado Docker 
 2. Tener instalado Maven
@@ -146,9 +147,19 @@ mvn spring-boot:run
     * [Tournament_addMatch.html](src/main/resources/templates/tournament_addMatch.html)
     * [Court.java](src/main/java/es/urjc/club_tenis/model/Court.java)
 * ARIEL CARNÉS BLASCO
-  * Tareas:
+  * Tareas: He participado en la creación de páginas html y la modificación de los repositorios y controladores para implementar funcionalidades importantes de la aplicación. También he participado en la creación del diagrama de clases.
   * Commits más Significativos:
+    * [Add login html](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/af56d9670cd236aba4b7e480df774a24cc24572f)
+    * [Create Basic Court Controller](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/5a4f8417cbcf02c898e3b8073e2df617ffd4a12c)
+    * [Added Delete User Endpoint](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/52b6a2d615990ac4b9db4d22697b9e27f5c79aa7)
+    * [Delete User Update](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/0bed9ef0062978262fc4c2cee2347c07d1fd21c6)
+    * [ClassDiagram](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/d8335e619706c5e2e6a0c5d67b7b72f0379c13b1)
   * Ficheros en los que participa:
+    * [users.html](src/main/resources/templates/users.html)
+    * [WebController.java](src/main/java/es/urjc/club_tenis/controller/WebController.java)
+    * [UserController.java](src/main/java/es/urjc/club_tenis/controller/UserController.java)
+    * [UserService.java](src/main/java/es/urjc/club_tenis/service/UserService.java)
+    * [CourtController.java](src/main/java/es/urjc/club_tenis/controller/CourtController.java)
 * HUGO FERNANDEZ SISQUELLA
   * Tareas:
   * Commits más Significativos:
