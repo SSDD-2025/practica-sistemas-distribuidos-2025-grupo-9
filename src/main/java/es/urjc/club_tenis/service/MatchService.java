@@ -70,11 +70,13 @@ public class MatchService {
 
     public TennisMatch createMatch(User local, User visitor, Court courtObj, User winner, String result) {
         TennisMatch newMatch = new TennisMatch(local, visitor, courtObj, winner, result);
+        userService.addPlayedMatch(newMatch);
         return repo.save(newMatch);
     }
 
     public TennisMatch createMatch(User owner, User local, User visitor, Court courtObj, User winner, String result) {
         TennisMatch newMatch = new TennisMatch(owner, local, visitor,  winner, result, courtObj);
+        userService.addPlayedMatch(newMatch);
         return repo.save(newMatch);
     }
 

@@ -41,17 +41,20 @@ public class UserService {
     }
 
     @Transactional
-    public void addPlayedMatch(TennisMatch match, User user){
+    public void addPlayedMatch(TennisMatch match){
+        addMatch(match, findByUsername(match.getLocal().getUsername()));
+        addMatch(match, findByUsername(match.getVisitor().getUsername()));
+    }
+
+    private void addMatch(TennisMatch match, User user){
         User savedUser = findByUsername(user.getUsername());
-        logger.info(savedUser.toString());
-        if(savedUser.equals(user)){
-            logger.info(savedUser.getPlayedMatches().toString());
-            if(savedUser.playedTennisMatches == null){
-                savedUser.playedTennisMatches = new ArrayList<>();
-            }
-            savedUser.playedTennisMatches.add(match);
-            save(savedUser);
+        if(savedUser.getPlayedMatches() == null){
+            savedUser.setPlayedMatches(new ArrayList<>());
         }
+        if(!savedUser.getPlayedMatches().contains(match)){
+            savedUser.getPlayedMatches().add(match);
+        }
+        save(savedUser);
     }
 
     public User modify(User oldUser, String newUsername, String newName, MultipartFile profilePicture) throws ChangeSetPersister.NotFoundException {

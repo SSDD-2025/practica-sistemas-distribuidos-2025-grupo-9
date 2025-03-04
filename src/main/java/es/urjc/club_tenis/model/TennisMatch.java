@@ -2,6 +2,8 @@ package es.urjc.club_tenis.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 public class TennisMatch {
 
@@ -115,6 +117,18 @@ public class TennisMatch {
 
     public long getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TennisMatch that)) return false;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
 

@@ -1,4 +1,7 @@
 {{>navbar}}
 <div class="container">
+    {{#user}}
+    <a href="/match/new" class="btn btn-warning">Nuevo Partido</a>
+    {{/user}}
     {{>matches_macro}}
 </div>
