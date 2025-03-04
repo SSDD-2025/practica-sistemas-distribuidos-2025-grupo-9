@@ -1,6 +1,8 @@
 package es.urjc.club_tenis.controller;
 
+import es.urjc.club_tenis.model.TennisMatch;
 import es.urjc.club_tenis.model.User;
+import es.urjc.club_tenis.service.MatchService;
 import es.urjc.club_tenis.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.*;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Controller
@@ -25,6 +28,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private MatchService matchService;
 
     @GetMapping("/profile/{username}")
     public String getProfilePage(Model model, HttpSession session, @PathVariable String username){
@@ -161,4 +166,63 @@ public class UserController {
         session.invalidate();
         return "redirect:/login";
     }
+
+    @GetMapping("/users")
+    public String getUserList(Model model, HttpSession session) {
+
+        User currentUser = (User) session.getAttribute("user");
+        model.addAttribute("user", currentUser);
+
+        if(currentUser==null || !currentUser.isAdmin()){
+            model.addAttribute("errorMessage", "Necesitas ser administrador para acceder a los Usuarios");
+            return "error";
+        }
+
+        List<User> users = userService.findAll();
+        User deleted = userService.findByUsername("deleted_user");
+        users.remove(deleted);
+        model.addAttribute("users",users);
+    
+        return "users";
+    }
+
+    @GetMapping("/users/delete/{username}")
+    public String getConfirmation(Model model, @PathVariable String username, HttpSession session){
+
+        User currentUser= (User) session.getAttribute("user");
+        model.addAttribute("user", currentUser);
+
+        if(currentUser==null || !currentUser.isAdmin()){
+            model.addAttribute("errorMessage", "Necesitas ser administrador para borrar un Usuario");
+            return "error";
+        }
+
+        User deletedUser = userService.findByUsername(username);
+        model.addAttribute("deletedUser", deletedUser);
+
+        return "confirmation";
+    }
+
+    @PostMapping("/users/delete/{username}")
+    public String deleteUser(Model model, @PathVariable String username, HttpSession session){
+
+        User currentUser = (User) session.getAttribute("user");
+        model.addAttribute("user", currentUser);
+
+        if(currentUser==null || !currentUser.isAdmin()){
+            model.addAttribute("errorMessage", "Necesitas ser administrador para borrar un Usuario");
+            return "error";
+        }
+
+        User deleteUser = userService.findByUsername(username);
+        List<TennisMatch> matches = deleteUser.getPlayedMatches();
+
+        for(int i=0; i<matches.size();i++){
+            matchService.deleteUser(deleteUser,matches.get(i));
+        }
+        userService.delete(deleteUser);
+
+        return "redirect:/users";
+    }
+
 }

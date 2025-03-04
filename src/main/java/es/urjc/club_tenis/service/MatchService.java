@@ -90,4 +90,19 @@ public class MatchService {
         match.setResult(result);
         return repo.save(match);
     }
+
+    public void deleteUser(User user, TennisMatch match){
+
+        User deleted = userService.findByUsername("deleted_user");
+        if(match.getLocal().equals(user)){
+            match.setLocal(deleted);
+        }else{
+            match.setVisitor(deleted);
+        }
+
+        if(match.getWinner().equals(user)){
+            match.setWinner(deleted);
+        }
+        repo.save(match);
+    }
 }

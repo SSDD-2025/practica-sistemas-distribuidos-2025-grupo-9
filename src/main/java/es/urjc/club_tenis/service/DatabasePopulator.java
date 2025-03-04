@@ -29,10 +29,17 @@ public class DatabasePopulator {
         //Users
         List<User> users = userService.findAll();
         User admin = userService.findByUsername("admin");
+        User deleted = userService.findByUsername("deleted_user");
         if(admin == null) {
             admin = new User("admin", "Admin", "admin", true);
             userService.save(admin);
             userService.findByUsername("admin").setAdmin(true);
+        }
+        if(deleted == null){
+            deleted = new User("deleted_user","Deleted","deleted",null);
+            userService.save(deleted);
+        }else{
+            users.remove(deleted);
         }
         for(int i = 0; i < 10; i++){
             if(userService.findByUsername("user"+i) == null){

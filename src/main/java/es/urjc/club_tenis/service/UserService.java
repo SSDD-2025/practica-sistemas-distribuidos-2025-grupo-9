@@ -25,6 +25,9 @@ public class UserService {
     @Autowired
     private UserRepository repo;
 
+    @Autowired
+    private TournamentService tournamentService;
+
     public User save(User user){
         return repo.save(user);
     }
@@ -108,5 +111,21 @@ public class UserService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void delete(User user) {
+        User deleted = findByUsername("deleted_user");
+
+        List<Tournament> tournaments = user.getTournaments();
+        for(int i=0; i<tournaments.size();i++){
+            Tournament currentTournament = tournaments.get(i);
+
+            currentTournament.getParticipants().remove(user);
+            currentTournament.getParticipants().add(deleted);
+
+            tournamentService.save(currentTournament);
+        }
+
+        repo.delete(user);
     }
 }

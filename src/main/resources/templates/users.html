@@ -1,0 +1,35 @@
+{{>navbar}}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Usuarios</h2>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nombre de Usuario</th>
+            <th>Nombre</th>
+            <th>Foto de perfil</th>
+            <th>Borrar</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {{#users}}
+        {{^admin}}
+        <tr>
+            <td>{{username}}</td>
+            <td>{{name}}</td>
+            <td>
+                {{#profilePicture}}
+                <img class="profile-picture" src="{{.}}" alt="Foto de Perfil">
+                {{/profilePicture}}
+            </td>
+            <td>
+                <a href="/users/delete/{{username}}" class="btn btn-warning">Borrar</a>
+            </td>
+        </tr>
+        {{/admin}}
+        {{/users}}
+        </tbody>
+    </table>
+</div>
