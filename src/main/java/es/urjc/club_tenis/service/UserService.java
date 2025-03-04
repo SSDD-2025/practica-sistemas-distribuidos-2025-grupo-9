@@ -131,4 +131,11 @@ public class UserService {
 
         repo.delete(user);
     }
+
+    @Transactional
+    public void removeTournament(User user, Tournament tournament) {
+        User saved = findByUsername(user.getUsername());
+        saved.getTournaments().remove(tournament);
+        repo.save(saved);
+    }
 }

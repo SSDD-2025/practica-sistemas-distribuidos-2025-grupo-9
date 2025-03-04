@@ -3,11 +3,13 @@ package es.urjc.club_tenis.service;
 import es.urjc.club_tenis.model.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.OffsetScrollPositionHandlerMethodArgumentResolver;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.logging.Logger;
 
 @Service
 public class DatabasePopulator {
@@ -21,6 +23,11 @@ public class DatabasePopulator {
     private TournamentService tournamentService;
     @Autowired
     private CourtService courtService;
+
+    Logger logger = Logger.getLogger("es.urjc.club_tenis.controller");
+    @Autowired
+    private OffsetScrollPositionHandlerMethodArgumentResolver offsetResolver;
+
 
     @PostConstruct
     public void init(){
@@ -48,18 +55,32 @@ public class DatabasePopulator {
             }
         }
 
-        for(int i = 0; i < 2; i++){
-            if(tournamentService.findById(i+1) == null) {
-                tournamentService.save(new Tournament("Tournament " + i, LocalDate.parse("2025-12-"+(12+i)), LocalDate.parse("2025-12-" +(15+i)), i));
-            }
-        }
-
         //Courts
         if(courtService.findAll().isEmpty()){
             for(int i = 0; i < 2; i++){
                 courtService.save(new Court("Court"+i, (float) (Math.random()*10), LocalTime.of(11,00), LocalTime.of(20,00)));
             }
         }
+
+        //Tournaments
+        for(int i = 0; i < 3; i++){
+            if(tournamentService.findById(i+1) == null) {
+                Tournament t = tournamentService.save(new Tournament("Tournament " + i, LocalDate.parse("2025-12-" + (12 + i)), LocalDate.parse("2025-12-" + (15 + i)), i));
+                for(int j = 0; j < 5; j++){
+                    User local = users.get((int) (Math.random() * users.size()));
+                    User visitor = users.get((int) (Math.random() * users.size()));
+                    User winner = Math.random() > 0.5? local: visitor;
+                    TennisMatch match = matchService.createMatch(admin, local, visitor, courtService.findAll().getFirst(), winner, "3-6, 6-4, 7-5", t);
+                    tournamentService.addMatch(t, match);
+                }
+                List<TennisMatch> matches = tournamentService.getMatches(t);
+                logger.warning("Partidos de t:" + t.toString());
+                for(TennisMatch tm : matches) {
+                    logger.info(tm.toString());
+                }
+            }
+        }
+
 
         //Matches
         if(matchService.findAll().isEmpty()) {

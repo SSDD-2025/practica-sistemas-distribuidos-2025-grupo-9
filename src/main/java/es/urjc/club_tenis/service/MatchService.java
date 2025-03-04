@@ -2,6 +2,7 @@ package es.urjc.club_tenis.service;
 
 import es.urjc.club_tenis.model.Court;
 import es.urjc.club_tenis.model.TennisMatch;
+import es.urjc.club_tenis.model.Tournament;
 import es.urjc.club_tenis.model.User;
 import es.urjc.club_tenis.repositories.MatchRepository;
 import jakarta.transaction.Transactional;
@@ -59,13 +60,15 @@ public class MatchService {
     }
 
     public void delete(TennisMatch match) {
-        User localUser = userService.findByUsername(match.getLocal().getUsername());
-        User visitorUser = userService.findByUsername(match.getVisitor().getUsername());
-        localUser.getPlayedMatches().remove(match);
-        visitorUser.getPlayedMatches().remove(match);
+        TennisMatch saved = findById(match.getId());
+        User localUser = userService.findByUsername(saved.getLocal().getUsername());
+        User visitorUser = userService.findByUsername(saved.getVisitor().getUsername());
+        localUser.getPlayedMatches().remove(saved);
+        visitorUser.getPlayedMatches().remove(saved);
         userService.save(localUser);
         userService.save(visitorUser);
-        repo.delete(match);
+        saved.setTournament(null);
+        repo.delete(saved);
     }
 
     public TennisMatch createMatch(User local, User visitor, Court courtObj, User winner, String result) {
@@ -106,5 +109,18 @@ public class MatchService {
             match.setWinner(deleted);
         }
         repo.save(match);
+    }
+
+    public TennisMatch createMatch(User currentUser, User local, User visitor, Court courtObj, User winner, String result, Tournament currentTournament) {
+        TennisMatch newMatch = new TennisMatch(currentUser, local, visitor,  winner, result, courtObj);
+        newMatch.setTournament(currentTournament);
+        userService.addPlayedMatch(newMatch);
+        return repo.save(newMatch);
+    }
+
+    public void detachTournament(TennisMatch t) {
+        TennisMatch saved = findById(t.getId());
+        saved.setTournament(null);
+        save(saved);
     }
 }

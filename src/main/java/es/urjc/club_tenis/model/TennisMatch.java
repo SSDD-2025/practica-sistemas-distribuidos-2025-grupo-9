@@ -130,5 +130,19 @@ public class TennisMatch {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    @Override
+    public String toString() {
+        return "TennisMatch{" +
+                "id=" + id +
+                ", owner=" + owner +
+                ", winner=" + winner +
+                ", local=" + local +
+                ", visitor=" + visitor +
+                ", tournament=" + tournament +
+                ", court=" + court +
+                ", result='" + result + '\'' +
+                '}';
+    }
 }
 

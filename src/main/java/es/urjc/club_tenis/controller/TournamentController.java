@@ -65,12 +65,12 @@ public class TournamentController {
     @PostMapping("/{id}/addMatch")
     public String saveMatch(@PathVariable long id, String localUsername, String visitorUsername, long court, String winnerUsername, String result, Model model, HttpSession session){
 
-        System.out.println("Datos recibidos:");
-        System.out.println("Local: " + localUsername);
-        System.out.println("Visitante: " + visitorUsername);
-        System.out.println("Court: " + court);
-        System.out.println("Ganador: " + winnerUsername);
-        System.out.println("Resultado: " + result);
+        logger.info("Datos recibidos:");
+        logger.info("Local: " + localUsername);
+        logger.info("Visitante: " + visitorUsername);
+        logger.info("Court: " + court);
+        logger.info("Ganador: " + winnerUsername);
+        logger.info("Resultado: " + result);
 
         Court courtObj = courtService.findById(court);
         User local = userService.findByUsername(localUsername);
@@ -102,11 +102,9 @@ public class TournamentController {
         }else {
             User currentUser = (User) session.getAttribute("user");
             Tournament currentTournament = tournamentService.findById(id);
-            TennisMatch newMatch = matchService.createMatch(currentUser,local, visitor, courtObj, winner, result);
-            newMatch.setTournament(currentTournament);
-            currentTournament.addMatch(newMatch);
-            matchService.save(newMatch);
-            tournamentService.save(currentTournament);
+            TennisMatch newMatch = matchService.createMatch(currentUser,local, visitor, courtObj, winner, result, currentTournament);
+            logger.info(newMatch.toString());
+            tournamentService.addMatch(currentTournament, newMatch);
             return "redirect:/tournament/" + id;
         }
     }
@@ -166,6 +164,17 @@ public class TournamentController {
         }
         Tournament tournament = tournamentService.findById(id);
         tournamentService.modify(tournament, name, initDate, endDate, price);
+        return "redirect:/tournaments";
+    }
+
+    @GetMapping("/{id}/delete")
+    public String deleteTorunament(Model model, HttpSession session, @PathVariable long id){
+        User currentUser = (User) session.getAttribute("user");
+        if(currentUser == null || !currentUser.isAdmin()){
+            model.addAttribute("errorMessage", "No se ha podido eliminar el torneo");
+            return "error";
+        }
+        tournamentService.delete(tournamentService.findById(id));
         return "redirect:/tournaments";
     }
 }

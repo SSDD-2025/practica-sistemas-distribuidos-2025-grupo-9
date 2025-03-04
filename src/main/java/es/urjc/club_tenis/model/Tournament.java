@@ -2,6 +2,8 @@ package es.urjc.club_tenis.model;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
+
 import java.util.*;
 import java.time.*;
 
@@ -27,7 +29,7 @@ public class Tournament {
     )
     public List<User> participants;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.REMOVE)
     @JoinTable(
             name = "tournament_matches",
             joinColumns = @JoinColumn(name = "tournament_id"),
@@ -40,14 +42,22 @@ public class Tournament {
         this.initDate = initDate;
         this.endDate = endDate;
         this.price = price;
+        this.matches = new ArrayList<>();
     }
 
     public Tournament() {
 
     }
 
+    @Transactional
     public void addMatch(TennisMatch match) {
-        if(!matches.contains(match)) {
+        List<TennisMatch> matches = this.getMatches();
+        if(matches == null){
+            matches = new ArrayList<>();
+        }
+        if(matches.isEmpty()){
+            matches.add(match);
+        }else if(!matches.contains(match)) {
             matches.add(match);
             if(!participants.contains(match.getLocal())) {
                 participants.add(match.getLocal());
