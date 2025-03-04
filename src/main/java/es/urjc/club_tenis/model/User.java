@@ -19,7 +19,6 @@ public class User {
     public String username;
     public String name;
     public String password;
-    public String statistics;
 
     @Lob
     private Blob profilePicture;
@@ -42,7 +41,6 @@ public class User {
         this.username = username;
         this.name = name;
         this.password = password;
-        this.statistics = "Aun no ha jugado ningun partido";
         this.admin = false;
         if(profilePicture!=null && !profilePicture.isEmpty()) {
             try {
@@ -60,7 +58,6 @@ public class User {
         this.username = username;
         this.name = name;
         this.password = password;
-        this.statistics = "Aun no ha jugado ningun partido";
         this.admin = true;
     }
 
@@ -100,14 +97,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getStatistics() {
-        return statistics;
-    }
-
-    public void setStatistics(String statistics) {
-        this.statistics = statistics;
     }
 
     public List<TennisMatch> getPlayedMatches() {
