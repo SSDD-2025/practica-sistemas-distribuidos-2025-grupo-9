@@ -169,6 +169,7 @@ mvn spring-boot:run
   Mi implicación inicial fue la parte más destacada de mi trabajo en esta entrega colaborando y gestionando tareas como:
   - Creación de diagrama de entidades y clases
   - Creación de diagrama de navegación
+  
   A partir de ese punto mi trabajo se ha basado en organizar al equipo y marcar los tiempos de realización de cadauna de las partes necesarias tanto a nivel de frontend como de lógica de negocio.
   * Ficheros en los que participa:
     * [WebController.java](src/main/java/es/urjc/club_tenis/controller/WebController.java)
