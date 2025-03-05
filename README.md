@@ -137,7 +137,7 @@ mvn spring-boot:run
   * Commits más Significativos:
     * [First implementation of serice, controller and repository of Tournament](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/1b5add60207e61ec12b2ae8c72302bac6e3276b2)
     * [Implementation of create tournament](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/9262369114fbf036a42746c30ea8ef480bcda545)
-    * [Firs implementation of add Match and Participants to Tournament](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/47520b4894171e831bf09f0bd90fbfdade6b5dee)
+    * [First implementation of add Match and Participants to Tournament](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/47520b4894171e831bf09f0bd90fbfdade6b5dee)
     * [Update tournament_new.html y tournaments](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/959c13ea950386a1193b3ab837d5ad0bdc6b86e7)
     * [Updated index, WebController, UserService and UserRepository](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/9458e346de1a6b7331bd5799df70a4bc4a790e93)
   * Ficheros en los que participa:
@@ -161,9 +161,15 @@ mvn spring-boot:run
     * [UserService.java](src/main/java/es/urjc/club_tenis/service/UserService.java)
     * [CourtController.java](src/main/java/es/urjc/club_tenis/controller/CourtController.java)
 * HUGO FERNANDEZ SISQUELLA
-  * Tareas:
-  * Commits más Significativos:
+  Al tratarse de un grupo donde los integrantes no nos conociamos previamente mi misión en el equipo ha sido la de garantizar la comunicación y la organización de las tareas del proyecto.
+  La elección del tema de la pàgina web fue debido a mi pasión por el tennis y aquí he podido aportar conocimientos de club de tennis con los que he colaborado con el diseño de sus respectivas páginas web.
+  Mi implicación inicial fue la parte más destacada de mi trabajo en esta entrega colaborando y gestionando tareas como:
+  - Creación de diagrama de entidades y clases
+  - Creación de diagrama de navegación
+  A partir de ese punto mi trabajo se ha basado en organizar al equipo y marcar los tiempos de realización de cadauna de las partes necesarias tanto a nivel de frontend como de lógica de negocio.
   * Ficheros en los que participa:
+    * [WebController.java](src/main/java/es/urjc/club_tenis/controller/WebController.java)
+    
 * RODRIGO LÓPEZ BARCA
   * Tareas: He participado en la creación de los endpoints, las relaciones de las entidades en la base de datos, y la gestión de estas.
   * Commits más Significativos:
