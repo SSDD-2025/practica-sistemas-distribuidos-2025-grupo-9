@@ -15,10 +15,96 @@
   * Crear y modificar partidos de cualquier usuario
   * Crear y modificar pistas
   * Modificar usuarios
+
+## Capturas de pantalla
+
+  * Página principal:
+ ![Pagina Principal](https://github.com/user-attachments/assets/c1270368-1fa0-49cb-a5b6-ec7979c4b836)
+
+Podemos ver la barra de navegación la cual estará presente en el resto de páginas. En esta tenemos los siguientes textos que nos redirigen a las páginas relacionadas con cada uno y dos botones, “Entrar” el cual nos lleva a la página de login y “Registrarse” que nos lleva a la pagina de registro.
+Debajo de esta se encuentra la sección de “Últimos Partidos” y “Lista de Torneos” en las que se ven los partidos jugados y los torneos respectivamente.
+
+  * Página de registro:
+ ![Pagina de Registro](https://github.com/user-attachments/assets/33d32805-c1e5-40a8-9e17-b45de2bdd545)
+
+Esta página sirve para que los usuarios se registren, es requerido que el usuario introduzca todos los campos a excepción de “Foto de Perfil” ya que este es opcional.
+
+  * Pagina de Inicio de sesión/Login
+ ![Pagina de Login](https://github.com/user-attachments/assets/2d434e91-c9b3-488f-8cf5-9192b18e1328)
+
+En esta página tenemos los campos para rellenar “Username” y “Contraseña” y el botón Enviar para hacer el login.
+
+  * Pagina de Perfil de usuario:
+ ![Pagina de Perfil](https://github.com/user-attachments/assets/376cb19e-7016-4c1f-a2f9-7213ea716fc0)
+
+En la barra de navegación al iniciar sesión se cambiarán los botones por “@username” y “Salir” los cuales te llevarán a la página del perfil del usuario y el se salir te cerrarán la sesión y te llevara a la página de login.
+Además, en esta se encuentra la foto del usuario, a su derecha su username, debajo de estos el botón de modificar, que solo se mostrará si nuestra sesión es la del perfil o un administrador y por último el nombre y los partidos que este ha jugado.
+
+  * Página de Partidos:
+ ![Pagina de Partidos](https://github.com/user-attachments/assets/d7379fa3-f028-40e3-9130-82e93d428dcb)
+
+En esta pagina se nos muestran los partidos jugados y el botón “Nuevo Partido” para crear un nuevo partido el cual solo veremos si hemos iniciado sesión.
+ 
+  * Página de Detalles del Partido:
+ ![Pagina de Detalles de Partido](https://github.com/user-attachments/assets/9fe52994-204e-4adc-9741-8156024a8803)
+
+En esta página está el usuario local y visitante, el resultado y el ganador de este junto con los botones de “Modificar” y “Eliminar” los cuales solo se verán si eres el propietario del partido o un administrador.
+
+  * Página de Modificar Partido/Crear Partido:
+ ![Pagina Creacion_Modificacion Partido](https://github.com/user-attachments/assets/51b93b44-0347-4ab8-a9b1-f743ca715877)
+
+La página de modificación contiene los campos necesarios para crear el partido.
+Esta página es casi idéntica a la de creación, las diferencias son que en los campos a rellenar estarían vacíos excepto el de Pista.
+
+  * Página de Torneos:
+ ![Pagina de Torneos](https://github.com/user-attachments/assets/e4e2f766-1851-4d0f-8519-0e4807576b60)
+
+En esta página se nos muestran todos los torneos con su nombre, fechas, precio, teléfono para inscribirse(el del club de tenis), y el botón de ver detalles. El resto de botones(Nuevo Torneo, Modificar y Eliminar) solo se verán si somos un administrador.
+
+  * Pagina de Detalles del Torneo:
+ ![Pagina de Detalles de Torneo](https://github.com/user-attachments/assets/67647802-38f7-449f-8734-ff22cbc39d61)
+
+En esta pagina se observa el nombre del torneo, las fechas, el precio, los participantes y los partidos jugados del torneo. Si somos el administrador veremos también el botón de “Añadir Partido”.
+ 
+  * Página de Creación/Modificación de Torneo:
+ ![Pagina Creacion_Modificacion Torneo](https://github.com/user-attachments/assets/611a911d-ec39-415e-8bd5-ea638ad0d4e5)
+
+En esta página tenemos el formulario para la creación o modificación de los torneos con los campos necesarios para crear este.
+
+  * Página de Pistas:
+ ![Pagina de Pistas](https://github.com/user-attachments/assets/d5f9d7ba-669b-4764-9be6-7e879b5f8a2a)
+
+En esta página veremos el nombre, horario, precio y el botón de reservar de estas si somos un usuario normal o un invitado y veremos de manera adicional los botones de crear pista, modificar y eliminar en caso de que seamos administrador.
+ 
+  * Página de Reservar pista:
+ ![Pagina Reserva de Pista](https://github.com/user-attachments/assets/9e1ed09d-f390-4d84-aaed-7a059b5225b1)
+
+En esta pagina vemos el nombre de la pista, su precio, y dos campos para la fecha y la hora de la reserva.
+
+  * Página de Creación/Modificación de Pista:
+ ![Pagina Creacion_Modificacion Pista](https://github.com/user-attachments/assets/78ccfdb6-e779-4087-ba84-f8ce4d63dc6f)
+
+En esta página tenemos los campos necesarios para crear o modificar una pista cambiará de “Crear Pista” a “Modificar Pista” en caso de estar modificando una pista.
+ 
+  * Página de Lista de Usuarios:
+ ![Pagina de Usuarios](https://github.com/user-attachments/assets/620816ee-ebb1-4e67-9342-f9718cddb829)
+
+Está pagina será solo visible para los administradores y es accesible desde la barra de navegación desde el texto “Usuarios”, en esta el administrador puede ver los perfiles de los usuarios y eliminarlos si fuese necesario.
+
+  * Página de Error:
+ ![Pagina de Error](https://github.com/user-attachments/assets/d6220370-9d5c-4f4b-ae6d-39508b3cf45e)
+
+Esta página será la que veremos cuando vayamos a una página inexistente u otros errores ocasionados en alguno de estos se cambiará el texto para indicar el error. Ej. Al intentar acceder a “/tournament/new” sin ser administrador nos dará el texto “Un usuario sin privilegios no puede crear un torneo”.
 ## Diagrama de navegación
+ * Las flechas verdes representan las páginas a las que pueden acceder todos los usuarios.
+ * Las flechas rojas representan las páginas a las que solo pueden acceder los usuarios con sesión iniciada.
+ * Las flechas amarillas representan las páginas a las que solo pueden acceder los usuarios que son administradores.
+ * A la página de error se puede acceder desde cualquier página.
+ ![Diagrama_Navegacion.jpg](Diagrama_Navegacion.jpg)
 ## Diagrama de entidades
 ![Diagrama_BD.png](Diagrama_BD.png)
 ## Diagrama de Clases
+![Diagrama_Clases.png](Diagrama_Clases.png)
 ## Instrucciones de Ejecución
 1. Tener instalado Docker 
 2. Tener instalado Maven
@@ -47,17 +133,47 @@ mvn spring-boot:run
 
 ## Participación:
 * RUBÉN BARGUEÑO PRIETO
-  * Tareas:
+  * Tareas: he participado en el diagrama de navegación, diagrama de la base de datos y en diversos puntos en las entidades, controladores, servicios y html.
   * Commits más Significativos:
-  * Ficheros en los que participa: 
+    * [First implementation of serice, controller and repository of Tournament](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/1b5add60207e61ec12b2ae8c72302bac6e3276b2)
+    * [Implementation of create tournament](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/9262369114fbf036a42746c30ea8ef480bcda545)
+    * [First implementation of add Match and Participants to Tournament](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/47520b4894171e831bf09f0bd90fbfdade6b5dee)
+    * [Update tournament_new.html y tournaments](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/959c13ea950386a1193b3ab837d5ad0bdc6b86e7)
+    * [Updated index, WebController, UserService and UserRepository](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/9458e346de1a6b7331bd5799df70a4bc4a790e93)
+  * Ficheros en los que participa:
+    * [TournamentController.java](src/main/java/es/urjc/club_tenis/controller/TournamentController.java)
+    * [Tournament.java](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/model/Tournament.java)
+    * [UserControler.java](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/controller/UserController.java)
+    * [Tournament_addMatch.html](src/main/resources/templates/tournament_addMatch.html)
+    * [Court.java](src/main/java/es/urjc/club_tenis/model/Court.java)
 * ARIEL CARNÉS BLASCO
-  * Tareas:
+  * Tareas: He participado en la creación de páginas html y la modificación de los repositorios y controladores para implementar funcionalidades importantes de la aplicación. También he participado en la creación del diagrama de clases.
   * Commits más Significativos:
+    * [Add login html](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/af56d9670cd236aba4b7e480df774a24cc24572f)
+    * [Create Basic Court Controller](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/5a4f8417cbcf02c898e3b8073e2df617ffd4a12c)
+    * [Added Delete User Endpoint](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/52b6a2d615990ac4b9db4d22697b9e27f5c79aa7)
+    * [Delete User Update](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/0bed9ef0062978262fc4c2cee2347c07d1fd21c6)
+    * [ClassDiagram](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/d8335e619706c5e2e6a0c5d67b7b72f0379c13b1)
   * Ficheros en los que participa:
+    * [users.html](src/main/resources/templates/users.html)
+    * [WebController.java](src/main/java/es/urjc/club_tenis/controller/WebController.java)
+    * [UserController.java](src/main/java/es/urjc/club_tenis/controller/UserController.java)
+    * [UserService.java](src/main/java/es/urjc/club_tenis/service/UserService.java)
+    * [CourtController.java](src/main/java/es/urjc/club_tenis/controller/CourtController.java)
 * HUGO FERNANDEZ SISQUELLA
-  * Tareas:
-  * Commits más Significativos:
+  
+  Al tratarse de un grupo donde los integrantes no nos conociamos previamente mi misión en el equipo ha sido la de garantizar la comunicación y la organización de las tareas del proyecto.
+  
+  La elección del tema de la pàgina web fue debido a mi pasión por el tennis y aquí he podido aportar conocimientos de club de tennis con los que he colaborado con el diseño de sus respectivas páginas web.
+  
+  Mi implicación inicial fue la parte más destacada de mi trabajo en esta entrega colaborando y gestionando tareas como:
+  - Creación de diagrama de entidades y clases
+  - Creación de diagrama de navegación
+  
+  A partir de ese punto mi trabajo se ha basado en organizar al equipo y marcar los tiempos de realización de cadauna de las partes necesarias tanto a nivel de frontend como de lógica de negocio.
   * Ficheros en los que participa:
+    * [WebController.java](src/main/java/es/urjc/club_tenis/controller/WebController.java)
+    
 * RODRIGO LÓPEZ BARCA
   * Tareas: He participado en la creación de los endpoints, las relaciones de las entidades en la base de datos, y la gestión de estas.
   * Commits más Significativos:

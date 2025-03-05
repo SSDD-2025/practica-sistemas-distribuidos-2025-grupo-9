@@ -36,13 +36,18 @@ public class UserController {
     public String getProfilePage(Model model, HttpSession session, @PathVariable String username){
         User user = userService.findByUsername(username);
         model.addAttribute("profilePictureUrl" ,"/profile-picture/" + user.getUsername());
-        model.addAttribute("user", user);
+        model.addAttribute("profileUser", user);
         model.addAttribute("matches", user.getPlayedMatches());
         User sessionUser = (User) session.getAttribute("user");
+        model.addAttribute("user",sessionUser);
+
         if(sessionUser == null){
             return "profile";
         } else if( sessionUser.equals(user) || sessionUser.isAdmin()){
             model.addAttribute("showModify", true);
+            if(!user.isAdmin() && !user.equals(userService.findByUsername("deleted_user"))){
+                model.addAttribute("showDelete", true);
+            }
         }
         return "profile";
     }
@@ -189,14 +194,14 @@ public class UserController {
     public String getConfirmation(Model model, @PathVariable String username, HttpSession session){
 
         User currentUser= (User) session.getAttribute("user");
+        User deletedUser = userService.findByUsername(username);
         model.addAttribute("user", currentUser);
 
-        if(currentUser==null || !currentUser.isAdmin()){
-            model.addAttribute("errorMessage", "Necesitas ser administrador para borrar un Usuario");
+        if(currentUser==null || (!currentUser.isAdmin() && !currentUser.equals(deletedUser))){
+            model.addAttribute("errorMessage", "No tienes permiso para borrar este usuario");
             return "error";
         }
 
-        User deletedUser = userService.findByUsername(username);
         model.addAttribute("deletedUser", deletedUser);
 
         return "confirmation";
@@ -206,18 +211,26 @@ public class UserController {
     public String deleteUser(Model model, @PathVariable String username, HttpSession session){
 
         User currentUser = (User) session.getAttribute("user");
+        User deleteUser = userService.findByUsername(username);
         model.addAttribute("user", currentUser);
 
-        if(currentUser==null || !currentUser.isAdmin()){
-            model.addAttribute("errorMessage", "Necesitas ser administrador para borrar un Usuario");
+        if(currentUser==null || (!currentUser.isAdmin() && !currentUser.equals(deleteUser))){
+            model.addAttribute("errorMessage", "No tienes permiso para borrar este usuario");
             return "error";
         }
 
-        User deleteUser = userService.findByUsername(username);
         Set<TennisMatch> matches = deleteUser.getPlayedMatches();
 
         for(TennisMatch match:matches){
             matchService.deleteUser(deleteUser, match);
+        }
+
+        if(currentUser.equals(deleteUser)){
+
+            userService.delete(deleteUser);
+            session.invalidate();
+
+            return "redirect:/";
         }
 
         userService.delete(deleteUser);
