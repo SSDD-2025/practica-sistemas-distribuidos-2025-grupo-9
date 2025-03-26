@@ -32,9 +32,6 @@ public class User {
     )
     public Set<TennisMatch> playedTennisMatches;
 
-    @ManyToMany(mappedBy = "participants")
-    public Set<Tournament> tournaments;
-
     public boolean admin;
 
     public User(String username, String name, String password, MultipartFile profilePicture) {
@@ -105,14 +102,6 @@ public class User {
 
     public void setPlayedMatches(Set<TennisMatch> playedTennisMatches) {
         this.playedTennisMatches = playedTennisMatches;
-    }
-
-    public Set<Tournament> getTournaments() {
-        return tournaments;
-    }
-
-    public void setTournaments(Set<Tournament> tournaments) {
-        this.tournaments = tournaments;
     }
 
     public boolean isAdmin() {

@@ -117,20 +117,6 @@ public class UserService {
         for(TennisMatch match : user.getPlayedMatches()){
             matchService.deleteUser(match.getId(), user);
         }
-        Set<Tournament> tournaments = user.getTournaments();
-        for(Tournament t : tournaments){
-            tournamentService.removeParticipant(t.getId(), user);
-        }
         repo.delete(user);
-    }
-
-    @Transactional
-    public void removeTournament(String username, Tournament tournament) {
-        User saved = findByUsername(username);
-        Tournament t = tournamentService.findById(tournament.getId());
-        t.getParticipants().remove(saved);
-        tournamentService.save(t);
-        saved.getTournaments().remove(tournament);
-        save(saved);
     }
 }

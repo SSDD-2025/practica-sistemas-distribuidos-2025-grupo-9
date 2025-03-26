@@ -51,7 +51,6 @@ public class MatchService {
         visitorUser.getPlayedMatches().remove(saved);
         userService.save(localUser);
         userService.save(visitorUser);
-        detachTournament(id);
         repo.delete(saved);
     }
 
@@ -95,18 +94,6 @@ public class MatchService {
 
     public TennisMatch createMatch(User currentUser, User local, User visitor, Court courtObj, User winner, String result, Tournament currentTournament) {
         TennisMatch newMatch = new TennisMatch(currentUser, local, visitor,  winner, result, courtObj);
-        newMatch.setTournament(tournamentService.findById(currentTournament.getId()));
         return save(newMatch);
-    }
-
-    public void detachTournament(long id) {
-        TennisMatch saved = findById(id);
-        if(saved.getTournament() != null){
-            Tournament savedTournament = tournamentService.findById(saved.getTournament().getId());
-            saved.setTournament(null);
-            save(saved);
-            savedTournament.getMatches().remove(saved);
-            tournamentService.save(savedTournament);
-        }
     }
 }

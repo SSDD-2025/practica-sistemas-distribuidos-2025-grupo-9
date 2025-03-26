@@ -28,10 +28,6 @@ public class TennisMatch {
     private User visitor;
 
     @ManyToOne
-    @JoinColumn(name = "tournament_id")
-    private Tournament tournament;
-
-    @ManyToOne
     @JoinColumn(name = "court_id")
     private Court court;
 
@@ -45,7 +41,6 @@ public class TennisMatch {
         this.visitor = visitor;
         this.winner = winner;
         this.result = result.isEmpty() ? "Aun no se ha jugado." : result;
-        this.tournament = null;
         this.court = court;
     }
 
@@ -56,7 +51,6 @@ public class TennisMatch {
         this.court = court;
         this.winner = winner;
         this.result = result.isEmpty() ? "Aun no se ha jugado." : result;
-        this.tournament = null;
     }
 
     public User getOwner() {
@@ -89,14 +83,6 @@ public class TennisMatch {
 
     public void setVisitor(User visitor) {
         this.visitor = visitor;
-    }
-
-    public Tournament getTournament() {
-        return tournament;
-    }
-
-    public void setTournament(Tournament tournament) {
-        this.tournament = tournament;
     }
 
     public Court getCourt() {

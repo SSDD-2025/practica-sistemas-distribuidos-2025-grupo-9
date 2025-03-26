@@ -65,45 +65,11 @@ public class TournamentService {
     }
 
     @Transactional
-    public void removeParticipant(long id, User user){
-        Tournament saved = findById(id);
-        Set<User> users = new HashSet<>(saved.getParticipants());
-        users.remove(user);
-        saved.setParticipants(users);
-        save(saved);
-    }
-
-
-    @Transactional
-    public void removeParticipants(long id){
-        Tournament t = findById(id);
-        Set<User> users = new HashSet<>(t.getParticipants());
-        for(User u : users){
-            userService.removeTournament(u.getUsername(), t);
-        }
-        t.getParticipants().clear();
-        save(t);
-    }
-
-    @Transactional
-    public void removeMatches(long id){
-        Tournament t = findById(id);
-        Set<TennisMatch> matches = new HashSet<>(t.getMatches());
-        for (TennisMatch m : matches) {
-            matchService.detachTournament(id);
-            matchService.delete(id);
-        }
-        t.getMatches().clear();
-        save(t);
-    }
-
-    @Transactional
     public void delete(long id) {
         Tournament saved = findById(id);
         if (saved != null) {
-            removeParticipants(id);
-            removeMatches(id);
-            save(saved);
+            saved.getParticipants().clear();
+            saved.getMatches().clear();
             repo.deleteById(id);
         }
     }

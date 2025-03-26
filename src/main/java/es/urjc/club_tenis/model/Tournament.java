@@ -65,7 +65,6 @@ public class Tournament {
                 participants.add(match.getVisitor());
             }
         }
-        match.setTournament(this);
         return match;
     }
 
