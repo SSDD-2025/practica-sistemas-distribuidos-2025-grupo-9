@@ -1,6 +1,5 @@
 package es.urjc.club_tenis.controller;
 
-import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import es.urjc.club_tenis.service.CourtService;
 import es.urjc.club_tenis.service.MatchService;
 import es.urjc.club_tenis.model.*;
@@ -63,7 +62,7 @@ public class MatchController {
         TennisMatch match = matchService.findById(id);
         if(currentUser.equals(match.getOwner()) || currentUser.isAdmin() || currentUser.equals(match.getLocal())){
             //Delete
-            matchService.delete(match);
+            matchService.delete(id);
             return "redirect:/matches";
         }else{
             model.addAttribute("errorMessage", "No tines permiso para eliminar este partido");
@@ -98,7 +97,11 @@ public class MatchController {
             model.addAttribute("courts", courtService.findAll());
             return "match_form";
         }else {
-            TennisMatch newMatch = matchService.createMatch(local, visitor, courtObj, winner, result);
+            User currentUser = (User) session.getAttribute("user");
+            if(currentUser == null){
+                return "redirect:/login";
+            }
+            TennisMatch newMatch = matchService.createMatch(currentUser, local, visitor, courtObj, winner, result);
             return "redirect:/match/" + newMatch.getId();
         }
     }
@@ -122,7 +125,7 @@ public class MatchController {
             model.addAttribute("action", match.getId() + "/update");
             return "match_form";
         }else{
-            model.addAttribute("errorMessage", "No tines permiso para modificar este partido");
+            model.addAttribute("errorMessage", "No tienes permiso para modificar este partido");
             return "error";
         }
     }
@@ -164,7 +167,7 @@ public class MatchController {
                 return "match_form";
             }else {
                 try{
-                    TennisMatch updatedMatch = matchService.modify(match, local, visitor, courtService.findById(court), winner, result);
+                    TennisMatch updatedMatch = matchService.modify(id, local, visitor, courtService.findById(court), winner, result);
                     return "redirect:/match/" + updatedMatch.getId();
                 }catch (ChangeSetPersister.NotFoundException e) {
                     model.addAttribute("errorMessage", "No se ha encontrado este partido");

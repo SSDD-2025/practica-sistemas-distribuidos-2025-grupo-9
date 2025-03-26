@@ -4,12 +4,9 @@ import es.urjc.club_tenis.model.TennisMatch;
 import es.urjc.club_tenis.model.Tournament;
 import es.urjc.club_tenis.model.User;
 import es.urjc.club_tenis.repositories.TournamentRespository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
-import org.springframework.ui.Model;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -19,9 +16,6 @@ import java.util.logging.Logger;
 public class TournamentService {
 
     Logger logger = Logger.getLogger("es.urjc.club_tenis.controller");
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Autowired
     private TournamentRespository repo;
@@ -45,29 +39,24 @@ public class TournamentService {
     }
 
     @Transactional
-    public void addMatch(Tournament tournament, TennisMatch match) {
-        Tournament saved = findById(tournament.getId());
+    public void addMatch(long id, TennisMatch match) {
+        Tournament saved = findById(id);
         TennisMatch savedMatch = matchService.findById(match.getId());
         saved.getMatches().add(savedMatch);
-        addParticipant(saved, userService.findByUsername(savedMatch.getLocal().getUsername()));
-        addParticipant(saved,userService.findByUsername(savedMatch.getVisitor().getUsername()));
+        addParticipant(id, userService.findByUsername(savedMatch.getLocal().getUsername()));
+        addParticipant(id,userService.findByUsername(savedMatch.getVisitor().getUsername()));
         save(saved);
     }
 
     @Transactional
-    public void addParticipant(Tournament t, User user){
-        Tournament saved = findById(t.getId());
+    public void addParticipant(long id, User user){
+        Tournament saved = findById(id);
         saved.getParticipants().add(user);
         save(saved);
     }
 
-    @Transactional
-    public Set<TennisMatch> getMatches(Tournament t){
-        return findById(t.getId()).getMatches();
-    }
-
-    public void modify(Tournament tournament, String name, String initDate, String endDate, int price) {
-        Tournament saved = findById(tournament.getId());
+    public void modify(long id, String name, String initDate, String endDate, int price) {
+        Tournament saved = findById(id);
         saved.setName(name);
         saved.setPrice(price);
         saved.setInitDate(LocalDate.parse(initDate));
@@ -75,40 +64,47 @@ public class TournamentService {
         repo.save(saved);
     }
 
-    public Set<User> getParticipants(Tournament t){
-        return findById(t.getId()).getParticipants();
+    @Transactional
+    public void removeParticipant(long id, User user){
+        Tournament saved = findById(id);
+        Set<User> users = new HashSet<>(saved.getParticipants());
+        users.remove(user);
+        saved.setParticipants(users);
+        save(saved);
     }
 
+
     @Transactional
-    public void removeParticipants(Tournament t){
-        Set<User> users = new HashSet<>(getParticipants(t));
-        logger.info("Users " + users);
+    public void removeParticipants(long id){
+        Tournament t = findById(id);
+        Set<User> users = new HashSet<>(t.getParticipants());
         for(User u : users){
-            userService.removeTournament(u, t);
+            userService.removeTournament(u.getUsername(), t);
         }
         t.getParticipants().clear();
         save(t);
     }
 
     @Transactional
-    public void removeMatches(Tournament t){
-        Set<TennisMatch> matches = new HashSet<>(getMatches(t));
+    public void removeMatches(long id){
+        Tournament t = findById(id);
+        Set<TennisMatch> matches = new HashSet<>(t.getMatches());
         for (TennisMatch m : matches) {
-            matchService.detachTournament(m, t);
-            matchService.delete(m);
+            matchService.detachTournament(id);
+            matchService.delete(id);
         }
         t.getMatches().clear();
         save(t);
     }
 
     @Transactional
-    public void delete(Tournament tournament) {
-        Tournament saved = findById(tournament.getId());
+    public void delete(long id) {
+        Tournament saved = findById(id);
         if (saved != null) {
-            removeParticipants(saved);
-            removeMatches(saved);
+            removeParticipants(id);
+            removeMatches(id);
             save(saved);
-            repo.delete(saved);
+            repo.deleteById(id);
         }
     }
 }

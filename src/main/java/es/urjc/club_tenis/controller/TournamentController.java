@@ -110,7 +110,7 @@ public class TournamentController {
             Tournament currentTournament = tournamentService.findById(id);
             TennisMatch newMatch = matchService.createMatch(currentUser,local, visitor, courtObj, winner, result, currentTournament);
             logger.info(newMatch.toString());
-            tournamentService.addMatch(currentTournament, newMatch);
+            tournamentService.addMatch(id, newMatch);
             return "redirect:/tournament/" + id;
         }
     }
@@ -168,8 +168,7 @@ public class TournamentController {
             model.addAttribute("errorMessage", "No se ha podido modificar el torneo");
             return "error";
         }
-        Tournament tournament = tournamentService.findById(id);
-        tournamentService.modify(tournament, name, initDate, endDate, price);
+        tournamentService.modify(id, name, initDate, endDate, price);
         return "redirect:/tournaments";
     }
 
@@ -180,8 +179,7 @@ public class TournamentController {
             model.addAttribute("errorMessage", "No se ha podido eliminar el torneo");
             return "error";
         }
-        Tournament currentTournament = tournamentService.findById(id);
-        tournamentService.delete(currentTournament);
+        tournamentService.delete(id);
         return "redirect:/tournaments";
     }
 }

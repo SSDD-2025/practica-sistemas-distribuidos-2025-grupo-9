@@ -6,8 +6,6 @@ import es.urjc.club_tenis.service.MatchService;
 import es.urjc.club_tenis.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +13,6 @@ import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -29,6 +24,7 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private MatchService matchService;
 
@@ -100,9 +96,9 @@ public class UserController {
             User modify;
             try {
                 if(password.isEmpty()){
-                    modify = userService.modify(user, username, name, profilePicture);
+                    modify = userService.modify(oldUsername, username, name, profilePicture);
                 }else if(password.equals(user.getPassword())){
-                    modify = userService.modify(user, username, name, password, newPassword, profilePicture);
+                    modify = userService.modify(oldUsername, username, name, password, newPassword, profilePicture);
                 }else{
                     model.addAttribute("invalidPassword", true);
                     return getModifyPage(model, session, oldUsername);
@@ -222,18 +218,18 @@ public class UserController {
         Set<TennisMatch> matches = deleteUser.getPlayedMatches();
 
         for(TennisMatch match:matches){
-            matchService.deleteUser(deleteUser, match);
+            matchService.deleteUser(match.getId(), deleteUser);
         }
 
         if(currentUser.equals(deleteUser)){
 
-            userService.delete(deleteUser);
+            userService.delete(username);
             session.invalidate();
 
             return "redirect:/";
         }
 
-        userService.delete(deleteUser);
+        userService.delete(username);
 
         return "redirect:/users";
     }

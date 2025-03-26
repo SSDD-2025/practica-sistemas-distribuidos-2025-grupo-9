@@ -10,22 +10,19 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.apache.commons.io.IOUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.logging.Logger;
 
 @Service
 public class UserService {
 
-    Logger logger = Logger.getLogger("es.urjc.club_tenis.controller");
-
-
     @Autowired
     private UserRepository repo;
+
+    @Autowired
+    private MatchService matchService;
 
     @Autowired
     private TournamentService tournamentService;
@@ -44,43 +41,39 @@ public class UserService {
 
     @Transactional
     public void addPlayedMatch(TennisMatch match){
-        addMatch(match, findByUsername(match.getLocal().getUsername()));
-        addMatch(match, findByUsername(match.getVisitor().getUsername()));
+        addMatch(match.getLocal().getUsername(), match);
+        addMatch(match.getVisitor().getUsername(), match);
     }
 
-    private void addMatch(TennisMatch match, User user){
-        User savedUser = findByUsername(user.getUsername());
+    private void addMatch(String username, TennisMatch match){
+        User savedUser = findByUsername(username);
         if(savedUser.getPlayedMatches() == null){
             savedUser.setPlayedMatches(new HashSet<>());
         }
-        if(!savedUser.getPlayedMatches().contains(match)){
-            savedUser.getPlayedMatches().add(match);
-        }
+        savedUser.getPlayedMatches().add(match);
         save(savedUser);
     }
 
-    public User modify(User oldUser, String newUsername, String newName, MultipartFile profilePicture) throws ChangeSetPersister.NotFoundException {
-        User user = findByUsername(oldUser.username);
+    public User modify(String oldUsername, String newUsername, String newName, MultipartFile profilePicture) throws ChangeSetPersister.NotFoundException {
+        User user = findByUsername(oldUsername);
         if(user == null){
             throw new ChangeSetPersister.NotFoundException();
         }
         user.setUsername(newUsername);
         user.setName(newName);
-        if(!profilePicture.isEmpty()) {
+        if(profilePicture != null && !profilePicture.isEmpty()) {
             try {
                 user.setProfilePicture(BlobProxy.generateProxy(profilePicture.getInputStream(),
                         profilePicture.getSize()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }else{
-            user.setProfilePicture(null);
         }
         return repo.save(user);
     }
 
-    public User modify(User oldUser, String newUsername, String newName, String oldPassword, String newPassword, MultipartFile profilePicture) throws ChangeSetPersister.NotFoundException {
-        User user = findByUsername(oldUser.username);
+    public User modify(String oldUsername, String newUsername, String newName, String oldPassword, String newPassword, MultipartFile profilePicture) throws ChangeSetPersister.NotFoundException {
+        User user = findByUsername(oldUsername);
         if(user == null){
             throw new ChangeSetPersister.NotFoundException();
         }
@@ -96,8 +89,6 @@ public class UserService {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }else{
-            user.setProfilePicture(null);
         }
         return repo.save(user);
     }
@@ -121,23 +112,21 @@ public class UserService {
         }
     }
 
-    public void delete(User user) {
-        User deleted = findByUsername("deleted_user");
-
+    public void delete(String username) {
+        User user = findByUsername(username);
+        for(TennisMatch match : user.getPlayedMatches()){
+            matchService.deleteUser(match.getId(), user);
+        }
         Set<Tournament> tournaments = user.getTournaments();
         for(Tournament t : tournaments){
-            t.getParticipants().remove(user);
-            t.getParticipants().add(deleted);
-
-            tournamentService.save(t);
+            tournamentService.removeParticipant(t.getId(), user);
         }
-
         repo.delete(user);
     }
 
     @Transactional
-    public void removeTournament(User user, Tournament tournament) {
-        User saved = findByUsername(user.getUsername());
+    public void removeTournament(String username, Tournament tournament) {
+        User saved = findByUsername(username);
         Tournament t = tournamentService.findById(tournament.getId());
         t.getParticipants().remove(saved);
         tournamentService.save(t);
