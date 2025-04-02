@@ -1,4 +1,4 @@
-package es.urjc.club_tenis.controller;
+package es.urjc.club_tenis.controller.web;
 
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.service.CourtService;
@@ -8,14 +8,12 @@ import es.urjc.club_tenis.service.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.logging.Logger;
 
 @Controller

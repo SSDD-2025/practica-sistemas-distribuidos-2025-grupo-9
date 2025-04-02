@@ -1,4 +1,4 @@
-package es.urjc.club_tenis.controller;
+package es.urjc.club_tenis.controller.web;
 
 import es.urjc.club_tenis.service.CourtService;
 import es.urjc.club_tenis.service.MatchService;
