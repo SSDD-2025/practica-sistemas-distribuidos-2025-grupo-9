@@ -5,6 +5,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.OffsetScrollPositionHandlerMethodArgumentResolver;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,6 +25,10 @@ public class DatabasePopulator {
     @Autowired
     private CourtService courtService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
     Logger logger = Logger.getLogger("es.urjc.club_tenis.controller");
 
 
@@ -36,19 +41,19 @@ public class DatabasePopulator {
         User admin = userService.findByUsername("admin");
         User deleted = userService.findByUsername("deleted_user");
         if(admin == null) {
-            admin = new User("admin", "Admin", "admin", true);
+            admin = new User("admin", "Admin", passwordEncoder.encode("admin"), true);
             userService.save(admin);
             userService.findByUsername("admin").setAdmin(true);
         }
         if(deleted == null){
-            deleted = new User("deleted_user","Deleted","deleted",null);
+            deleted = new User("deleted_user","Deleted",passwordEncoder.encode("deleted"),null);
             userService.save(deleted);
         }else{
             users.remove(deleted);
         }
         for(int i = 0; i < 10; i++){
             if(userService.findByUsername("user"+i) == null){
-                User newUser = new User("user"+i, "Usuario " + i, "user"+i, null);
+                User newUser = new User("user"+i, "Usuario " + i, passwordEncoder.encode("user"+i), null);
                 users.add(userService.save(newUser));
             }
         }

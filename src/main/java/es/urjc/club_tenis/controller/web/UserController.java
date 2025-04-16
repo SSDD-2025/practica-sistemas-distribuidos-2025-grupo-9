@@ -4,11 +4,13 @@ import es.urjc.club_tenis.model.TennisMatch;
 import es.urjc.club_tenis.model.User;
 import es.urjc.club_tenis.service.MatchService;
 import es.urjc.club_tenis.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,18 +30,25 @@ public class UserController {
     @Autowired
     private MatchService matchService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("/profile/{username}")
-    public String getProfilePage(Model model, HttpSession session, @PathVariable String username){
+    public String getProfilePage(Model model, @AuthenticationPrincipal UserDetails userDetails, @PathVariable String username){
         User user = userService.findByUsername(username);
         model.addAttribute("profilePictureUrl" ,"/profile-picture/" + user.getUsername());
         model.addAttribute("profileUser", user);
         model.addAttribute("matches", user.getPlayedMatches());
-        User sessionUser = (User) session.getAttribute("user");
-        model.addAttribute("user",sessionUser);
+        User currentUser = null;
+        if(userDetails != null){
+            String currentUsername = userDetails.getUsername();
+            currentUser = userService.findByUsername(currentUsername);
+        }
+        model.addAttribute("user",currentUser);
 
-        if(sessionUser == null){
+        if(currentUser == null){
             return "profile";
-        } else if( sessionUser.equals(user) || sessionUser.isAdmin()){
+        } else if( currentUser.equals(user) || currentUser.isAdmin()){
             model.addAttribute("showModify", true);
             if(!user.isAdmin() && !user.equals(userService.findByUsername("deleted_user"))){
                 model.addAttribute("showDelete", true);
@@ -62,9 +71,10 @@ public class UserController {
     }
 
     @GetMapping("/profile/{username}/modify")
-    public String getModifyPage(Model model, HttpSession session, @PathVariable String username){
-        User currentUser = (User) session.getAttribute("user");
+    public String getModifyPage(Model model, @AuthenticationPrincipal UserDetails userDetails, @PathVariable String username){
         User user = userService.findByUsername(username);
+        String currentUsername = userDetails.getUsername();
+        User currentUser = userService.findByUsername(currentUsername);
         if(currentUser == null){
             return "redirect:/login";
         }
@@ -85,8 +95,9 @@ public class UserController {
     }
 
     @PostMapping("/profile/{oldUsername}/modify")
-    public String modifyProfilePage(Model model, HttpSession session, @PathVariable String oldUsername, String username, String name, String password, String newPassword, MultipartFile profilePicture){
-        User currentUser = (User) session.getAttribute("user");
+    public String modifyProfilePage(Model model, @AuthenticationPrincipal UserDetails userDetails, @PathVariable String oldUsername, String username, String name, String password, String newPassword, MultipartFile profilePicture){
+        String currentUsername = userDetails.getUsername();
+        User currentUser = userService.findByUsername(currentUsername);
         User user = userService.findByUsername(oldUsername);
         logger.info(profilePicture.toString());
         if(currentUser == null){
@@ -94,14 +105,16 @@ public class UserController {
         }
         if(currentUser.isAdmin() || currentUser.equals(user)){
             User modify;
+            String encodedPassword = passwordEncoder.encode(password);
+            String newEncodedPassword = passwordEncoder.encode(newPassword);
             try {
                 if(password.isEmpty()){
                     modify = userService.modify(oldUsername, username, name, profilePicture);
-                }else if(password.equals(user.getPassword())){
-                    modify = userService.modify(oldUsername, username, name, password, newPassword, profilePicture);
+                }else if(encodedPassword.equals(user.getPassword())){
+                    modify = userService.modify(oldUsername, username, name, encodedPassword, newEncodedPassword, profilePicture);
                 }else{
                     model.addAttribute("invalidPassword", true);
-                    return getModifyPage(model, session, oldUsername);
+                    return getModifyPage(model, userDetails, oldUsername);
                 }
                 return "redirect:/profile/" + modify.getUsername();
             } catch (ChangeSetPersister.NotFoundException e) {
@@ -133,8 +146,8 @@ public class UserController {
             model.addAttribute("invalid",true);
             return "register";
         }
-
-        User newUser = userService.save(new User(username, name, password, profilePicture));
+        String encodedPassword = passwordEncoder.encode(password);
+        User newUser = userService.save(new User(username, name, encodedPassword, profilePicture));
 
         model.addAttribute("user", newUser.getId());
 
@@ -142,35 +155,25 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String showLoginPage() {
+    public String showLoginPage(@RequestParam(value = "error", required = false) String error, @RequestParam(value = "expired", required = false) String expired, Model model) {
+        if (error != null) {
+            model.addAttribute("error", true);
+        }
+        if (expired != null) {
+            model.addAttribute("error", "Sesión expirada");
+        }
+
         return "login";
     }
 
-    // Procesar el login
-    @PostMapping("/login")
-    public String loginUser(@RequestParam String username, @RequestParam String password, HttpSession session, Model model) {
-
-        User user = userService.findByUsername(username);
-
-        if (user != null && user.getPassword().equals(password)) {
-            session.setAttribute("user", user);
-            return "redirect:/";
-        } else {
-            model.addAttribute("invalid", true);
-            return "login";
-        }
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
-    }
-
     @GetMapping("/users")
-    public String getUserList(Model model, HttpSession session) {
+    public String getUserList(Model model, @AuthenticationPrincipal UserDetails userDetails) {
 
-        User currentUser = (User) session.getAttribute("user");
+        User currentUser = null;
+        if(userDetails != null){
+            String currentUsername = userDetails.getUsername();
+            currentUser = userService.findByUsername(currentUsername);
+        }
         model.addAttribute("user", currentUser);
 
         if(currentUser==null || !currentUser.isAdmin()){
@@ -187,9 +190,10 @@ public class UserController {
     }
 
     @GetMapping("/users/delete/{username}")
-    public String getConfirmation(Model model, @PathVariable String username, HttpSession session){
+    public String getConfirmation(Model model, @PathVariable String username, @AuthenticationPrincipal UserDetails userDetails){
 
-        User currentUser= (User) session.getAttribute("user");
+        String currentUsername = userDetails.getUsername();
+        User currentUser = userService.findByUsername(currentUsername);
         User deletedUser = userService.findByUsername(username);
         model.addAttribute("user", currentUser);
 
@@ -204,9 +208,10 @@ public class UserController {
     }
 
     @PostMapping("/users/delete/{username}")
-    public String deleteUser(Model model, @PathVariable String username, HttpSession session){
+    public String deleteUser(Model model, @PathVariable String username, @AuthenticationPrincipal UserDetails userDetails){
 
-        User currentUser = (User) session.getAttribute("user");
+        String currentUsername = userDetails.getUsername();
+        User currentUser = userService.findByUsername(currentUsername);
         User deleteUser = userService.findByUsername(username);
         model.addAttribute("user", currentUser);
 
@@ -220,18 +225,18 @@ public class UserController {
         for(TennisMatch match:matches){
             matchService.deleteUser(match.getId(), deleteUser);
         }
-
+/*
         if(currentUser.equals(deleteUser)){
 
             userService.delete(username);
             session.invalidate();
 
             return "redirect:/";
-        }
+        }*/
 
         userService.delete(username);
 
-        return "redirect:/users";
+        return currentUser.equals(deleteUser) ? "redirect:/login" : "redirect:/users";
     }
 
 }

@@ -5,7 +5,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import es.urjc.club_tenis.model.User;
+import es.urjc.club_tenis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,18 +18,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import es.urjc.club_tenis.model.Court;
 import es.urjc.club_tenis.service.CourtService;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/court")
 public class CourtController {
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private CourtService courtService;
 
     @GetMapping("/new")
-    public String getNewCourtForm(Model model, HttpSession session){
-        User currentUser = (User) session.getAttribute("user");
+    public String getNewCourtForm(Model model, @AuthenticationPrincipal UserDetails userDetails){
+        User currentUser = null;
+        if(userDetails != null){
+            String currentUsername = userDetails.getUsername();
+            currentUser = userService.findByUsername(currentUsername);
+        }
         if(currentUser == null){
             model.addAttribute("errorMessage", "No se puede reservar una pista sin estar registrado");
             return "error";
@@ -42,8 +51,12 @@ public class CourtController {
     }
 
     @PostMapping("/")
-    public String createNewCourt(Model model, HttpSession session, String name, float price , String start, String end){
-        User currentUser = (User) session.getAttribute("user");
+    public String createNewCourt(Model model, @AuthenticationPrincipal UserDetails userDetails, String name, float price , String start, String end){
+        User currentUser = null;
+        if(userDetails != null){
+            String currentUsername = userDetails.getUsername();
+            currentUser = userService.findByUsername(currentUsername);
+        }
         model.addAttribute("user", currentUser);
         if(currentUser == null){
             model.addAttribute("errorMessage", "No se puede reservar una pista sin estar registrado");
@@ -60,8 +73,12 @@ public class CourtController {
     }
 
     @GetMapping("/{id}/modify")
-    public String getModifyForm(Model model, HttpSession session, @PathVariable long id){
-        User currentUser = (User) session.getAttribute("user");
+    public String getModifyForm(Model model, @AuthenticationPrincipal UserDetails userDetails, @PathVariable long id){
+        User currentUser = null;
+        if(userDetails != null){
+            String currentUsername = userDetails.getUsername();
+            currentUser = userService.findByUsername(currentUsername);
+        }
         if(currentUser == null || !currentUser.isAdmin()){
             model.addAttribute("errorMessage", "No se puede reservar una pista sin estar registrado");
             return "error";
@@ -74,8 +91,12 @@ public class CourtController {
     }
 
     @PostMapping("/{id}")
-    public String updateCourt(Model model, HttpSession session, @PathVariable long id, String name, float price , String start, String end){
-        User currentUser = (User) session.getAttribute("user");
+    public String updateCourt(Model model, @AuthenticationPrincipal UserDetails userDetails, @PathVariable long id, String name, float price , String start, String end){
+        User currentUser = null;
+        if(userDetails != null){
+            String currentUsername = userDetails.getUsername();
+            currentUser = userService.findByUsername(currentUsername);
+        }
         model.addAttribute("user", currentUser);
         if(currentUser == null){
             model.addAttribute("errorMessage", "No se puede reservar una pista sin estar registrado");
@@ -96,8 +117,12 @@ public class CourtController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteCourt(Model model, HttpSession session, @PathVariable long id){
-        User currentUser = (User) session.getAttribute("user");
+    public String deleteCourt(Model model, @AuthenticationPrincipal UserDetails userDetails, @PathVariable long id){
+        User currentUser = null;
+        if(userDetails != null){
+            String currentUsername = userDetails.getUsername();
+            currentUser = userService.findByUsername(currentUsername);
+        }
         model.addAttribute("user", currentUser);
         if(currentUser == null || !currentUser.isAdmin()) {
             model.addAttribute("errorMessage", "No se puede borrar una pista sin ser administrador");
@@ -109,24 +134,28 @@ public class CourtController {
 
 
     @GetMapping("/{id}")
-    public String getCourts(Model model, @PathVariable long id, HttpSession session){
-        if(session.getAttribute("user") == null){
+    public String getCourts(Model model, @PathVariable long id, @AuthenticationPrincipal UserDetails userDetails){
+        if(userDetails == null){
             return "redirect:/login";
         }
         Court court = courtService.findById(id);
-
+        String currentUsername = userDetails.getUsername();
+        User currentUser = userService.findByUsername(currentUsername);
         model.addAttribute("court",court);
-        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", currentUser);
         return "court";
     }
 
     @PostMapping("/{id}/book")
-    public String bookCourt(Model model, @PathVariable long id, String date, String start, HttpSession session){
-        if(session.getAttribute("user") == null){
+    public String bookCourt(Model model, @PathVariable long id, String date, String start, @AuthenticationPrincipal UserDetails userDetails){
+        if(userDetails == null){
             model.addAttribute("errorMessage", "No se puede reservar una pista sin estar registrado");
             return "error";
         }
-        User currentUser = (User) session.getAttribute("user");
+
+        String currentUsername = userDetails.getUsername();
+        User currentUser = userService.findByUsername(currentUsername);
+
         model.addAttribute("user", currentUser);
         LocalDate newDate = LocalDate.parse(date);
         LocalTime newStart = LocalTime.parse(start);
@@ -134,7 +163,7 @@ public class CourtController {
         boolean invalid = false;
         if(court.getStart().isAfter(newStart) || court.getEnd().isBefore(newStart)){
             model.addAttribute("invalidStart", true);
-            return getCourts(model, id, session);
+            return getCourts(model, id, userDetails);
         }
         if(!courtService.checkAvailability(court, newDate, newStart)){
             model.addAttribute("errorMessage", "La fecha ya esta ocupada.");

@@ -4,9 +4,10 @@ import es.urjc.club_tenis.service.CourtService;
 import es.urjc.club_tenis.service.MatchService;
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,10 +29,14 @@ public class MatchController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public String getMatches(Model model, @PathVariable long id, HttpSession session){
+    public String getMatches(Model model, @PathVariable long id, @AuthenticationPrincipal UserDetails userDetails){
         TennisMatch match = matchService.findById(id);
         model.addAttribute("match", match);
-        User currentUser = (User) session.getAttribute("user");
+        User currentUser = null;
+        if(userDetails != null){
+            String currentUsername = userDetails.getUsername();
+            currentUser = userService.findByUsername(currentUsername);
+        }
         if(currentUser != null){
             if(currentUser.equals(match.getOwner()) || currentUser.isAdmin() || currentUser.equals(match.getLocal())){
                 model.addAttribute("showModify", true);
@@ -42,23 +47,26 @@ public class MatchController {
     }
 
     @GetMapping("/new")
-    public String getForm(Model model, HttpSession session){
-        if(session.getAttribute("user") == null){
+    public String getForm(Model model, @AuthenticationPrincipal UserDetails userDetails){
+        if(userDetails == null){
             return "redirect:/login";
         }
+        String currentUsername = userDetails.getUsername();
+        User currentUser = userService.findByUsername(currentUsername);
         model.addAttribute("actionName", "Crear ");
         model.addAttribute("action", "");
-        model.addAttribute("user", session.getAttribute("user"));
+        model.addAttribute("user", currentUser);
         model.addAttribute("courts", courtService.findAll());
         return "match_form";
     }
 
     @GetMapping("/{id}/delete")
-    public String delete(Model model, @PathVariable long id, HttpSession session){
-        User currentUser = (User) session.getAttribute("user");
-        if(currentUser == null){
+    public String delete(Model model, @PathVariable long id,@AuthenticationPrincipal UserDetails userDetails){
+        if(userDetails == null){
             return "redirect:/login";
         }
+        String currentUsername = userDetails.getUsername();
+        User currentUser = userService.findByUsername(currentUsername);
         TennisMatch match = matchService.findById(id);
         if(currentUser.equals(match.getOwner()) || currentUser.isAdmin() || currentUser.equals(match.getLocal())){
             //Delete
@@ -71,7 +79,7 @@ public class MatchController {
     }
 
     @PostMapping("/")
-    public String createMatch(String localUsername, String visitorUsername, long court, String winnerUsername, String result, Model model, HttpSession session){
+    public String createMatch(String localUsername, String visitorUsername, long court, String winnerUsername, String result, Model model, @AuthenticationPrincipal UserDetails userDetails){
         Court courtObj = courtService.findById(court);
         User local = userService.findByUsername(localUsername);
         User visitor = userService.findByUsername(visitorUsername);
@@ -97,7 +105,11 @@ public class MatchController {
             model.addAttribute("courts", courtService.findAll());
             return "match_form";
         }else {
-            User currentUser = (User) session.getAttribute("user");
+            User currentUser = null;
+            if(userDetails != null){
+                String currentUsername = userDetails.getUsername();
+                currentUser = userService.findByUsername(currentUsername);
+            }
             if(currentUser == null){
                 return "redirect:/login";
             }
@@ -107,8 +119,12 @@ public class MatchController {
     }
 
     @GetMapping("/{id}/update")
-    public String getUpdateForm(Model model, @PathVariable long id, HttpSession session){
-        User currentUser = (User) session.getAttribute("user");
+    public String getUpdateForm(Model model, @PathVariable long id, @AuthenticationPrincipal UserDetails userDetails){
+        User currentUser = null;
+        if(userDetails != null){
+            String currentUsername = userDetails.getUsername();
+            currentUser = userService.findByUsername(currentUsername);
+        }
         if(currentUser == null){
             return "redirect:/login";
         }
@@ -119,7 +135,7 @@ public class MatchController {
                 model.addAttribute("winner.username", "");
             }
             model.addAttribute("match", match);
-            model.addAttribute("user", session.getAttribute("user"));
+            model.addAttribute("user", currentUser);
             model.addAttribute("courts", courtService.findAll());
             model.addAttribute("actionName", "Actualizar ");
             model.addAttribute("action", match.getId() + "/update");
@@ -131,8 +147,12 @@ public class MatchController {
     }
 
     @PostMapping("/{id}/update")
-    public String udpateMatch(Model model, String localUsername, String visitorUsername, long court, String winnerUsername, String result, @PathVariable long id, HttpSession session){
-        User currentUser = (User) session.getAttribute("user");
+    public String udpateMatch(Model model, String localUsername, String visitorUsername, long court, String winnerUsername, String result, @PathVariable long id, @AuthenticationPrincipal UserDetails userDetails){
+        User currentUser = null;
+        if(userDetails != null){
+            String currentUsername = userDetails.getUsername();
+            currentUser = userService.findByUsername(currentUsername);
+        }
         if(currentUser == null){
             return "redirect:/login";
         }

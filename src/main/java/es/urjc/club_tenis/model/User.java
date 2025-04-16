@@ -20,6 +20,9 @@ public class User {
     public String name;
     public String password;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles;
+
     @Lob
     private Blob profilePicture;
 
@@ -140,5 +143,13 @@ public class User {
                 ", name='" + name + '\'' +
                 ", admin=" + admin +
                 '}';
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 }
