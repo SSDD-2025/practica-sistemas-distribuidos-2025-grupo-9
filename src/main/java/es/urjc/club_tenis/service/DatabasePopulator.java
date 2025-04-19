@@ -4,6 +4,7 @@ import es.urjc.club_tenis.model.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.web.OffsetScrollPositionHandlerMethodArgumentResolver;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,10 @@ public class DatabasePopulator {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${security.user}")
+    private String username;
+    @Value("${security.encodedPassword}")
+    private String encodedPassword;
 
     Logger logger = Logger.getLogger("es.urjc.club_tenis.controller");
 
@@ -38,12 +43,14 @@ public class DatabasePopulator {
 
         //Users
         List<User> users = userService.findAll();
-        User admin = userService.findByUsername("admin");
+        User admin = userService.findByUsername(username);
         User deleted = userService.findByUsername("deleted_user");
         if(admin == null) {
-            admin = new User("admin", "Admin", passwordEncoder.encode("admin"), true);
+            admin = new User(username, "Admin", encodedPassword, true);
             userService.save(admin);
             userService.findByUsername("admin").setAdmin(true);
+            userService.findByUsername("admin").addRole("USER");
+            userService.findByUsername("admin").addRole("ADMIN");
         }
         if(deleted == null){
             deleted = new User("deleted_user","Deleted",passwordEncoder.encode("deleted"),null);
@@ -55,6 +62,7 @@ public class DatabasePopulator {
             if(userService.findByUsername("user"+i) == null){
                 User newUser = new User("user"+i, "Usuario " + i, passwordEncoder.encode("user"+i), null);
                 users.add(userService.save(newUser));
+                userService.findByUsername("user"+i).addRole("USER");
             }
         }
 

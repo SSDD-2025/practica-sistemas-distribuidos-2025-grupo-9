@@ -90,4 +90,10 @@ public class WebController {
         }
         return "courts";
     }
+
+    @GetMapping("/error/accessDenied")
+    public String accessDenied(Model model) {
+        model.addAttribute("errorMessage", "Access denied, insufficient permissions");
+        return "error";
+    }
 }

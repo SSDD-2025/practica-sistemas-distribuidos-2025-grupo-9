@@ -16,11 +16,6 @@ import org.springframework.security.web.savedrequest.NullRequestCache;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    @Value("${security.user}")
-    private String username;
-    @Value("${security.encodedPassword}")
-    private String encodedPassword;
-
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -28,16 +23,6 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-/*
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.builder()
-                .username(username)
-                .password(passwordEncoder().encode(encodedPassword))
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user);
-    }*/
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -80,8 +65,13 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/signin", "/courts", "/profile/**", "/tournaments",
                                 "/tournament/**", "/matches", "/profile-picture/**", "match/**",
-                                "/css/**", "/ball.svg","/favicon.ico", "/error",
+                                "/css/**", "/ball.svg","/favicon.ico", "/error/**",
                                 "/style.css").permitAll()
+                        .requestMatchers("/match/new", "/match/*/update", "/court/**"
+                        ).hasAnyRole("USER")
+                        .requestMatchers("/users", "/tournament/new", "/tournament/*/modify",
+                                "tournament/*/addMatch", "/court/*/modify", "/court/*/delete",
+                                "/court/new").hasAnyRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
@@ -96,10 +86,13 @@ public class SecurityConfiguration {
                         .permitAll())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                        .invalidSessionUrl("/login")
+                        .invalidSessionUrl("/   ")
                 )
                 .requestCache(cache -> cache
                         .requestCache(new NullRequestCache())
+                )
+                .exceptionHandling(ex -> ex
+                        .accessDeniedPage("/error/accessDenied")
                 );
         http.csrf(csrf -> csrf.disable());
         return http.build();
