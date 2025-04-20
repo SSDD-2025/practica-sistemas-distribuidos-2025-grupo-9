@@ -64,7 +64,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/signin", "/courts", "/profile/**", "/tournaments",
-                                "/tournament/**", "/matches", "/profile-picture/**", "match/**",
+                                "/tournament/**", "/matches", "/matches/**", "/profile-picture/**", "match/**",
                                 "/css/**", "/ball.svg","/favicon.ico", "/error/**",
                                 "/style.css").permitAll()
                         .requestMatchers("/match/new", "/match/*/update", "/court/**"
