@@ -42,6 +42,7 @@ public class User {
         this.name = name;
         this.password = password;
         this.admin = false;
+        this.roles = new ArrayList<>();
         if(profilePicture!=null && !profilePicture.isEmpty()) {
             try {
                 this.profilePicture = (BlobProxy.generateProxy(profilePicture.getInputStream(),
@@ -59,6 +60,7 @@ public class User {
         this.name = name;
         this.password = password;
         this.admin = true;
+        this.roles = new ArrayList<>();
     }
 
 

@@ -48,10 +48,10 @@ public class DatabasePopulator {
         User deleted = userService.findByUsername("deleted_user");
         if(admin == null) {
             admin = new User(username, "Admin", encodedPassword, true);
+            admin.setAdmin(true);
+            admin.addRole("USER");
+            admin.addRole("ADMIN");
             userService.save(admin);
-            userService.findByUsername("admin").setAdmin(true);
-            userService.findByUsername("admin").addRole("USER");
-            userService.findByUsername("admin").addRole("ADMIN");
         }
         if(deleted == null){
             deleted = new User("deleted_user","Deleted",passwordEncoder.encode("deleted"),null);
@@ -62,8 +62,8 @@ public class DatabasePopulator {
         for(int i = 0; i < 10; i++){
             if(userService.findByUsername("user"+i) == null){
                 User newUser = new User("user"+i, "Usuario " + i, passwordEncoder.encode("user"+i), null);
+                newUser.addRole("USER");
                 users.add(userService.save(newUser));
-                userService.findByUsername("user"+i).addRole("USER");
             }
         }
 
