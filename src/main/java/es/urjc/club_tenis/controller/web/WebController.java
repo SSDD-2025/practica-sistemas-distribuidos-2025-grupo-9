@@ -1,14 +1,18 @@
 package es.urjc.club_tenis.controller.web;
 
+import es.urjc.club_tenis.dto.court.CourtMapper;
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -22,6 +26,8 @@ public class WebController {
     private MatchService matchService;
     @Autowired
     private CourtService courtService;
+    @Autowired
+    private CourtMapper courtMapper;
 
     @GetMapping("/")
     public String homePage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
@@ -76,18 +82,33 @@ public class WebController {
     }
 
     @GetMapping("/courts")
-    public String getCourts(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String getCourts(Model model, @AuthenticationPrincipal UserDetails userDetails, @RequestParam(defaultValue = "1") int page) {
         User currentUser = null;
         if(userDetails != null){
             String currentUsername = userDetails.getUsername();
             currentUser = userService.findByUsername(currentUsername);
         }
-        List<Court> courts = courtService.findAll();
-        model.addAttribute("courts",courts);
+        Page<Court> courts = courtService.findAll(page);
+        model.addAttribute("courts", courtMapper.toDTOs(courts.toList()));
         model.addAttribute("user", currentUser);
         if(currentUser != null && currentUser.isAdmin()){
             model.addAttribute("showModify", true);
         }
+
+        long nCourts = courts.getTotalElements();
+        if (nCourts > 5) {
+            long nPages = nCourts % Court.PAGE_SIZE == 0 ? nCourts / Court.PAGE_SIZE : (nCourts / Court.PAGE_SIZE) + 1;
+            ArrayList<Integer> pages = new ArrayList<>();
+            for (int i = 1; i <= nPages; i++) {
+                pages.add(i);
+            }
+            model.addAttribute("pages", pages);
+            if (nPages > page)
+                model.addAttribute("nextPage", page + 1);
+            if (page > 1)
+                model.addAttribute("previousPage", page - 1);
+        }
+
         return "courts";
     }
 

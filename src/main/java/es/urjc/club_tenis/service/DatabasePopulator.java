@@ -69,7 +69,7 @@ public class DatabasePopulator {
 
         //Courts
         if(courtService.findAll().isEmpty()){
-            for(int i = 0; i < 2; i++){
+            for(int i = 0; i < 20; i++){
                 courtService.save(new Court("Court"+i, (float) (Math.random()*10), LocalTime.of(11,00), LocalTime.of(20,00)));
             }
         }

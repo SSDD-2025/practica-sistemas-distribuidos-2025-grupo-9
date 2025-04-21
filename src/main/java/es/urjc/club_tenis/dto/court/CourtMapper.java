@@ -14,7 +14,9 @@ public interface CourtMapper {
 
     CourtBasicDTO toBasicDTO(Court court);
 
-    List<CourtBasicDTO> toDTOs(Collection<Court> courts);
+    List<CourtBasicDTO> toBasicDTOs(Collection<Court> courts);
+
+    List<CourtDTO> toDTOs(Collection<Court> courts);
 
     @Mapping(target = "reservations", ignore = true)
     Court toDomain(CourtBasicDTO courtBasicDTO);

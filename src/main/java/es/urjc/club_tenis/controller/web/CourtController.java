@@ -4,6 +4,7 @@ package es.urjc.club_tenis.controller.web;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import es.urjc.club_tenis.dto.court.CourtMapper;
 import es.urjc.club_tenis.model.User;
 import es.urjc.club_tenis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class CourtController {
 
     @Autowired
     private CourtService courtService;
+
+    @Autowired
+    private CourtMapper courtMapper;
 
     @GetMapping("/new")
     public String getNewCourtForm(Model model, @AuthenticationPrincipal UserDetails userDetails){
@@ -84,7 +88,7 @@ public class CourtController {
             return "error";
         }
         model.addAttribute("user", currentUser);
-        model.addAttribute("court", courtService.findById(id));
+        model.addAttribute("court", courtMapper.toDTO(courtService.findById(id)));
         model.addAttribute("action", id);
         model.addAttribute("actionName", "Modificar ");
         return "court_form";
@@ -141,7 +145,7 @@ public class CourtController {
         Court court = courtService.findById(id);
         String currentUsername = userDetails.getUsername();
         User currentUser = userService.findByUsername(currentUsername);
-        model.addAttribute("court",court);
+        model.addAttribute("court",courtMapper.toDTO(court));
         model.addAttribute("user", currentUser);
         return "court";
     }

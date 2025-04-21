@@ -6,14 +6,11 @@ import es.urjc.club_tenis.dto.user.UserMapper;
 import es.urjc.club_tenis.service.*;
 import es.urjc.club_tenis.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/match")
@@ -62,7 +59,7 @@ public class MatchController {
         model.addAttribute("actionName", "Crear ");
         model.addAttribute("action", "");
         model.addAttribute("user", currentUser);
-        model.addAttribute("courts", courtService.findAll());
+        model.addAttribute("courts", courtMapper.toBasicDTOs(courtService.findAll()));
         return "match_form";
     }
 
@@ -154,7 +151,7 @@ public class MatchController {
             }
             model.addAttribute("match", match);
             model.addAttribute("user", currentUser);
-            model.addAttribute("courts", courtService.findAll());
+            model.addAttribute("courts", courtMapper.toBasicDTOs(courtService.findAll()));
             model.addAttribute("actionName", "Actualizar ");
             model.addAttribute("action", match.id() + "/update");
             return "match_form";
@@ -201,7 +198,7 @@ public class MatchController {
                 model.addAttribute("match", match);
                 model.addAttribute("action", "");
                 model.addAttribute("actionName", "Crear ");
-                model.addAttribute("courts", courtService.findAll());
+                model.addAttribute("courts", courtMapper.toBasicDTOs(courtService.findAll()));
                 return "match_form";
             }else {
                 MatchDTO modifiedMatch = new MatchDTO(
