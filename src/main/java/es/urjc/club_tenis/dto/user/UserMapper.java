@@ -1,18 +1,20 @@
 package es.urjc.club_tenis.dto.user;
 
 import es.urjc.club_tenis.model.User;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
     UserDTO toDTO(User user);
 
-    User toDomain(UserDTO user);
+    UserBasicDTO toBasicDTO(User user);
 
-    List<UserDTO> toDTOs(Collection<User> users);
+    List<UserBasicDTO> toDTOs(Collection<User> users);
 
+    //User toDomain(UserDTO user);
+    @Mapping(target = "playedTennisMatches", ignore = true)
+    User toDomain(UserBasicDTO userDTO);
 }

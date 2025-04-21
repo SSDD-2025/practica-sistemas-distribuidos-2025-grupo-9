@@ -1,5 +1,8 @@
 package es.urjc.club_tenis.controller.web;
 
+import es.urjc.club_tenis.dto.court.CourtMapper;
+import es.urjc.club_tenis.dto.match.MatchDTO;
+import es.urjc.club_tenis.dto.user.UserMapper;
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.service.CourtService;
 import es.urjc.club_tenis.service.MatchService;
@@ -31,6 +34,12 @@ public class TournamentController {
     private MatchService matchService;
     @Autowired
     private UserService userService;
+
+    //Temporal hasta que se use UserDTO y CourtDTO aquí
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private CourtMapper courtMapper;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -119,9 +128,19 @@ public class TournamentController {
             currentUser = userService.findByUsername(currentUsername);
         }
             Tournament currentTournament = tournamentService.findById(id);
-            TennisMatch newMatch = matchService.createMatch(currentUser,local, visitor, courtObj, winner, result, currentTournament);
-            logger.info(newMatch.toString());
-            tournamentService.addMatch(id, newMatch);
+            MatchDTO newMatch = new MatchDTO(
+                    null,
+                    userMapper.toBasicDTO(currentUser),
+                    userMapper.toBasicDTO(winner),
+                    userMapper.toBasicDTO(local),
+                    userMapper.toBasicDTO(visitor),
+                    courtMapper.toBasicDTO(courtObj),
+                    result),
+
+                    savedMatch;
+                    savedMatch = matchService.save(newMatch);
+            logger.info(savedMatch.toString());
+            tournamentService.addMatch(id, savedMatch);
             return "redirect:/tournament/" + id;
         }
     }

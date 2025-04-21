@@ -1,5 +1,6 @@
 package es.urjc.club_tenis.service;
 
+import es.urjc.club_tenis.dto.match.*;
 import es.urjc.club_tenis.model.TennisMatch;
 import es.urjc.club_tenis.model.Tournament;
 import es.urjc.club_tenis.model.User;
@@ -22,6 +23,8 @@ public class TournamentService {
 
     @Autowired
     private MatchService matchService;
+    @Autowired
+    private MatchMapper matchMapper;
 
     @Autowired
     private UserService userService;
@@ -39,9 +42,9 @@ public class TournamentService {
     }
 
     @Transactional
-    public void addMatch(long id, TennisMatch match) {
+    public void addMatch(long id, MatchDTO match) {
         Tournament saved = findById(id);
-        TennisMatch savedMatch = matchService.findById(match.getId());
+        TennisMatch savedMatch = matchMapper.toDomain(matchService.findById(match.id()));
         saved.getMatches().add(savedMatch);
         addParticipant(id, userService.findByUsername(savedMatch.getLocal().getUsername()));
         addParticipant(id,userService.findByUsername(savedMatch.getVisitor().getUsername()));

@@ -2,6 +2,7 @@ package es.urjc.club_tenis.dto.court;
 
 import es.urjc.club_tenis.model.Court;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,7 +12,10 @@ public interface CourtMapper {
 
     CourtDTO toDTO(Court court);
 
-    List<CourtDTO> toDTOs(Collection<Court> courts);
+    CourtBasicDTO toBasicDTO(Court court);
 
-    Court toDomain(CourtDTO courtDTO);
+    List<CourtBasicDTO> toDTOs(Collection<Court> courts);
+
+    @Mapping(target = "reservations", ignore = true)
+    Court toDomain(CourtBasicDTO courtBasicDTO);
 }

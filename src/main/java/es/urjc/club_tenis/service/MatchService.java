@@ -1,14 +1,12 @@
 package es.urjc.club_tenis.service;
 
-import es.urjc.club_tenis.model.Court;
-import es.urjc.club_tenis.model.TennisMatch;
-import es.urjc.club_tenis.model.Tournament;
-import es.urjc.club_tenis.model.User;
+import es.urjc.club_tenis.dto.match.*;
+import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.repositories.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class MatchService {
@@ -17,16 +15,22 @@ public class MatchService {
     private MatchRepository repo;
 
     @Autowired
+    private MatchMapper mapper;
+
+    @Autowired
     private TournamentService tournamentService;
 
     @Autowired
     private UserService userService;
 
-    public List<TennisMatch> findAll() {
-        return repo.findAll();
+    public List<MatchDTO> findAll() { return mapper.toDTOs(repo.findAll());}
+
+    public MatchDTO findById(long id) {
+        return mapper.toDTO(repo.findById(id).orElseThrow());
     }
 
-    public TennisMatch save(TennisMatch match){
+    public MatchDTO save(MatchDTO matchDTO){
+        TennisMatch match = mapper.toDomain(matchDTO);
         User localUser = userService.findByUsername(match.getLocal().getUsername());
         User visitorUser = userService.findByUsername(match.getVisitor().getUsername());
 
@@ -34,55 +38,42 @@ public class MatchService {
             TennisMatch aux = repo.save(match);
 
             userService.addPlayedMatch(aux);
-            return aux;
+            return mapper.toDTO(aux);
         }
         return null;
     }
 
-    public TennisMatch findById(long id) {
-        return repo.findById(id).orElse(null);
-    }
-
-    public void delete(long id) {
-        TennisMatch saved = findById(id);
+    public MatchDTO delete(long id) {
+        TennisMatch saved = repo.findById(id).orElseThrow();
         User localUser = userService.findByUsername(saved.getLocal().getUsername());
         User visitorUser = userService.findByUsername(saved.getVisitor().getUsername());
         localUser.getPlayedMatches().remove(saved);
         visitorUser.getPlayedMatches().remove(saved);
         userService.save(localUser);
         userService.save(visitorUser);
-        repo.delete(saved);
+        repo.deleteById(id);
+        return mapper.toDTO(saved);
     }
 
-    public TennisMatch createMatch(User local, User visitor, Court courtObj, User winner, String result) {
-        TennisMatch newMatch = new TennisMatch(local, visitor, courtObj, winner, result);
-        return save(newMatch);
-    }
+    public MatchDTO modify(long id, MatchDTO updatedMatchDTO){
+        if(repo.existsById(id)){
+            TennisMatch updatedMatch = mapper.toDomain(updatedMatchDTO);
+            updatedMatch.setId(id);
 
-    public TennisMatch createMatch(User owner, User local, User visitor, Court courtObj, User winner, String result) {
-        TennisMatch newMatch = new TennisMatch(owner, local, visitor,  winner, result, courtObj);
-        return save(newMatch);
-    }
-
-    public TennisMatch modify(long id, User local, User visitor, Court court, User winner, String result) throws ChangeSetPersister.NotFoundException {
-        TennisMatch match = findById(id);
-        if(match == null){
-            throw new ChangeSetPersister.NotFoundException();
+            repo.save(updatedMatch);
+            return mapper.toDTO(updatedMatch);
         }
-        match.setCourt(court);
-        match.setLocal(local);
-        match.setVisitor(visitor);
-        match.setWinner(winner);
-        match.setResult(result);
-        return repo.save(match);
+        else throw new NoSuchElementException();
     }
 
     public void deleteUser(long id, User user){
-        TennisMatch match = findById(id);
+        TennisMatch match = repo.findById(id).orElseThrow();
         User deleted = userService.findByUsername("deleted_user");
         if(match.getLocal().equals(user)){
             match.setLocal(deleted);
-        }else{
+        }
+
+        if(match.getVisitor().equals(user)){
             match.setVisitor(deleted);
         }
 
@@ -92,8 +83,4 @@ public class MatchService {
         repo.save(match);
     }
 
-    public TennisMatch createMatch(User currentUser, User local, User visitor, Court courtObj, User winner, String result, Tournament currentTournament) {
-        TennisMatch newMatch = new TennisMatch(currentUser, local, visitor,  winner, result, courtObj);
-        return save(newMatch);
-    }
 }

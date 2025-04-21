@@ -1,7 +1,7 @@
 package es.urjc.club_tenis.controller.rest;
 
-import es.urjc.club_tenis.model.TennisMatch;
-import es.urjc.club_tenis.repositories.MatchRepository;
+import es.urjc.club_tenis.dto.match.MatchDTO;
+import es.urjc.club_tenis.service.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,43 +16,34 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 public class MatchRestController {
 
     @Autowired
-    private MatchRepository matchRepository;
+    private MatchService matchService;
 
     @GetMapping("/")
-    public Collection<TennisMatch> getMatches(){
-        return matchRepository.findAll();
+    public Collection<MatchDTO> getMatches(){
+        return matchService.findAll();
     }
 
     @GetMapping("/{id}")
-    public TennisMatch getMatch(@PathVariable long id){
-        return matchRepository.findById(id).orElseThrow();
+    public MatchDTO getMatch(@PathVariable long id){
+        return matchService.findById(id);
     }
 
     @PostMapping("/")
-    public ResponseEntity<TennisMatch> createMatch(@RequestBody TennisMatch match){
-        matchRepository.save(match);
-        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(match.getId()).toUri();
+    public ResponseEntity<MatchDTO> createMatch(@RequestBody MatchDTO match){
+        match = matchService.save(match);
+        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(match.id()).toUri();
 
         return ResponseEntity.created(location).body(match);
     }
 
     @DeleteMapping("/{id}")
-    public TennisMatch deleteMatch(@PathVariable long id){
-        TennisMatch match = matchRepository.findById(id).orElseThrow();
-
-        matchRepository.deleteById(id);
-
-        return match;
+    public MatchDTO deleteMatch(@PathVariable long id){
+        return matchService.delete(id);
     }
 
     @PutMapping("/{id}")
-    public TennisMatch replaceMatch(@PathVariable long id, @RequestBody TennisMatch match){
-        if(matchRepository.existsById(id)){
-            match.setId(id);
-            matchRepository.save(match);
-            return match;
-        }
-        else throw new NoSuchElementException();
+    public MatchDTO replaceMatch(@PathVariable long id, @RequestBody MatchDTO match){
+        return matchService.modify(id, match);
     }
 
 }

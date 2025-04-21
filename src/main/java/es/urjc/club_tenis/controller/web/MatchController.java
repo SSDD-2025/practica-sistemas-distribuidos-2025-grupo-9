@@ -1,19 +1,19 @@
 package es.urjc.club_tenis.controller.web;
 
-import es.urjc.club_tenis.service.CourtService;
-import es.urjc.club_tenis.service.MatchService;
+import es.urjc.club_tenis.dto.court.CourtMapper;
+import es.urjc.club_tenis.dto.match.MatchDTO;
+import es.urjc.club_tenis.dto.user.UserMapper;
+import es.urjc.club_tenis.service.*;
 import es.urjc.club_tenis.model.*;
-import es.urjc.club_tenis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/match")
@@ -28,9 +28,15 @@ public class MatchController {
     @Autowired
     private UserService userService;
 
+    //Temporal hasta que se use UserDTO y CourtDTO aquí
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private CourtMapper courtMapper;
+
     @GetMapping("/{id}")
     public String getMatches(Model model, @PathVariable long id, @AuthenticationPrincipal UserDetails userDetails){
-        TennisMatch match = matchService.findById(id);
+        MatchDTO match = matchService.findById(id);
         model.addAttribute("match", match);
         User currentUser = null;
         if(userDetails != null){
@@ -38,7 +44,7 @@ public class MatchController {
             currentUser = userService.findByUsername(currentUsername);
         }
         if(currentUser != null){
-            if(currentUser.equals(match.getOwner()) || currentUser.isAdmin() || currentUser.equals(match.getLocal())){
+            if(userMapper.toDTO(currentUser).id().equals(match.owner().id()) || currentUser.isAdmin() || userMapper.toDTO(currentUser).id().equals(match.local().id())){
                 model.addAttribute("showModify", true);
             }
         }
@@ -67,8 +73,8 @@ public class MatchController {
         }
         String currentUsername = userDetails.getUsername();
         User currentUser = userService.findByUsername(currentUsername);
-        TennisMatch match = matchService.findById(id);
-        if(currentUser.equals(match.getOwner()) || currentUser.isAdmin() || currentUser.equals(match.getLocal())){
+        MatchDTO match = matchService.findById(id);
+        if(userMapper.toDTO(currentUser).id().equals(match.owner().id()) || currentUser.isAdmin() || userMapper.toDTO(currentUser).id().equals(match.local().id())){
             //Delete
             matchService.delete(id);
             return "redirect:/matches";
@@ -113,8 +119,20 @@ public class MatchController {
             if(currentUser == null){
                 return "redirect:/login";
             }
-            TennisMatch newMatch = matchService.createMatch(currentUser, local, visitor, courtObj, winner, result);
-            return "redirect:/match/" + newMatch.getId();
+            MatchDTO newMatch = new MatchDTO(
+                    null,
+                    userMapper.toBasicDTO(currentUser),
+                    userMapper.toBasicDTO(winner),
+                    userMapper.toBasicDTO(local),
+                    userMapper.toBasicDTO(visitor),
+                    courtMapper.toBasicDTO(courtService.findById(court)),
+                    result),
+
+                    savedMatch;
+
+            savedMatch = matchService.save(newMatch);
+
+            return "redirect:/match/" + savedMatch.id();
         }
     }
 
@@ -128,17 +146,17 @@ public class MatchController {
         if(currentUser == null){
             return "redirect:/login";
         }
-        TennisMatch match = matchService.findById(id);
+        MatchDTO match = matchService.findById(id);
 
-        if(currentUser.equals(match.getOwner()) || currentUser.isAdmin() || currentUser.equals(match.getLocal())){
-            if(match.getWinner()==null){
+        if(userMapper.toDTO(currentUser).id().equals(match.owner().id()) || currentUser.isAdmin() || userMapper.toDTO(currentUser).id().equals(match.local().id())){
+            if(match.winner()==null){
                 model.addAttribute("winner.username", "");
             }
             model.addAttribute("match", match);
             model.addAttribute("user", currentUser);
             model.addAttribute("courts", courtService.findAll());
             model.addAttribute("actionName", "Actualizar ");
-            model.addAttribute("action", match.getId() + "/update");
+            model.addAttribute("action", match.id() + "/update");
             return "match_form";
         }else{
             model.addAttribute("errorMessage", "No tienes permiso para modificar este partido");
@@ -156,9 +174,9 @@ public class MatchController {
         if(currentUser == null){
             return "redirect:/login";
         }
-        TennisMatch match = matchService.findById(id);
-        if(currentUser.equals(match.getOwner()) || currentUser.isAdmin() || currentUser.equals(match.getLocal())){
-            if(match.getWinner()==null){
+        MatchDTO match = matchService.findById(id);
+        if(userMapper.toDTO(currentUser).id().equals(match.owner().id()) || currentUser.isAdmin() || userMapper.toDTO(currentUser).id().equals(match.local().id())){
+            if(match.winner()==null){
                 model.addAttribute("winner.username", "");
             }
             User local = userService.findByUsername(localUsername);
@@ -186,13 +204,19 @@ public class MatchController {
                 model.addAttribute("courts", courtService.findAll());
                 return "match_form";
             }else {
-                try{
-                    TennisMatch updatedMatch = matchService.modify(id, local, visitor, courtService.findById(court), winner, result);
-                    return "redirect:/match/" + updatedMatch.getId();
-                }catch (ChangeSetPersister.NotFoundException e) {
-                    model.addAttribute("errorMessage", "No se ha encontrado este partido");
-                    return "error";
-                }
+                MatchDTO modifiedMatch = new MatchDTO(
+                        id,
+                        match.owner(),
+                        userMapper.toBasicDTO(winner),
+                        userMapper.toBasicDTO(local),
+                        userMapper.toBasicDTO(visitor),
+                        match.court(),
+                        result),
+
+                        updatedMatch;
+
+                updatedMatch = matchService.modify(id, modifiedMatch);
+                return "redirect:/match/" + updatedMatch.id();
             }
         }else{
             model.addAttribute("errorMessage", "No tines permiso para modificar este partido");

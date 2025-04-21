@@ -2,6 +2,7 @@ package es.urjc.club_tenis.dto.match;
 
 import es.urjc.club_tenis.model.TennisMatch;
 import org.mapstruct.Mapper;
+import org.springframework.context.annotation.Bean;
 
 import java.util.Collection;
 import java.util.List;

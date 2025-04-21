@@ -1,6 +1,7 @@
 package es.urjc.club_tenis.service;
 
 import es.urjc.club_tenis.model.*;
+import es.urjc.club_tenis.repositories.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class DatabasePopulator {
     @Autowired
     private UserService userService;
     @Autowired
-    private MatchService matchService;
+    private MatchRepository matchRepository;
     @Autowired
     private TournamentService tournamentService;
     @Autowired
@@ -83,13 +84,13 @@ public class DatabasePopulator {
 
 
         //Matches
-        if(matchService.findAll().isEmpty()) {
+        if(matchRepository.findAll().isEmpty()) {
             for(int i = 0; i < 10; i++){
                 User local = users.get((int) (Math.random() * users.size()));
                 User visitor = users.get((int) (Math.random() * users.size()));
                 User winner = Math.random() > 0.5? local: visitor;
                 TennisMatch match = new TennisMatch(admin, local, visitor, winner, "3-6, 6-4, 7-5", courtService.findAll().getFirst());
-                matchService.save(match);
+                matchRepository.save(match);
             }
         }
     }
