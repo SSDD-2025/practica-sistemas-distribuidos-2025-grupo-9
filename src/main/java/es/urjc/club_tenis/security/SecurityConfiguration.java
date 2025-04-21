@@ -72,6 +72,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/users", "/tournament/new", "/tournament/*/modify",
                                 "tournament/*/addMatch", "/court/*/modify", "/court/*/delete",
                                 "/court/new").hasAnyRole("ADMIN")
+                        .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")

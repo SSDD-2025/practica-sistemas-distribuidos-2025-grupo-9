@@ -6,6 +6,8 @@ import es.urjc.club_tenis.model.Court;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.*;
 
 import java.time.LocalDate;
@@ -34,6 +36,10 @@ public class CourtService {
         return repo.findAll();
     }
 
+    public Page<Court> findAll(int page){
+        return repo.findAll(PageRequest.of(page - 1, Court.PAGE_SIZE));
+    }
+
     public Court addReservation(User currentUser, Court court, LocalDate newDate, LocalTime newStart) {
         Court savedCourt = findById(court.getId());
         savedCourt.addReservation(currentUser, newDate, newStart);
@@ -46,5 +52,9 @@ public class CourtService {
 
     public void delete(Court court) {
         repo.delete(court);
+    }
+
+    public Court update(Court court) {
+        return repo.save(court);
     }
 }

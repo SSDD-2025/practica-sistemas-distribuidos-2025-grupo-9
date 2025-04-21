@@ -8,6 +8,8 @@ import java.time.*;
 @Entity
 public class Court {
 
+    public static final int PAGE_SIZE = 5;
+
     @Id
     @GeneratedValue
     private long id;
@@ -27,6 +29,7 @@ public class Court {
         this.price = price;
         this.start = start;
         this.end = end;
+        this.reservations = new HashMap<>();
     }
 
     public Court(){
@@ -75,5 +78,9 @@ public class Court {
 
     public Map<LocalDateTime, User> getReservations() {
         return reservations;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
