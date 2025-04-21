@@ -1,5 +1,7 @@
 package es.urjc.club_tenis.service;
 
+import es.urjc.club_tenis.dto.tournament.TournamentDTO;
+import es.urjc.club_tenis.dto.tournament.TournamentMapper;
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.repositories.*;
 import jakarta.annotation.PostConstruct;
@@ -29,6 +31,9 @@ public class DatabasePopulator {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TournamentMapper tournamentMapper;
 
     @Value("${security.user}")
     private String username;
@@ -78,7 +83,10 @@ public class DatabasePopulator {
         for (int i = 0; i < 3; i++) {
             if (tournamentService.findById(i + 1) == null) {
                 Tournament t = new Tournament("Tournament " + i, LocalDate.parse("2025-12-" + (12 + i)), LocalDate.parse("2025-12-" + (15 + i)), (int) (Math.random()*10));
-                Tournament saved = tournamentService.save(t);
+                TournamentDTO tournamentDTO = tournamentMapper.toDto(t);
+
+                // Guardar el TournamentDTO
+                tournamentService.save(tournamentDTO);
             }
         }
 

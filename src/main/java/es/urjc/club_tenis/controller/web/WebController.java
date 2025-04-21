@@ -1,6 +1,7 @@
 package es.urjc.club_tenis.controller.web;
 
 import es.urjc.club_tenis.dto.court.CourtMapper;
+import es.urjc.club_tenis.dto.tournament.TournamentDTO;
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,8 @@ public class WebController {
 
     @GetMapping("/")
     public String homePage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        List<Tournament> tournaments = tournamentService.findAll();
-        model.addAttribute("tournaments", tournaments);
+        List<TournamentDTO> tournamentDTOs = tournamentService.findAll();
+        model.addAttribute("tournaments", tournamentDTOs);
         model.addAttribute("matches", matchService.findAll());
         if(userDetails!=null){
             String currentUsername = userDetails.getUsername();
@@ -66,7 +67,7 @@ public class WebController {
 
     @GetMapping("/tournaments")
     public String getTournaments(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        List<Tournament> tournaments = tournamentService.findAll();
+        List<TournamentDTO> tournamentDTOs = tournamentService.findAll();
         User currentUser = null;
         if(userDetails != null){
             String currentUsername = userDetails.getUsername();
@@ -76,7 +77,7 @@ public class WebController {
             model.addAttribute("showNew", true);
             model.addAttribute("showModify", true);
         }
-        model.addAttribute("tournaments", tournaments);
+        model.addAttribute("tournaments", tournamentDTOs);
         model.addAttribute("user", currentUser);
         return "tournaments";
     }
