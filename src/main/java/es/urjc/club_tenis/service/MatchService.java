@@ -23,6 +23,9 @@ public class MatchService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CourtService courtService;
+
     public List<MatchDTO> findAll() { return mapper.toDTOs(repo.findAll());}
 
     public MatchDTO findById(long id) {
@@ -31,6 +34,9 @@ public class MatchService {
 
     public MatchDTO save(MatchDTO matchDTO){
         TennisMatch match = mapper.toDomain(matchDTO);
+        Court managedCourt = courtService.findById(matchDTO.court().id());
+        match.setCourt(managedCourt);
+
         User localUser = userService.findByUsername(match.getLocal().getUsername());
         User visitorUser = userService.findByUsername(match.getVisitor().getUsername());
 
@@ -58,6 +64,9 @@ public class MatchService {
     public MatchDTO modify(long id, MatchDTO updatedMatchDTO){
         if(repo.existsById(id)){
             TennisMatch updatedMatch = mapper.toDomain(updatedMatchDTO);
+            Court managedCourt = courtService.findById(updatedMatchDTO.court().id());
+            updatedMatch.setCourt(managedCourt);
+
             updatedMatch.setId(id);
 
             repo.save(updatedMatch);
