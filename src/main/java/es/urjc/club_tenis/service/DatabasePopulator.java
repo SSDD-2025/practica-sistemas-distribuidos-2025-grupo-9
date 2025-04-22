@@ -1,5 +1,6 @@
 package es.urjc.club_tenis.service;
 
+import es.urjc.club_tenis.dto.court.CourtMapper;
 import es.urjc.club_tenis.dto.tournament.TournamentDTO;
 import es.urjc.club_tenis.dto.tournament.TournamentMapper;
 import es.urjc.club_tenis.model.*;
@@ -34,6 +35,9 @@ public class DatabasePopulator {
 
     @Autowired
     private TournamentMapper tournamentMapper;
+
+    @Autowired
+    private CourtMapper courtMapper;
 
     @Value("${security.user}")
     private String username;

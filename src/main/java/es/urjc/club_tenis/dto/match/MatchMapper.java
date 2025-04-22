@@ -12,7 +12,7 @@ public interface MatchMapper {
 
     MatchDTO toDTO(TennisMatch match);
 
-    List<MatchDTO> toDTOs(Collection<TennisMatch> matches);
+    Collection<MatchDTO> toDTOs(Collection<TennisMatch> matches);
 
     TennisMatch toDomain(MatchDTO match);
 

@@ -1,5 +1,6 @@
 package es.urjc.club_tenis.service;
 
+import es.urjc.club_tenis.dto.court.CourtMapper;
 import es.urjc.club_tenis.dto.match.*;
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.repositories.MatchRepository;
@@ -26,7 +27,10 @@ public class MatchService {
     @Autowired
     private CourtService courtService;
 
-    public List<MatchDTO> findAll() { return mapper.toDTOs(repo.findAll());}
+    @Autowired
+    private CourtMapper courtMapper;
+
+    public Collection<MatchDTO> findAll() { return mapper.toDTOs(repo.findAll());}
 
     public MatchDTO findById(long id) {
         return mapper.toDTO(repo.findById(id).orElseThrow());
@@ -34,7 +38,7 @@ public class MatchService {
 
     public MatchDTO save(MatchDTO matchDTO){
         TennisMatch match = mapper.toDomain(matchDTO);
-        Court managedCourt = courtService.findById(matchDTO.court().id());
+        Court managedCourt = courtMapper.toDomain(courtService.findById(match.getCourt().getId()));
         match.setCourt(managedCourt);
 
         User localUser = userService.findByUsername(match.getLocal().getUsername());
@@ -64,7 +68,7 @@ public class MatchService {
     public MatchDTO modify(long id, MatchDTO updatedMatchDTO){
         if(repo.existsById(id)){
             TennisMatch updatedMatch = mapper.toDomain(updatedMatchDTO);
-            Court managedCourt = courtService.findById(updatedMatchDTO.court().id());
+            Court managedCourt = courtMapper.toDomain(courtService.findById(updatedMatchDTO.court().id()));
             updatedMatch.setCourt(managedCourt);
 
             updatedMatch.setId(id);

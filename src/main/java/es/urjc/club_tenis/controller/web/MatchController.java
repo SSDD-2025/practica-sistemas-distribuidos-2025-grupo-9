@@ -59,7 +59,7 @@ public class MatchController {
         model.addAttribute("actionName", "Crear ");
         model.addAttribute("action", "");
         model.addAttribute("user", currentUser);
-        model.addAttribute("courts", courtMapper.toBasicDTOs(courtService.findAll()));
+        model.addAttribute("courts", courtService.findAllDTOs());
         return "match_form";
     }
 
@@ -83,7 +83,6 @@ public class MatchController {
 
     @PostMapping("/")
     public String createMatch(String localUsername, String visitorUsername, long court, String winnerUsername, String result, Model model, @AuthenticationPrincipal UserDetails userDetails){
-        Court courtObj = courtService.findById(court);
         User local = userService.findByUsername(localUsername);
         User visitor = userService.findByUsername(visitorUsername);
         User winner = userService.findByUsername(winnerUsername);
@@ -105,7 +104,7 @@ public class MatchController {
         if(invalid){
             model.addAttribute("action", "");
             model.addAttribute("actionName", "Crear ");
-            model.addAttribute("courts", courtService.findAll());
+            model.addAttribute("courts", courtService.findAllDTOs());
             return "match_form";
         }else {
             User currentUser = null;
@@ -122,7 +121,7 @@ public class MatchController {
                     userMapper.toBasicDTO(winner),
                     userMapper.toBasicDTO(local),
                     userMapper.toBasicDTO(visitor),
-                    courtMapper.toBasicDTO(courtService.findById(court)),
+                    courtService.findById(court),
                     result),
 
                     savedMatch;
@@ -151,7 +150,7 @@ public class MatchController {
             }
             model.addAttribute("match", match);
             model.addAttribute("user", currentUser);
-            model.addAttribute("courts", courtMapper.toBasicDTOs(courtService.findAll()));
+            model.addAttribute("courts", courtService.findAllDTOs());
             model.addAttribute("actionName", "Actualizar ");
             model.addAttribute("action", match.id() + "/update");
             return "match_form";
@@ -198,7 +197,7 @@ public class MatchController {
                 model.addAttribute("match", match);
                 model.addAttribute("action", "");
                 model.addAttribute("actionName", "Crear ");
-                model.addAttribute("courts", courtMapper.toBasicDTOs(courtService.findAll()));
+                model.addAttribute("courts", courtService.findAllDTOs());
                 return "match_form";
             }else {
                 MatchDTO modifiedMatch = new MatchDTO(

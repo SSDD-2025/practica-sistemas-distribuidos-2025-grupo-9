@@ -12,12 +12,11 @@ public interface CourtMapper {
 
     CourtDTO toDTO(Court court);
 
-    CourtBasicDTO toBasicDTO(Court court);
-
-    List<CourtBasicDTO> toBasicDTOs(Collection<Court> courts);
-
     List<CourtDTO> toDTOs(Collection<Court> courts);
 
     @Mapping(target = "reservations", ignore = true)
-    Court toDomain(CourtBasicDTO courtBasicDTO);
+    Collection<Court> toDomain(Collection<CourtDTO> courtDTOs);
+
+    @Mapping(target = "reservations", ignore = true)
+    Court toDomain(CourtDTO courtDTO);
 }

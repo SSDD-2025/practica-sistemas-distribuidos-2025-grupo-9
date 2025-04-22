@@ -4,6 +4,7 @@ package es.urjc.club_tenis.controller.web;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import es.urjc.club_tenis.dto.court.CourtDTO;
 import es.urjc.club_tenis.dto.court.CourtMapper;
 import es.urjc.club_tenis.model.User;
 import es.urjc.club_tenis.service.UserService;
@@ -88,7 +89,7 @@ public class CourtController {
             return "error";
         }
         model.addAttribute("user", currentUser);
-        model.addAttribute("court", courtMapper.toDTO(courtService.findById(id)));
+        model.addAttribute("court", courtService.findById(id));
         model.addAttribute("action", id);
         model.addAttribute("actionName", "Modificar ");
         return "court_form";
@@ -111,7 +112,7 @@ public class CourtController {
             model.addAttribute("user", currentUser);
             return "error";
         }
-        Court court = courtService.findById(id);
+        Court court = courtMapper.toDomain(courtService.findById(id));
         court.setName(name);
         court.setPrice(price);
         court.setStart(LocalTime.parse(start));
@@ -132,7 +133,7 @@ public class CourtController {
             model.addAttribute("errorMessage", "No se puede borrar una pista sin ser administrador");
             return "error";
         }
-        courtService.delete(courtService.findById(id));
+        courtService.delete(id);
         return "redirect:/courts";
     }
 
@@ -142,10 +143,10 @@ public class CourtController {
         if(userDetails == null){
             return "redirect:/login";
         }
-        Court court = courtService.findById(id);
+        CourtDTO court = courtService.findById(id);
         String currentUsername = userDetails.getUsername();
         User currentUser = userService.findByUsername(currentUsername);
-        model.addAttribute("court",courtMapper.toDTO(court));
+        model.addAttribute("court", court);
         model.addAttribute("user", currentUser);
         return "court";
     }
@@ -163,7 +164,7 @@ public class CourtController {
         model.addAttribute("user", currentUser);
         LocalDate newDate = LocalDate.parse(date);
         LocalTime newStart = LocalTime.parse(start);
-        Court court = courtService.findById(id);
+        Court court = courtMapper.toDomain(courtService.findById(id));
         boolean invalid = false;
         if(court.getStart().isAfter(newStart) || court.getEnd().isBefore(newStart)){
             model.addAttribute("invalidStart", true);

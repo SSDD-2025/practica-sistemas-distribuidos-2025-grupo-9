@@ -1,6 +1,7 @@
 package es.urjc.club_tenis.dto.match;
 
 import es.urjc.club_tenis.dto.court.CourtBasicDTO;
+import es.urjc.club_tenis.dto.court.CourtDTO;
 import es.urjc.club_tenis.dto.user.UserBasicDTO;
 
 public record MatchDTO(
@@ -9,6 +10,6 @@ public record MatchDTO(
         UserBasicDTO winner,
         UserBasicDTO local,
         UserBasicDTO visitor,
-        CourtBasicDTO court,
+        CourtDTO court,
         String result) {
 }

@@ -1,5 +1,7 @@
 package es.urjc.club_tenis.controller.web;
 
+import es.urjc.club_tenis.dto.court.CourtBasicDTO;
+import es.urjc.club_tenis.dto.court.CourtDTO;
 import es.urjc.club_tenis.dto.court.CourtMapper;
 import es.urjc.club_tenis.dto.tournament.TournamentDTO;
 import es.urjc.club_tenis.model.*;
@@ -89,8 +91,8 @@ public class WebController {
             String currentUsername = userDetails.getUsername();
             currentUser = userService.findByUsername(currentUsername);
         }
-        Page<Court> courts = courtService.findAll(page);
-        model.addAttribute("courts", courtMapper.toDTOs(courts.toList()));
+        Page<CourtDTO> courts = courtService.findAll(page);
+        model.addAttribute("courts", courts);
         model.addAttribute("user", currentUser);
         if(currentUser != null && currentUser.isAdmin()){
             model.addAttribute("showModify", true);

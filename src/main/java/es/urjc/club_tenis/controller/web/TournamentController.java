@@ -65,7 +65,7 @@ public class TournamentController {
 
         model.addAttribute("actionName", "Crear ");
         model.addAttribute("action", "addMatch");
-        model.addAttribute("courts", courtMapper.toBasicDTOs(courtService.findAll()));
+        model.addAttribute("courts", courtService.findAllDTOs());
         model.addAttribute("tournament", tournament);
         model.addAttribute("user", currentUser);
         return "tournament_addMatch";
@@ -98,7 +98,7 @@ public class TournamentController {
         if (invalid) {
             model.addAttribute("action", "addMatch");
             model.addAttribute("actionName", "Crear ");
-            model.addAttribute("courts", courtMapper.toBasicDTOs(courtService.findAll()));
+            model.addAttribute("courts", courtService.findAllDTOs());
             return "tournament_addMatch";
         }
 
@@ -110,7 +110,7 @@ public class TournamentController {
                 (winner != null ? userMapper.toBasicDTO(winner) : null),
                 userMapper.toBasicDTO(local),
                 userMapper.toBasicDTO(visitor),
-                courtMapper.toBasicDTO(courtObj),
+                courtObj,
                 result
         );
 

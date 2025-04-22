@@ -7,10 +7,12 @@ import es.urjc.club_tenis.model.Court;
 import es.urjc.club_tenis.service.CourtService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
@@ -26,19 +28,23 @@ public class CourtRestController {
     private CourtMapper courtMapper;
 
     @GetMapping("/courts")
-    public List<CourtBasicDTO> getPageCourts(@RequestParam(defaultValue = "0") int page){
-        return courtMapper.toBasicDTOs(courtService.findAll(page).toList());
+    public Collection<CourtDTO> getPageCourts(@RequestParam(defaultValue = "0") int page){
+        return courtService.findAll(page).toList();
     }
 
     @GetMapping("/court/{id}")
-    public CourtDTO getCourt(@PathVariable long id) {
-        return courtMapper.toDTO(courtService.findById(id));
+    public ResponseEntity<CourtDTO> getCourt(@PathVariable long id) {
+        CourtDTO court = courtService.findById(id);
+        if (court == null){
+            return ResponseEntity.notFound().build();
+        }
+        return new ResponseEntity<>(court, HttpStatus.OK);
     }
 
     @PostMapping("/court")
-    public ResponseEntity<Court> createCourt(Court court){
-        Court savedCourt = courtService.save(court);
-        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedCourt.getId()).toUri();
+    public ResponseEntity<CourtDTO> createCourt(Court court){
+        CourtDTO savedCourt = courtService.save(court);
+        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedCourt.id()).toUri();
         return ResponseEntity.created(location).body(savedCourt);
     }
 
@@ -46,15 +52,14 @@ public class CourtRestController {
     public CourtDTO updateCourt(@PathVariable long id, Court court){
         courtService.findById(id);
         court.setId(id);
-        Court updatedCourt = courtService.update(court);
-        return courtMapper.toDTO(updatedCourt);
+        return courtService.update(court);
     }
 
     @DeleteMapping("/court/{id}")
     @Transactional
     public CourtDTO deleteCourt(@PathVariable long id){
-        Court deletedCourt = courtService.findById(id);
-        courtService.delete(deletedCourt);
-        return courtMapper.toDTO(deletedCourt);
+        CourtDTO deletedCourt = courtService.findById(id);
+        courtService.delete(deletedCourt.id());
+        return deletedCourt;
     }
 }
