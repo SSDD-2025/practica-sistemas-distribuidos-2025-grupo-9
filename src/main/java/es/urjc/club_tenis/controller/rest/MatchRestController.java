@@ -4,6 +4,7 @@ import es.urjc.club_tenis.dto.match.MatchDTO;
 import es.urjc.club_tenis.service.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -29,6 +30,7 @@ public class MatchRestController {
     }
 
     @PostMapping("/match")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<MatchDTO> createMatch(@RequestBody MatchDTO match){
         match = matchService.save(match);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(match.id()).toUri();
@@ -37,11 +39,13 @@ public class MatchRestController {
     }
 
     @DeleteMapping("/match/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public MatchDTO deleteMatch(@PathVariable long id){
         return matchService.delete(id);
     }
 
     @PutMapping("/match/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public MatchDTO replaceMatch(@PathVariable long id, @RequestBody MatchDTO match){
         return matchService.modify(id, match);
     }

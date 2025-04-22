@@ -23,7 +23,7 @@ public class User {
     public String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
+    private Set<String> roles = new HashSet<>();
 
     @Lob
     private Blob profilePicture;
@@ -61,7 +61,8 @@ public class User {
         this.name = name;
         this.password = password;
         this.admin = true;
-        this.roles = new ArrayList<>();
+        this.roles = new HashSet<>();
+        this.roles.add("USER");
     }
 
 
@@ -148,7 +149,7 @@ public class User {
                 '}';
     }
 
-    public List<String> getRoles() {
+    public Set<String> getRoles() {
         return roles;
     }
 
@@ -156,5 +157,5 @@ public class User {
         this.roles.add(role);
     }
 
-    public void setRoles(List<String> roles) {this.roles = roles;}
+    public void setRoles(HashSet<String> roles) {this.roles = roles;}
 }

@@ -71,7 +71,6 @@ public class DatabasePopulator {
         for(int i = 0; i < 10; i++){
             if(userService.findByUsername("user"+i) == null){
                 User newUser = new User("user"+i, "Usuario " + i, passwordEncoder.encode("user"+i), null);
-                newUser.addRole("USER");
                 users.add(userService.save(newUser));
             }
         }
