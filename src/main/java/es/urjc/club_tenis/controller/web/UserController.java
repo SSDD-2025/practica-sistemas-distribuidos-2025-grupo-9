@@ -66,7 +66,7 @@ public class UserController {
             return "profile";
         } else if( currentUser.equals(user) || userService.findByUsername(currentUsername).isAdmin()){
             model.addAttribute("showModify", true);
-            if(!userService.findByUsername(user.username()).isAdmin() && !user.equals(userMapper.toDTO(userService.findByUsername("deleted_user")))){
+            if(!userService.findByUsername(user.username()).isAdmin() && !user.username().equals("deleted_user")){
                 model.addAttribute("showDelete", true);
             }
         }
@@ -201,13 +201,16 @@ public class UserController {
         }
 
 
-        Page<UserBasicDTO> users = userService.findAllDTO(page);
-        List<UserBasicDTO> usersList = users.getContent();
-        UserBasicDTO deleted = userMapper.toBasicDTO(userService.findByUsername("deleted_user"));
-        usersList.remove(deleted);
-        model.addAttribute("users",usersList);
+        Page<User> users = userService.findAll(page);
+        List<User> usersList = new ArrayList<>();
+        for (User user : users){
+            if(!user.getRoles().contains("ADMIN") || !user.getUsername().equals("deleted_user")){
+                usersList.add(user);
+            }
+        }
 
-        long nUsers = usersList.size() - 1 ;
+        model.addAttribute("users",usersList);
+        long nUsers = users.getTotalElements();
         if (nUsers > 5) {
             long nPages = nUsers % User.PAGE_SIZE == 0 ? nUsers / User.PAGE_SIZE : (nUsers / User.PAGE_SIZE) + 1;
             ArrayList<Integer> pages = new ArrayList<>();
@@ -220,7 +223,7 @@ public class UserController {
             if (page > 1)
                 model.addAttribute("previousPage", page - 1);
         }
-    
+
         return "users";
     }
 
@@ -248,22 +251,22 @@ public class UserController {
                              HttpServletRequest request){
 
         String currentUsername = userDetails.getUsername();
-        UserDTO currentUser = userMapper.toDTO(userService.findByUsername(currentUsername));
-        UserDTO deleteUser = userMapper.toDTO(userService.findByUsername(username));
+        User currentUser = userService.findByUsername(currentUsername);
+        User deleteUser = userService.findByUsername(username);
         model.addAttribute("user", currentUser);
 
-        if(currentUser==null || (!userService.findByUsername(currentUsername).isAdmin() && !currentUser.equals(deleteUser))){
+        if (currentUser == null || (!userService.findByUsername(currentUsername).isAdmin() && !currentUser.equals(deleteUser))) {
             model.addAttribute("errorMessage", "No tienes permiso para borrar este usuario");
             return "error";
         }
 
         Set<TennisMatch> matches = userService.findByUsername(username).getPlayedMatches();
 
-        for(TennisMatch match:matches){
+        for (TennisMatch match : matches) {
             matchService.deleteUser(match.getId(), userService.findByUsername(username));
         }
 
-        if(currentUser.equals(deleteUser)){
+        if (currentUser.equals(deleteUser)) {
 
             userService.delete(username);
             request.getSession().invalidate();

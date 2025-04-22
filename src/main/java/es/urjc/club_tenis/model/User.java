@@ -12,6 +12,8 @@ import java.util.*;
 @Entity
 public class User {
 
+    public static final User DELETED_USER = new User("deleted_user","Deleted","deleted",null);
+
     public static final int PAGE_SIZE = 10;
 
     @Id

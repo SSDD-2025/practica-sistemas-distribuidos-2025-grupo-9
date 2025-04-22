@@ -81,17 +81,16 @@ public class MatchService {
 
     public void deleteUser(long id, User user){
         TennisMatch match = repo.findById(id).orElseThrow();
-        User deleted = userService.findByUsername("deleted_user");
         if(match.getLocal().equals(user)){
-            match.setLocal(deleted);
+            match.setLocal(User.DELETED_USER);
         }
 
         if(match.getVisitor().equals(user)){
-            match.setVisitor(deleted);
+            match.setVisitor(User.DELETED_USER);
         }
 
         if(match.getWinner().equals(user)){
-            match.setWinner(deleted);
+            match.setWinner(User.DELETED_USER);
         }
         repo.save(match);
     }

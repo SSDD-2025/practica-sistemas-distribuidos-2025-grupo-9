@@ -54,19 +54,12 @@ public class DatabasePopulator {
         //Users
         List<User> users = userService.findAll();
         User admin = userService.findByUsername(username);
-        User deleted = userService.findByUsername("deleted_user");
         if(admin == null) {
             admin = new User(username, "Admin", encodedPassword, true);
             admin.setAdmin(true);
             admin.addRole("USER");
             admin.addRole("ADMIN");
             userService.save(admin);
-        }
-        if(deleted == null){
-            deleted = new User("deleted_user","Deleted",passwordEncoder.encode("deleted"),null);
-            userService.save(deleted);
-        }else{
-            users.remove(deleted);
         }
         for(int i = 0; i < 15; i++){
             if(userService.findByUsername("user"+i) == null){
