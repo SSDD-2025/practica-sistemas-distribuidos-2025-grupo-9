@@ -27,12 +27,12 @@ public class CourtRestController {
     @Autowired
     private CourtMapper courtMapper;
 
-    @GetMapping("/courts")
+    @GetMapping("/courts/")
     public Collection<CourtDTO> getPageCourts(@RequestParam(defaultValue = "1") int page){
         return courtService.findAll(page).toList();
     }
 
-    @GetMapping("/court/{id}")
+    @GetMapping("/courts/{id}")
     public ResponseEntity<CourtDTO> getCourt(@PathVariable long id) {
         CourtDTO court = courtService.findById(id);
         if (court == null){
@@ -41,13 +41,13 @@ public class CourtRestController {
         return new ResponseEntity<>(court, HttpStatus.OK);
     }
 
-    @PostMapping("/court")
+    @PostMapping("/courts/")
     @ResponseStatus(HttpStatus.CREATED)
     public CourtDTO createCourt(Court court){
         return courtService.save(court);
     }
 
-    @PutMapping("/court/{id}")
+    @PutMapping("/courts/{id}")
     public ResponseEntity<CourtDTO> updateCourt(@PathVariable long id, Court court){
         CourtDTO saved = courtService.findById(id);
         if (saved == null){
@@ -58,7 +58,7 @@ public class CourtRestController {
         }
     }
 
-    @DeleteMapping("/court/{id}")
+    @DeleteMapping("/courts/{id}")
     @Transactional
     public ResponseEntity<CourtDTO> deleteCourt(@PathVariable long id){
         courtService.delete(id);

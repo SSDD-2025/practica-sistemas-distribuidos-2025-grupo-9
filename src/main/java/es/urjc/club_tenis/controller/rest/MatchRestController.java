@@ -12,7 +12,7 @@ import java.util.*;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RestController
-@RequestMapping("/matches")
+@RequestMapping("api/matches")
 public class MatchRestController {
 
     @Autowired

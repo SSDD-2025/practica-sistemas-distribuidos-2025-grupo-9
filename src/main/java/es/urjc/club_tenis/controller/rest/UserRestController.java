@@ -38,27 +38,24 @@ public class UserRestController {
     private UserService userService;
 
     @Autowired
-    private MatchService matchService;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserMapper userMapper;
 
-    @GetMapping("/")//funciona
+    @GetMapping("/")
     public List<UserBasicDTO> getPageUsers(@RequestParam(defaultValue = "1") int page){
         return userMapper.toBasicDTOs(userService.findAll(page).toList());
     }
 
-    @GetMapping("/{username}")//problema en los usuarios con los partidos tanto en rest como no
+    @GetMapping("/{username}")
     public UserDTO getProfile(@PathVariable String username) {
         User user = userService.findByUsername(username);
 
         return userMapper.toDTO(user);
     }
 
-    @PostMapping("/")//funciona
+    @PostMapping("/")
     public ResponseEntity<UserDTO> createUser(@RequestBody User user){
         user.addRole("USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -67,7 +64,7 @@ public class UserRestController {
         return ResponseEntity.created(location).body(userMapper.toDTO(savedUser));
     }
 
-    @PutMapping("/{username}")//funciona pero verificar autenticacion
+    @PutMapping("/{username}")
     @PreAuthorize("#username == principal.username or hasRole('ADMIN')")
     public UserDTO updateUser(@PathVariable String username, @RequestBody User updatedUser){
         User user = userService.findByUsername(username);
@@ -83,7 +80,7 @@ public class UserRestController {
         return userMapper.toDTO(updatedUser);
     }
 
-    @DeleteMapping("/{username}")//funciona
+    @DeleteMapping("/{username}")
     @PreAuthorize("#username == principal.username or hasRole('ADMIN')")
     @Transactional
     public ResponseEntity<Object> deleteUser(@PathVariable String username){
@@ -92,7 +89,7 @@ public class UserRestController {
         return ResponseEntity.ok().body(deletedUsername + " eliminado");
     }
 
-    @PutMapping("/{username}/profile-picture")//funciona
+    @PutMapping("/{username}/profile-picture")
     @PreAuthorize("#username == principal.username or hasRole('ADMIN')")
     public ResponseEntity<Object> uploadProfilePicture(
             @PathVariable String username,
@@ -112,7 +109,7 @@ public class UserRestController {
                 .body(profilePictureNew);
     }
 
-    @GetMapping(value = "/{username}/profile-picture")//funciona
+    @GetMapping(value = "/{username}/profile-picture")
     public ResponseEntity<Object> getProfilePicture(@PathVariable String username) {
 
         byte[] profilePicture = userService.getProfilePicture(username);
