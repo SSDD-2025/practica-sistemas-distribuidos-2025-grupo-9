@@ -1,9 +1,13 @@
 package es.urjc.club_tenis.controller.web;
 
+import es.urjc.club_tenis.dto.user.UserDTO;
+import es.urjc.club_tenis.dto.user.UserMapper;
 import es.urjc.club_tenis.model.TennisMatch;
 import es.urjc.club_tenis.model.User;
 import es.urjc.club_tenis.service.MatchService;
 import es.urjc.club_tenis.service.UserService;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.MediaType;
@@ -11,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,24 +38,29 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @GetMapping("/profile/{username}")
-    public String getProfilePage(Model model, @AuthenticationPrincipal UserDetails userDetails, @PathVariable String username){
-        User user = userService.findByUsername(username);
-        model.addAttribute("profilePictureUrl" ,"/profile-picture/" + user.getUsername());
+    public String getProfilePage(Model model, @AuthenticationPrincipal UserDetails userDetails,
+                                 @PathVariable String username){
+        UserDTO user = userMapper.toDTO(userService.findByUsername(username));
+        model.addAttribute("profilePictureUrl" ,"/profile-picture/" + user.username());
         model.addAttribute("profileUser", user);
-        model.addAttribute("matches", user.getPlayedMatches());
-        User currentUser = null;
+        model.addAttribute("matches", user.playedMatches());
+        UserDTO currentUser = null;
+        String currentUsername = null;
         if(userDetails != null){
-            String currentUsername = userDetails.getUsername();
-            currentUser = userService.findByUsername(currentUsername);
+            currentUsername = userDetails.getUsername();
+            currentUser = userMapper.toDTO(userService.findByUsername(currentUsername));
         }
         model.addAttribute("user",currentUser);
 
         if(currentUser == null){
             return "profile";
-        } else if( currentUser.equals(user) || currentUser.isAdmin()){
+        } else if( currentUser.equals(user) || userService.findByUsername(currentUsername).isAdmin()){
             model.addAttribute("showModify", true);
-            if(!user.isAdmin() && !user.equals(userService.findByUsername("deleted_user"))){
+            if(!userService.findByUsername(user.username()).isAdmin() && !user.equals(userMapper.toDTO(userService.findByUsername("deleted_user")))){
                 model.addAttribute("showDelete", true);
             }
         }
@@ -72,13 +82,13 @@ public class UserController {
 
     @GetMapping("/profile/{username}/modify")
     public String getModifyPage(Model model, @AuthenticationPrincipal UserDetails userDetails, @PathVariable String username){
-        User user = userService.findByUsername(username);
+        UserDTO user = userMapper.toDTO(userService.findByUsername(username));
         String currentUsername = userDetails.getUsername();
-        User currentUser = userService.findByUsername(currentUsername);
+        UserDTO currentUser = userMapper.toDTO(userService.findByUsername(currentUsername));
         if(currentUser == null){
             return "redirect:/login";
         }
-        if(currentUser.isAdmin() || currentUser.equals(user)){
+        if(userService.findByUsername(currentUsername).isAdmin() || currentUser.equals(user)){
             model.addAttribute("showPasswordInput", false);
             if(currentUser.equals(user)){
                 model.addAttribute("showPasswordInput", true);
@@ -97,20 +107,20 @@ public class UserController {
     @PostMapping("/profile/{oldUsername}/modify")
     public String modifyProfilePage(Model model, @AuthenticationPrincipal UserDetails userDetails, @PathVariable String oldUsername, String username, String name, String password, String newPassword, MultipartFile profilePicture){
         String currentUsername = userDetails.getUsername();
-        User currentUser = userService.findByUsername(currentUsername);
-        User user = userService.findByUsername(oldUsername);
+        UserDTO currentUser = userMapper.toDTO(userService.findByUsername(currentUsername));
+        UserDTO user = userMapper.toDTO(userService.findByUsername(oldUsername));
         logger.info(profilePicture.toString());
         if(currentUser == null){
             return "redirect:/login";
         }
-        if(currentUser.isAdmin() || currentUser.equals(user)){
+        if(userService.findByUsername(currentUsername).isAdmin() || currentUser.equals(user)){
             User modify;
             String encodedPassword = passwordEncoder.encode(password);
             String newEncodedPassword = passwordEncoder.encode(newPassword);
             try {
                 if(password.isEmpty()){
                     modify = userService.modify(oldUsername, username, name, profilePicture);
-                }else if(encodedPassword.equals(user.getPassword())){
+                }else if(encodedPassword.equals(userService.findByUsername(oldUsername).getPassword())){
                     modify = userService.modify(oldUsername, username, name, encodedPassword, newEncodedPassword, profilePicture);
                 }else{
                     model.addAttribute("invalidPassword", true);
@@ -156,7 +166,8 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String showLoginPage(@RequestParam(value = "error", required = false) String error, @RequestParam(value = "expired", required = false) String expired, Model model) {
+    public String showLoginPage(@RequestParam(value = "error", required = false) String error,
+                                @RequestParam(value = "expired", required = false) String expired, Model model) {
         if (error != null) {
             model.addAttribute("error", true);
         }
@@ -194,11 +205,11 @@ public class UserController {
     public String getConfirmation(Model model, @PathVariable String username, @AuthenticationPrincipal UserDetails userDetails){
 
         String currentUsername = userDetails.getUsername();
-        User currentUser = userService.findByUsername(currentUsername);
-        User deletedUser = userService.findByUsername(username);
+        UserDTO currentUser = userMapper.toDTO(userService.findByUsername(currentUsername));
+        UserDTO deletedUser = userMapper.toDTO(userService.findByUsername(username));
         model.addAttribute("user", currentUser);
 
-        if(currentUser==null || (!currentUser.isAdmin() && !currentUser.equals(deletedUser))){
+        if(currentUser==null || (!userService.findByUsername(currentUsername).isAdmin() && !currentUser.equals(deletedUser))){
             model.addAttribute("errorMessage", "No tienes permiso para borrar este usuario");
             return "error";
         }
@@ -209,31 +220,33 @@ public class UserController {
     }
 
     @PostMapping("/users/delete/{username}")
-    public String deleteUser(Model model, @PathVariable String username, @AuthenticationPrincipal UserDetails userDetails){
+    public String deleteUser(Model model, @PathVariable String username,
+                             @AuthenticationPrincipal UserDetails userDetails,
+                             HttpServletRequest request){
 
         String currentUsername = userDetails.getUsername();
-        User currentUser = userService.findByUsername(currentUsername);
-        User deleteUser = userService.findByUsername(username);
+        UserDTO currentUser = userMapper.toDTO(userService.findByUsername(currentUsername));
+        UserDTO deleteUser = userMapper.toDTO(userService.findByUsername(username));
         model.addAttribute("user", currentUser);
 
-        if(currentUser==null || (!currentUser.isAdmin() && !currentUser.equals(deleteUser))){
+        if(currentUser==null || (!userService.findByUsername(currentUsername).isAdmin() && !currentUser.equals(deleteUser))){
             model.addAttribute("errorMessage", "No tienes permiso para borrar este usuario");
             return "error";
         }
 
-        Set<TennisMatch> matches = deleteUser.getPlayedMatches();
+        Set<TennisMatch> matches = userService.findByUsername(username).getPlayedMatches();
 
         for(TennisMatch match:matches){
-            matchService.deleteUser(match.getId(), deleteUser);
+            matchService.deleteUser(match.getId(), userService.findByUsername(username));
         }
-/*
+
         if(currentUser.equals(deleteUser)){
 
             userService.delete(username);
-            session.invalidate();
+            request.getSession().invalidate();
 
             return "redirect:/";
-        }*/
+        }
 
         userService.delete(username);
 

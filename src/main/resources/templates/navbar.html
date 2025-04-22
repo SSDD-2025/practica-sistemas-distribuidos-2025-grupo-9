@@ -36,7 +36,10 @@
             <div class="text-end">
                 {{#user}}
                 <button type="button" class="btn btn-outline-light me-2" onclick="window.location.href='/profile/{{username}}'">@{{username}}</button>
-                <button type="button" class="btn btn-warning" onclick="window.location.href='/logout'">Salir</button>
+                <form action="/logout" method="post" style="display: inline;">
+                    <input type="hidden" name="_csrf" value="{{token}}"/>
+                    <button type="submit" class="btn btn-warning">Salir</button>
+                </form>
                 {{/user}}
                 {{^user}}
                 <button type="button" class="btn btn-outline-light me-2" onclick="window.location.href='/login'">Entrar</button>
