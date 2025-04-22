@@ -249,7 +249,7 @@ public class UserController {
     public String deleteUser(Model model, @PathVariable String username,
                              @AuthenticationPrincipal UserDetails userDetails,
                              HttpServletRequest request){
-
+        logger.info("Hemos llegdo a borrar metodo");
         String currentUsername = userDetails.getUsername();
         User currentUser = userService.findByUsername(currentUsername);
         User deleteUser = userService.findByUsername(username);

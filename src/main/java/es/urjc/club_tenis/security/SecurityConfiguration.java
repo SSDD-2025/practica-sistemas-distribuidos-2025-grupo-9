@@ -22,6 +22,8 @@ import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 
+import java.util.logging.Logger;
+
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
@@ -31,6 +33,8 @@ public class SecurityConfiguration {
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+
+    Logger logger = Logger.getLogger("es.urjc.club_tenis.controller");
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -57,7 +61,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    @Order(1)
+    @Order(2)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         RequestMatcher apiUrls = (antMatcher("/api/**"));
@@ -68,16 +72,15 @@ public class SecurityConfiguration {
                 .securityMatcher(nonApiUrls)
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/signin", "/courts", "/profile/**", "/tournaments",
-                                "/tournament/**", "/matches", "/matches/**", "/profile-picture/**", "match/**",
-                                "/css/**", "/ball.svg","/favicon.ico", "/error/**","users/delete/**",
-                                "/style.css").permitAll()
-                        .requestMatchers("/match/new", "/match/*/update", "/court/**"
-                        ).hasAnyRole("USER")
-                        .requestMatchers("/users", "/tournament/new", "/tournament/*/modify",
-                                "tournament/*/addMatch", "/court/*/modify", "/court/*/delete",
-                                "/court/new").hasAnyRole("ADMIN")
-                        .anyRequest().permitAll())
+                        .requestMatchers("/", "/signin", "/courts", "/profile/**", "/tournaments", "/matches", "/profile-picture/**","/css/**", "/ball.svg", "/favicon.ico", "/error/**","/style.css")
+                            .permitAll()
+                        .requestMatchers("/match/new", "/match/*/update", "/court/**")
+                            .hasAnyRole("USER")
+                        .requestMatchers("/users", "/users/delete/**", "/tournament/new", "/tournament/*/modify","/tournament/*/addMatch", "/court/*/modify", "/court/*/delete","/court/new")
+                            .hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/users/delete-confirmation/**").hasRole("ADMIN")
+                        //.anyRequest().permitAll()
+                )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .failureUrl("/login?error")
@@ -87,46 +90,43 @@ public class SecurityConfiguration {
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .permitAll())
-                .exceptionHandling(ex -> ex
-                        .accessDeniedPage("/error/accessDenied")
-                );
-
+                .exceptionHandling(ex -> {
+                    logger.warning(ex.toString());
+                    ex.accessDeniedPage("/error/accessDenied/web");
+                });
 
         return http.build();
     }
 
     @Bean
-    @Order(2)
+    @Order(1)
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
-        http.authenticationProvider(authenticationProvider());
         http
+                .authenticationProvider(authenticationProvider())
                 .securityMatcher("/api/**")
-                .exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
-        http
+                .exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt))
                 .authorizeHttpRequests(authorize -> authorize
                         // PRIVATE ENDPOINTS
-                        .requestMatchers(HttpMethod.POST,"api/matches/").hasAnyRole("USER")
-                        .requestMatchers(HttpMethod.PUT,"/api/matches/**").hasAnyRole("USER")
-                        .requestMatchers(HttpMethod.DELETE,"/api/matches/**").hasAnyRole("USER")
-                        .requestMatchers(HttpMethod.POST,"/api/tournaments/").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/tournaments/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/tournaments/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/courts/").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/courts/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/courts/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasAnyRole("USERS")
-                        .requestMatchers(HttpMethod.PUT,"/api/users/**").hasAnyRole("USERS")
+                        .requestMatchers(HttpMethod.POST, "/api/matches").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/match/**").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/match/**").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/tournaments").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/tournament/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/tournament/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/courts").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/court/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/court/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/user/**").hasAnyRole("USERS")
+                        .requestMatchers(HttpMethod.PUT, "/api/user/**").hasAnyRole("USERS")
                         // PUBLIC ENDPOINTS
                         .requestMatchers("/api/**").permitAll()
-                );
-        http.formLogin(formLogin -> formLogin.disable());
-        http.csrf(csrf -> csrf.disable());
-        http.httpBasic(httpBasic -> httpBasic.disable());
-        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                )
+                .formLogin(formLogin -> formLogin.disable())
+                .csrf(csrf -> csrf.disable())
+                .httpBasic(httpBasic -> httpBasic.disable())
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
-
 
 }
