@@ -12,23 +12,23 @@ import java.util.*;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RestController
-@RequestMapping("api/matches")
+@RequestMapping("/api")
 public class MatchRestController {
 
     @Autowired
     private MatchService matchService;
 
-    @GetMapping("/")
+    @GetMapping("/matches")
     public Collection<MatchDTO> getMatches(){
         return matchService.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/match/{id}")
     public MatchDTO getMatch(@PathVariable long id){
         return matchService.findById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping("/match")
     public ResponseEntity<MatchDTO> createMatch(@RequestBody MatchDTO match){
         match = matchService.save(match);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(match.id()).toUri();
@@ -36,12 +36,12 @@ public class MatchRestController {
         return ResponseEntity.created(location).body(match);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/match/{id}")
     public MatchDTO deleteMatch(@PathVariable long id){
         return matchService.delete(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/match/{id}")
     public MatchDTO replaceMatch(@PathVariable long id, @RequestBody MatchDTO match){
         return matchService.modify(id, match);
     }

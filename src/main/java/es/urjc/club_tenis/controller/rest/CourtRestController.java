@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -27,12 +28,12 @@ public class CourtRestController {
     @Autowired
     private CourtMapper courtMapper;
 
-    @GetMapping("/courts/")
+    @GetMapping("/courts")
     public Collection<CourtDTO> getPageCourts(@RequestParam(defaultValue = "1") int page){
         return courtService.findAll(page).toList();
     }
 
-    @GetMapping("/courts/{id}")
+    @GetMapping("/court/{id}")
     public ResponseEntity<CourtDTO> getCourt(@PathVariable long id) {
         CourtDTO court = courtService.findById(id);
         if (court == null){
@@ -41,13 +42,15 @@ public class CourtRestController {
         return new ResponseEntity<>(court, HttpStatus.OK);
     }
 
-    @PostMapping("/courts/")
+    @PostMapping("/court")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public CourtDTO createCourt(Court court){
         return courtService.save(court);
     }
 
-    @PutMapping("/courts/{id}")
+    @PutMapping("/court/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CourtDTO> updateCourt(@PathVariable long id, Court court){
         CourtDTO saved = courtService.findById(id);
         if (saved == null){
@@ -58,7 +61,8 @@ public class CourtRestController {
         }
     }
 
-    @DeleteMapping("/courts/{id}")
+    @DeleteMapping("/court/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ResponseEntity<CourtDTO> deleteCourt(@PathVariable long id){
         courtService.delete(id);
