@@ -28,7 +28,7 @@ public class CourtRestController {
     private CourtMapper courtMapper;
 
     @GetMapping("/courts")
-    public Collection<CourtDTO> getPageCourts(@RequestParam(defaultValue = "0") int page){
+    public Collection<CourtDTO> getPageCourts(@RequestParam(defaultValue = "1") int page){
         return courtService.findAll(page).toList();
     }
 
