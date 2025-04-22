@@ -42,24 +42,26 @@ public class CourtRestController {
     }
 
     @PostMapping("/court")
-    public ResponseEntity<CourtDTO> createCourt(Court court){
-        CourtDTO savedCourt = courtService.save(court);
-        URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedCourt.id()).toUri();
-        return ResponseEntity.created(location).body(savedCourt);
+    @ResponseStatus(HttpStatus.CREATED)
+    public CourtDTO createCourt(Court court){
+        return courtService.save(court);
     }
 
     @PutMapping("/court/{id}")
-    public CourtDTO updateCourt(@PathVariable long id, Court court){
-        courtService.findById(id);
-        court.setId(id);
-        return courtService.update(court);
+    public ResponseEntity<CourtDTO> updateCourt(@PathVariable long id, Court court){
+        CourtDTO saved = courtService.findById(id);
+        if (saved == null){
+            return ResponseEntity.notFound().build();
+        }else{
+            court.setId(id);
+            return new ResponseEntity<>(courtService.update(court), HttpStatus.OK);
+        }
     }
 
     @DeleteMapping("/court/{id}")
     @Transactional
-    public CourtDTO deleteCourt(@PathVariable long id){
-        CourtDTO deletedCourt = courtService.findById(id);
-        courtService.delete(deletedCourt.id());
-        return deletedCourt;
+    public ResponseEntity<CourtDTO> deleteCourt(@PathVariable long id){
+        courtService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
