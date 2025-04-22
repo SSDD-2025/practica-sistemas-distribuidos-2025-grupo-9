@@ -7,6 +7,8 @@ import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.apache.commons.io.IOUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +39,10 @@ public class UserService {
 
     public List <User> findAll(){
         return repo.findAll();
+    }
+
+    public Page<User> findAll(int page){
+        return repo.findAll(PageRequest.of(page - 1, User.PAGE_SIZE));
     }
 
     @Transactional
@@ -118,5 +124,14 @@ public class UserService {
             matchService.deleteUser(match.getId(), user);
         }
         repo.delete(user);
+    }
+
+    public void updateProfilePicture(User user, MultipartFile profilePicture) throws IOException {
+            user.setProfilePicture(BlobProxy.generateProxy(
+                    profilePicture.getInputStream(),
+                    profilePicture.getSize()
+            ));
+            repo.save(user);
+
     }
 }

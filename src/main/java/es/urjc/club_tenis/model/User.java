@@ -12,6 +12,8 @@ import java.util.*;
 @Entity
 public class User {
 
+    public static final int PAGE_SIZE = 10;
+
     @Id
     @GeneratedValue
     private long id;
@@ -21,7 +23,7 @@ public class User {
     public String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles;
+    private List<String> roles = new ArrayList<>();
 
     @Lob
     private Blob profilePicture;
@@ -42,7 +44,6 @@ public class User {
         this.name = name;
         this.password = password;
         this.admin = false;
-        this.roles = new ArrayList<>();
         if(profilePicture!=null && !profilePicture.isEmpty()) {
             try {
                 this.profilePicture = (BlobProxy.generateProxy(profilePicture.getInputStream(),
@@ -154,4 +155,6 @@ public class User {
     public void addRole(String role) {
         this.roles.add(role);
     }
+
+    public void setRoles(List<String> roles) {this.roles = roles;}
 }

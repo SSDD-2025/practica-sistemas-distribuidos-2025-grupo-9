@@ -148,6 +148,7 @@ public class UserController {
         }
         String encodedPassword = passwordEncoder.encode(password);
         User newUser = userService.save(new User(username, name, encodedPassword, profilePicture));
+        newUser.addRole("USER");
 
         model.addAttribute("user", newUser.getId());
 

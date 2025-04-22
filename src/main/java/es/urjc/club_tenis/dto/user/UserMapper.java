@@ -1,5 +1,6 @@
 package es.urjc.club_tenis.dto.user;
 
+import es.urjc.club_tenis.model.Court;
 import es.urjc.club_tenis.model.User;
 import org.mapstruct.*;
 
@@ -11,6 +12,8 @@ public interface UserMapper {
     UserDTO toDTO(User user);
 
     UserBasicDTO toBasicDTO(User user);
+
+    List<UserBasicDTO> toBasicDTOs(Collection<User> users);
 
     List<UserBasicDTO> toDTOs(Collection<User> users);
 
