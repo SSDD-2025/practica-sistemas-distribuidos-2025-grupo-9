@@ -68,7 +68,7 @@ public class DatabasePopulator {
         }else{
             users.remove(deleted);
         }
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 15; i++){
             if(userService.findByUsername("user"+i) == null){
                 User newUser = new User("user"+i, "Usuario " + i, passwordEncoder.encode("user"+i), null);
                 users.add(userService.save(newUser));

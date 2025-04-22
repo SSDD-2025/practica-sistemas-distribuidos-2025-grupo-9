@@ -8,7 +8,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,7 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.*;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.savedrequest.NullRequestCache;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -55,46 +58,19 @@ public class SecurityConfiguration {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
-        http.authenticationProvider(authenticationProvider());
-        http
-                .securityMatcher("/api/**")
-                .exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        // PRIVATE ENDPOINTS
-                        .requestMatchers(HttpMethod.POST,"/api/match").hasAnyRole("USER")
-                        .requestMatchers(HttpMethod.PUT,"/api/match/**").hasAnyRole("USER")
-                        .requestMatchers(HttpMethod.DELETE,"/api/match/**").hasAnyRole("USER")
-                        .requestMatchers(HttpMethod.POST,"/api/tournament").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/tournament/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/tournament/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/court").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/court/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/court/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/user/**").hasAnyRole("USERS")
-                        .requestMatchers(HttpMethod.PUT,"/api/user/**").hasAnyRole("USERS")
-                        // PUBLIC ENDPOINTS
-                        .anyRequest().permitAll()
-                );
-        http.formLogin(formLogin -> formLogin.disable());
-        http.csrf(csrf -> csrf.disable());
-        http.httpBasic(httpBasic -> httpBasic.disable());
-        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
-
-
-    @Bean
-    @Order(2)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        RequestMatcher apiUrls = (antMatcher("/api/**"));
+
+        NegatedRequestMatcher nonApiUrls = new NegatedRequestMatcher(apiUrls);
+
         http
+                .securityMatcher(nonApiUrls)
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/signin", "/courts", "/profile/**", "/tournaments",
                                 "/tournament/**", "/matches", "/matches/**", "/profile-picture/**", "match/**",
-                                "/css/**", "/ball.svg","/favicon.ico", "/error/**",
+                                "/css/**", "/ball.svg","/favicon.ico", "/error/**","users/delete/**",
                                 "/style.css").permitAll()
                         .requestMatchers("/match/new", "/match/*/update", "/court/**"
                         ).hasAnyRole("USER")
@@ -110,21 +86,47 @@ public class SecurityConfiguration {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
                         .permitAll())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                        .invalidSessionUrl("/   ")
-                )
-                .requestCache(cache -> cache
-                        .requestCache(new NullRequestCache())
-                )
                 .exceptionHandling(ex -> ex
                         .accessDeniedPage("/error/accessDenied")
                 );
-        //http.csrf(csrf -> csrf.disable());
+
 
         return http.build();
     }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+        http.authenticationProvider(authenticationProvider());
+        http
+                .securityMatcher("/api/**")
+                .exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
+        http
+                .authorizeHttpRequests(authorize -> authorize
+                        // PRIVATE ENDPOINTS
+                        .requestMatchers(HttpMethod.POST,"api/matches/").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.PUT,"/api/matches/**").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.DELETE,"/api/matches/**").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.POST,"/api/tournaments/").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/tournaments/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/tournaments/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/courts/").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/courts/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/courts/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasAnyRole("USERS")
+                        .requestMatchers(HttpMethod.PUT,"/api/users/**").hasAnyRole("USERS")
+                        // PUBLIC ENDPOINTS
+                        .requestMatchers("/api/**").permitAll()
+                );
+        http.formLogin(formLogin -> formLogin.disable());
+        http.csrf(csrf -> csrf.disable());
+        http.httpBasic(httpBasic -> httpBasic.disable());
+        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+
+
 }
