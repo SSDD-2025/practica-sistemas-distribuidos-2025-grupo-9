@@ -11,6 +11,7 @@ import java.time.*;
 @Entity
 public class Tournament {
 
+    public static final int PAGE_SIZE = 5;
     @Id
     @GeneratedValue
     private long id;

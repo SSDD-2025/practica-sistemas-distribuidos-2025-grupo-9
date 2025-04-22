@@ -6,12 +6,13 @@ import es.urjc.club_tenis.dto.tournament.TournamentMapper;
 import es.urjc.club_tenis.model.TennisMatch;
 import es.urjc.club_tenis.model.Tournament;
 import es.urjc.club_tenis.model.User;
-import es.urjc.club_tenis.repositories.TournamentRespository;
+import es.urjc.club_tenis.repositories.TournamentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.*;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Logger;
 @Service
@@ -20,7 +21,7 @@ public class TournamentService {
     Logger logger = Logger.getLogger("es.urjc.club_tenis.controller");
 
     @Autowired
-    private TournamentRespository repo;
+    private TournamentRepository repo;
 
     @Autowired
     private MatchService matchService;
@@ -47,6 +48,10 @@ public class TournamentService {
 
     public List<TournamentDTO> findAll() {
         return tournamentMapper.toDTOs(repo.findAll());
+    }
+
+    public Page<TournamentDTO> findAll(int page){
+        return repo.findAll(PageRequest.of(page - 1, Tournament.PAGE_SIZE)).map(tournamentMapper::toDto);
     }
 
     @Transactional

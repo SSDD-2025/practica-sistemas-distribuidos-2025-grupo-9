@@ -1,5 +1,6 @@
 package es.urjc.club_tenis.controller.rest;
 
+import es.urjc.club_tenis.dto.court.CourtDTO;
 import es.urjc.club_tenis.dto.match.MatchDTO;
 import es.urjc.club_tenis.dto.tournament.TournamentDTO;
 import es.urjc.club_tenis.service.TournamentService;
@@ -20,9 +21,9 @@ public class TournamentRestController {
     @Autowired
     private TournamentService tournamentService;
 
-    @GetMapping("/tournaments/")
-    public Collection<TournamentDTO> getAllTournaments() {
-        return tournamentService.findAll();
+    @GetMapping("/tournaments")
+    public Collection<TournamentDTO> getTournamentCourts(@RequestParam(defaultValue = "1") int page){
+        return tournamentService.findAll(page).toList();
     }
 
     @GetMapping("/tournament/{id}")
