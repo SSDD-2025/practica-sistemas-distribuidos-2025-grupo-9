@@ -1,8 +1,11 @@
 package es.urjc.club_tenis.controller.web;
 
+import es.urjc.club_tenis.dto.user.UserBasicDTO;
 import es.urjc.club_tenis.dto.user.UserDTO;
 import es.urjc.club_tenis.dto.user.UserMapper;
+import es.urjc.club_tenis.model.Court;
 import es.urjc.club_tenis.model.TennisMatch;
+import es.urjc.club_tenis.model.Tournament;
 import es.urjc.club_tenis.model.User;
 import es.urjc.club_tenis.service.MatchService;
 import es.urjc.club_tenis.service.UserService;
@@ -10,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +24,8 @@ import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -179,24 +185,41 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String getUserList(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String getUserList(Model model, @AuthenticationPrincipal UserDetails userDetails, @RequestParam(defaultValue = "1") int page) {
 
-        User currentUser = null;
+        UserDTO currentUser = null;
+        String currentUsername = null;
         if(userDetails != null){
-            String currentUsername = userDetails.getUsername();
-            currentUser = userService.findByUsername(currentUsername);
+            currentUsername = userDetails.getUsername();
+            currentUser = userMapper.toDTO(userService.findByUsername(currentUsername));
         }
         model.addAttribute("user", currentUser);
 
-        if(currentUser==null || !currentUser.isAdmin()){
+        if(currentUser==null || !userService.findByUsername(currentUsername).isAdmin()){
             model.addAttribute("errorMessage", "Necesitas ser administrador para acceder a los Usuarios");
             return "error";
         }
 
-        List<User> users = userService.findAll();
-        User deleted = userService.findByUsername("deleted_user");
-        users.remove(deleted);
-        model.addAttribute("users",users);
+
+        Page<UserBasicDTO> users = userService.findAllDTO(page);
+        List<UserBasicDTO> usersList = users.getContent();
+        UserBasicDTO deleted = userMapper.toBasicDTO(userService.findByUsername("deleted_user"));
+        usersList.remove(deleted);
+        model.addAttribute("users",usersList);
+
+        long nUsers = usersList.size() - 1 ;
+        if (nUsers > 5) {
+            long nPages = nUsers % User.PAGE_SIZE == 0 ? nUsers / User.PAGE_SIZE : (nUsers / User.PAGE_SIZE) + 1;
+            ArrayList<Integer> pages = new ArrayList<>();
+            for (int i = 1; i <= nPages; i++) {
+                pages.add(i);
+            }
+            model.addAttribute("pages", pages);
+            if (nPages > page)
+                model.addAttribute("nextPage", page + 1);
+            if (page > 1)
+                model.addAttribute("previousPage", page - 1);
+        }
     
         return "users";
     }

@@ -30,4 +30,20 @@
         {{/users}}
         </tbody>
     </table>
+
+    <div class=" container shadow-none p-5 mt-5 mx-auto">
+        <nav>
+            <ul class="pagination justify-content-center">
+                {{#previousPage}}
+                <li class="page-item"><a class="page-link bg-btn white-text" href="?page={{previousPage}}">Anterior</a></li>
+                {{/previousPage}}
+                {{#pages}}
+                <li class="page-item"><a class="page-link bg-btn white-text" href="?page={{.}}">{{.}}</a></li>
+                {{/pages}}
+                {{#nextPage}}
+                <li class="page-item"><a class="page-link bg-btn white-text" href="?page={{nextPage}}">Siguiente</a></li>
+                {{/nextPage}}
+            </ul>
+        </nav>
+    </div>
 </div>

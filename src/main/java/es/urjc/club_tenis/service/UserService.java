@@ -1,5 +1,7 @@
 package es.urjc.club_tenis.service;
 
+import es.urjc.club_tenis.dto.user.UserBasicDTO;
+import es.urjc.club_tenis.dto.user.UserMapper;
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -27,6 +29,9 @@ public class UserService {
     private MatchService matchService;
 
     @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
     private TournamentService tournamentService;
 
     public User save(User user){
@@ -40,6 +45,11 @@ public class UserService {
     public List <User> findAll(){
         return repo.findAll();
     }
+
+    public Page<UserBasicDTO> findAllDTO(int page){
+        return repo.findAll(PageRequest.of(page - 1, User.PAGE_SIZE)).map(userMapper::toBasicDTO);
+    }
+
 
     public Page<User> findAll(int page){
         return repo.findAll(PageRequest.of(page - 1, User.PAGE_SIZE));

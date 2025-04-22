@@ -85,7 +85,7 @@ public class WebController {
 
         long nTournaments = tournaments.getTotalElements();
         if (nTournaments > 5) {
-            long nPages = nTournaments % Tournament.PAGE_SIZE == 0 ? nTournaments / Tournament.PAGE_SIZE : (nTournaments / Court.PAGE_SIZE) + 1;
+            long nPages = nTournaments % Tournament.PAGE_SIZE == 0 ? nTournaments / Tournament.PAGE_SIZE : (nTournaments / Tournament.PAGE_SIZE) + 1;
             ArrayList<Integer> pages = new ArrayList<>();
             for (int i = 1; i <= nPages; i++) {
                 pages.add(i);
