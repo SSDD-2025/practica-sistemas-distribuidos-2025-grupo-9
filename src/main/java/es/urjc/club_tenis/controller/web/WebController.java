@@ -68,8 +68,7 @@ public class WebController {
     }
 
     @GetMapping("/tournaments")
-    public String getTournaments(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        List<TournamentDTO> tournamentDTOs = tournamentService.findAll();
+    public String getTournaments(Model model, @AuthenticationPrincipal UserDetails userDetails, @RequestParam(defaultValue = "1") int page) {
         User currentUser = null;
         if(userDetails != null){
             String currentUsername = userDetails.getUsername();
@@ -79,8 +78,25 @@ public class WebController {
             model.addAttribute("showNew", true);
             model.addAttribute("showModify", true);
         }
-        model.addAttribute("tournaments", tournamentDTOs);
         model.addAttribute("user", currentUser);
+
+        Page<TournamentDTO> tournaments = tournamentService.findAll(page);
+        model.addAttribute("tournaments", tournaments);
+
+        long nTournaments = tournaments.getTotalElements();
+        if (nTournaments > 5) {
+            long nPages = nTournaments % Tournament.PAGE_SIZE == 0 ? nTournaments / Tournament.PAGE_SIZE : (nTournaments / Court.PAGE_SIZE) + 1;
+            ArrayList<Integer> pages = new ArrayList<>();
+            for (int i = 1; i <= nPages; i++) {
+                pages.add(i);
+            }
+            model.addAttribute("pages", pages);
+            if (nPages > page)
+                model.addAttribute("nextPage", page + 1);
+            if (page > 1)
+                model.addAttribute("previousPage", page - 1);
+        }
+
         return "tournaments";
     }
 

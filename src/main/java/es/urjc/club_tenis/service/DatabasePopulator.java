@@ -83,7 +83,7 @@ public class DatabasePopulator {
         }
 
         // Tournaments
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 10; i++) {
             if (tournamentService.findById(i + 1) == null) {
                 Tournament t = new Tournament("Tournament " + i, LocalDate.parse("2025-12-" + (12 + i)), LocalDate.parse("2025-12-" + (15 + i)), (int) (Math.random()*10));
                 TournamentDTO tournamentDTO = tournamentMapper.toDto(t);
