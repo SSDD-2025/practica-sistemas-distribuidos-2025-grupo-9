@@ -63,17 +63,17 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         // PRIVATE ENDPOINTS
-                        .requestMatchers(HttpMethod.POST,"api/matches/").hasAnyRole("USER")
-                        .requestMatchers(HttpMethod.PUT,"/api/matches/**").hasAnyRole("USER")
-                        .requestMatchers(HttpMethod.DELETE,"/api/matches/**").hasAnyRole("USER")
-                        .requestMatchers(HttpMethod.POST,"/api/tournaments/").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/tournaments/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/tournaments/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/api/courts/").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/api/courts/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/courts/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasAnyRole("USERS")
-                        .requestMatchers(HttpMethod.PUT,"/api/users/**").hasAnyRole("USERS")
+                        .requestMatchers(HttpMethod.POST,"/api/match").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.PUT,"/api/match/**").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.DELETE,"/api/match/**").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.POST,"/api/tournament").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/tournament/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/tournament/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/court").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/court/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/court/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/user/**").hasAnyRole("USERS")
+                        .requestMatchers(HttpMethod.PUT,"/api/user/**").hasAnyRole("USERS")
                         // PUBLIC ENDPOINTS
                         .anyRequest().permitAll()
                 );
