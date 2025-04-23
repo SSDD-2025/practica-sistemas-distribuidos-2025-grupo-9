@@ -118,7 +118,7 @@ docker run --rm -e MYSQL_ROOT_PASSWORD=admin  -e MYSQL_DATABASE=clubtenis -p 330
 ```shell
 mvn spring-boot:run
 ```
-5. Accede a la aplicación a traves de: http://localhost:8080
+5. Accede a la aplicación a traves de: https://localhost:8443
 ## Integrantes
 * RUBÉN BARGUEÑO PRIETO
   * E-mail: r.bargueno.2020@alumnos.urjc.es
