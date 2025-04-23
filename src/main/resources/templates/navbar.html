@@ -38,6 +38,7 @@
                 <button type="button" class="btn btn-outline-light me-2" onclick="window.location.href='/profile/{{username}}'">@{{username}}</button>
                 <form action="/logout" method="post" style="display: inline;">
                     <button type="submit" class="btn btn-warning">Salir</button>
+                    <input type="hidden" name="_csrf" value="{{token}}"/>
                 </form>
                 {{/user}}
                 {{^user}}

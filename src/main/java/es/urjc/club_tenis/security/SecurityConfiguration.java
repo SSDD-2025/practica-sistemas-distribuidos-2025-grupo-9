@@ -70,10 +70,9 @@ public class SecurityConfiguration {
 
         http
                 .securityMatcher(nonApiUrls)
-                .csrf().disable()
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/signin", "/courts", "/profile/**", "/tournaments", "/tournament/**", "/matches", "/match/**", "/profile-picture/**", "/css/**", "/ball.svg", "/favicon.ico", "/error/**", "/style.css")
+                        .requestMatchers("/login", "/", "/signin", "/courts", "/profile/**", "/tournaments", "/tournament/**", "/matches", "/match/**", "/profile-picture/**", "/css/**", "/ball.svg", "/favicon.ico", "/error/**", "/style.css")
                             .permitAll()
                         .requestMatchers("/match/new", "/match/*/update", "/court/**", "/match", "/users/delete/**")
                             .hasAnyRole("USER", "ADMIN")
@@ -84,7 +83,6 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/users/delete-confirmation/**")
                             .hasRole("ADMIN")
                 )
-
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .failureUrl("/login?error")
