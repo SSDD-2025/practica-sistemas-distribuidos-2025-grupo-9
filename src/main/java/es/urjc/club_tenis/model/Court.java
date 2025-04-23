@@ -32,7 +32,9 @@ public class Court {
         this.reservations = new HashMap<>();
     }
 
-    public Court(){}
+    public Court(){
+        this.reservations = new HashMap<>();
+    }
 
     public long getId() {
         return id;
