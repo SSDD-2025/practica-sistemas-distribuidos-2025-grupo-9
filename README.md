@@ -103,8 +103,10 @@ Esta página será la que veremos cuando vayamos a una página inexistente u otr
  ![Diagrama_Navegacion.jpg](Diagrama_Navegacion.jpg)
 ## Diagrama de entidades
 ![Diagrama_BD.png](Diagrama_BD.png)
-## Diagrama de Clases
+## Diagrama de Clases Fase I
 ![Diagrama_Clases.png](Diagrama_Clases.png)
+## Diagrama de Clases Fase II
+![Diagrama_UML_Fase2.png](Diagrama_UML_Fase2.png)
 ## Instrucciones de Ejecución
 1. Tener instalado Docker 
 2. Tener instalado Maven
