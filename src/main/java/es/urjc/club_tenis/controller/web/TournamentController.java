@@ -2,6 +2,7 @@ package es.urjc.club_tenis.controller.web;
 
 import es.urjc.club_tenis.dto.court.CourtMapper;
 import es.urjc.club_tenis.dto.match.MatchDTO;
+import es.urjc.club_tenis.dto.match.MatchMapper;
 import es.urjc.club_tenis.dto.tournament.TournamentDTO;
 import es.urjc.club_tenis.dto.user.UserMapper;
 import es.urjc.club_tenis.model.*;
@@ -11,6 +12,7 @@ import es.urjc.club_tenis.service.TournamentService;
 import es.urjc.club_tenis.service.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,6 +33,8 @@ public class TournamentController {
     @Autowired private CourtService courtService;
     @Autowired private MatchService matchService;
     @Autowired private UserService userService;
+    @Autowired private CourtMapper courtMapper;
+    @Autowired private MatchMapper matchMapper;
 
     @Autowired private UserMapper userMapper;
 
@@ -100,17 +104,16 @@ public class TournamentController {
 
         var currentUser = (userDetails != null) ? userService.findByUsername(userDetails.getUsername()) : null;
 
-        var newMatch = new MatchDTO(
-                null,
-                userMapper.toBasicDTO(currentUser),
-                (winner != null ? userMapper.toBasicDTO(winner) : null),
-                userMapper.toBasicDTO(local),
-                userMapper.toBasicDTO(visitor),
-                courtObj,
-                result
+        var newMatch = new TennisMatch(
+                currentUser,
+                (winner != null ? winner : null),
+                local,
+                visitor,
+                result,
+                courtMapper.toDomain(courtObj)
         );
 
-        var savedMatch = matchService.save(newMatch);
+        var savedMatch = matchService.save(matchMapper.toDTO(newMatch));
         logger.info(savedMatch.toString());
         tournamentService.addMatch(id, savedMatch);
 

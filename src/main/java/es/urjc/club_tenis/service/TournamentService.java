@@ -59,8 +59,8 @@ public class TournamentService {
         Tournament saved = repo.findById(id).orElseThrow();
         TennisMatch savedMatch = matchMapper.toDomain(matchService.findById(match.id()));
         saved.getMatches().add(savedMatch);
-        addParticipant(id, userService.findByUsername(savedMatch.getLocal().getUsername()));
-        addParticipant(id, userService.findByUsername(savedMatch.getVisitor().getUsername()));
+        addParticipant(id, savedMatch.getLocal());
+        addParticipant(id, savedMatch.getVisitor());
         repo.save(saved);
     }
 
