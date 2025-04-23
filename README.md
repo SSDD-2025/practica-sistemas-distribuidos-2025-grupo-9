@@ -207,9 +207,19 @@ mvn spring-boot:run
     * [LoginRestController](src/main/java/es/urjc/club_tenis/controller/rest/LoginRestController.java)
     * [RepositoryUserDetailsService](src/main/java/es/urjc/club_tenis/security/RepositoryUserDetailsService.java)
 * ARIEL CARNÉS BLASCO
-  * Tareas:
+  * Tareas: En esta fase mi papel más importante ha sido el de desarrollar toda la parte con relacion a la entidad TennisMatch. Tambien me he encargado de partes menores como la creacion del Diagrama de Clases y la documentación de la API Rest mediante OpenAPI.
   * Commits más Significativos:
+    * [Added Rest Mapping to Matches](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/c306a8a29683f95847393b2f19f39e49cae9d344)
+    * [Updated MatchRestController and MatchController to use DTO](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/a250268f0a477a0b626a792a70dddcce8d60d56a)
+    * [Add Match Pagination](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/13c36be066868dceda1f1450221cf194beec3bbd)
+    * [Match Fixes](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/9c02be55912b4a98f80c1801dec25b0c9f2a784f)
+    * [Complete Documentation](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/8f3035ba667075587821245c75b541a0e15348c7)
   * Ficheros en los que participa:
+    * [MatchRestController](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/controller/rest/MatchRestController.java)
+    * [MatchService](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/service/MatchService.java)
+    * [MatchController](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/controller/web/MatchController.java)
+    * [TournamentController](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/controller/web/TournamentController.java)
+    * [SecurityConfiguration](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/security/SecurityConfiguration.java)
 * HUGO FERNANDEZ SISQUELLA
   * Tareas: Mi participación en esta fase del proyecto ha sido la creación y desarrollo de código relacionado con la entidad Tournament.
   * Commits más Significativos:
