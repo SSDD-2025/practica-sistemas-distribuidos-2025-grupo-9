@@ -1,6 +1,5 @@
 package es.urjc.club_tenis.controller.rest;
 
-import es.urjc.club_tenis.dto.court.CourtBasicDTO;
 import es.urjc.club_tenis.dto.court.CourtDTO;
 import es.urjc.club_tenis.dto.court.CourtMapper;
 import es.urjc.club_tenis.model.Court;
@@ -12,11 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.Collection;
-import java.util.List;
-
-import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RestController
 @RequestMapping("/api")
