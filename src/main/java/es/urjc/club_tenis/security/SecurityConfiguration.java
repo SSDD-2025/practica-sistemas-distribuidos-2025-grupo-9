@@ -72,7 +72,7 @@ public class SecurityConfiguration {
                 .securityMatcher(nonApiUrls)
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login", "/", "/signin", "/courts", "/profile/**", "/tournaments", "/tournament/**", "/matches", "/match/**", "/profile-picture/**", "/css/**", "/ball.svg", "/favicon.ico", "/error/**", "/style.css")
+                        .requestMatchers("/login", "/", "/signin", "/courts", "/profile/**", "/tournaments", "/tournament/**", "/matches", "/match/**", "/profile-picture/**", "/css/**", "/ball.svg", "/favicon.ico", "/error/**", "/style.css", "/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**", "/webjars/**")
                             .permitAll()
                         .requestMatchers("/match/new", "/match/*/update", "/court/**", "/match", "/users/delete/**")
                             .hasAnyRole("USER", "ADMIN")
