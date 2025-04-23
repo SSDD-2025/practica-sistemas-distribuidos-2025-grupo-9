@@ -756,6 +756,40 @@
 					"response": []
 				},
 				{
+					"name": "Add tournament Match",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"owner\": {\r\n        \"id\": 1,\r\n        \"username\": \"admin\",\r\n        \"name\": \"Admin\"\r\n    },\r\n    \"local\": {\r\n        \"id\": 6,\r\n        \"username\": \"user3\",\r\n        \"name\": \"Usuario 3\"\r\n    },\r\n    \"visitor\": {\r\n        \"id\": 4,\r\n        \"username\": \"user1\",\r\n        \"name\": \"Usuario 1\"\r\n    },\r\n    \"court\":{\r\n        \"id\":2\r\n    },\r\n    \"result\": \"6-3, 6-1\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/api/tournament/1/addMatch",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"tournament",
+								"1",
+								"addMatch"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update tournament",
 					"request": {
 						"auth": {
