@@ -70,12 +70,13 @@ public class SecurityConfiguration {
 
         http
                 .securityMatcher(nonApiUrls)
+                .csrf().disable()
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/signin", "/courts", "/profile/**", "/tournaments", "/matches", "/profile-picture/**","/css/**", "/ball.svg", "/favicon.ico", "/error/**","/style.css")
                             .permitAll()
-                        .requestMatchers("/match/new", "/match/*/update", "/court/**")
-                            .hasAnyRole("USER")
+                        .requestMatchers("/match/new", "/match/*/update", "/court/**", "/match")
+                            .hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/users", "/users/delete/**", "/tournament/new", "/tournament/*/modify","/tournament/*/addMatch", "/court/*/modify", "/court/*/delete","/court/new")
                             .hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/users/delete-confirmation/**").hasRole("ADMIN")
