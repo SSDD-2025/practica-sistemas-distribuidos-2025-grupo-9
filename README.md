@@ -131,7 +131,7 @@ mvn spring-boot:run
   * E-mail: r.lopezb.2019@alumnos.urjc.es
   * GitHub: @rodriLB
 
-## Participación:
+## Participación Fase I:
 * RUBÉN BARGUEÑO PRIETO
   * Tareas: he participado en el diagrama de navegación, diagrama de la base de datos y en diversos puntos en las entidades, controladores, servicios y html.
   * Commits más Significativos:
@@ -188,3 +188,31 @@ mvn spring-boot:run
     * [TennisMatch.java](src%2Fmain%2Fjava%2Fes%2Furjc%2Fclub_tenis%2Fmodel%2FTennisMatch.java)
     * [MatchService.java](src%2Fmain%2Fjava%2Fes%2Furjc%2Fclub_tenis%2Fservice%2FMatchService.java)
     * [UserController.java](src%2Fmain%2Fjava%2Fes%2Furjc%2Fclub_tenis%2Fcontroller%2FUserController.java)
+
+## Participación Fase II:
+* RUBÉN BARGUEÑO PRIETO
+  * Tareas: 
+  * Commits más Significativos:
+  * Ficheros en los que participa:
+* ARIEL CARNÉS BLASCO
+  * Tareas:
+  * Commits más Significativos:
+  * Ficheros en los que participa:
+* HUGO FERNANDEZ SISQUELLA
+  * Tareas:
+  * Commits más Significativos:
+  * Ficheros en los que participa:
+* RODRIGO LÓPEZ BARCA
+  * Tareas: En esta fase del proyecto me he dedicado a la creacion del controlador REST para la api de la entidad Court, tambien he actualizado la entidad para el uso de DTOs. 
+  * Commits más Significativos:
+    * [Added Court Rest Controller](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/68e903c2ee341c829dbfff34affe3d7e405d008d)
+    * [Added Pagination and DTOs to Court Entity](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/ff02520c464c9ca4a5d0d399c0d1caf2dcb462d7)
+    * [Updated CourtRestController](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/b078103590d8a56389908ac7cc807a7ad5b3010b)
+    * [Fixed Some CourtDTO Bugs](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/3965e8c7abac98572b527bcfe18e88837ce640f8)
+    * [Fixed User pagination](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/3b8ac60a9ea691ce3f5d952e7455581e07c7e89d)
+  * Ficheros en los que participa:
+    * [CourtRestController](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/controller/rest/CourtRestController.java)
+    * [CourtService](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/service/CourtService.java)
+    * [CourtController](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/controller/web/CourtController.java)
+    * [SecurityConfiguration](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/security/SecurityConfiguration.java)
+    * [UserController](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/controller/web/UserController.java)
