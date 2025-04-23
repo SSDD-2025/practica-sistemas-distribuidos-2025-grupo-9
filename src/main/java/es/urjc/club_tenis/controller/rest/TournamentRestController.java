@@ -3,6 +3,7 @@ package es.urjc.club_tenis.controller.rest;
 import es.urjc.club_tenis.dto.court.CourtDTO;
 import es.urjc.club_tenis.dto.match.MatchDTO;
 import es.urjc.club_tenis.dto.tournament.TournamentDTO;
+import es.urjc.club_tenis.service.MatchService;
 import es.urjc.club_tenis.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,8 @@ public class TournamentRestController {
 
     @Autowired
     private TournamentService tournamentService;
+    @Autowired
+    private MatchService matchService;
 
     @Operation(summary = "Get all Tournaments")
     @ApiResponses(value = {
@@ -193,6 +196,7 @@ public class TournamentRestController {
     @PostMapping("/tournament/{id}/addMatch")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public void addMatch(@PathVariable long id, @RequestBody MatchDTO match) {
-        tournamentService.addMatch(id, match);
+        MatchDTO save = matchService.save(match);
+        tournamentService.addMatch(id,save);
     }
 }
