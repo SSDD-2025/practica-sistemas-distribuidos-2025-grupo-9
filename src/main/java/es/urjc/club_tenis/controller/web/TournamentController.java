@@ -32,11 +32,7 @@ public class TournamentController {
     @Autowired private MatchService matchService;
     @Autowired private UserService userService;
 
-    // TEMP (hasta que migréis completamente a DTOs para User/Court)
     @Autowired private UserMapper userMapper;
-    @Autowired private CourtMapper courtMapper;
-
-    @PersistenceContext private EntityManager entityManager;
 
     @GetMapping("/{id}")
     public String getTournament(Model model, @PathVariable long id, @AuthenticationPrincipal UserDetails userDetails) {

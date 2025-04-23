@@ -28,8 +28,6 @@ public class MatchController {
     //Temporal hasta que se use UserDTO y CourtDTO aquí
     @Autowired
     private UserMapper userMapper;
-    @Autowired
-    private CourtMapper courtMapper;
 
     @GetMapping("/{id}")
     public String getMatches(Model model, @PathVariable long id, @AuthenticationPrincipal UserDetails userDetails){
