@@ -193,9 +193,19 @@ mvn spring-boot:run
 
 ## Participación Fase II:
 * RUBÉN BARGUEÑO PRIETO
-  * Tareas: 
+  * Tareas: Implemetación de la seguridad y los endpoints de la API REST en los usuarios junto con actualizaciones en las entidades relacionadas con esto.
   * Commits más Significativos:
+    * [First implementation of HTTPS](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/df26af74e4b0d117e609244a22a5372785572dac)
+    * [Updated UserRestController and related classes with this update](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/437d9ceecfe7eab9286962887272755c125e8b75)
+    * [Update of security adding CSRF](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/e1601aa5b561169e841e8958607e021a8bb58956)
+    * [Update of security](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/d19d2c05130bc88f9f49ef94e3d718ba8e6e0034)
+    * [Update use of DTO in /users(doesn't work)](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/74773309b60a86c2cb907e474d398b751f538862)
   * Ficheros en los que participa:
+    * [UserRestController](src/main/java/es/urjc/club_tenis/controller/rest/UserRestController.java)
+    * [SecurityConfiguration](src/main/java/es/urjc/club_tenis/security/SecurityConfiguration.java)
+    * [UserController](src/main/java/es/urjc/club_tenis/controller/web/UserController.java)
+    * [LoginRestController](src/main/java/es/urjc/club_tenis/controller/rest/LoginRestController.java)
+    * [RepositoryUserDetailsService](src/main/java/es/urjc/club_tenis/security/RepositoryUserDetailsService.java)
 * ARIEL CARNÉS BLASCO
   * Tareas:
   * Commits más Significativos:
