@@ -133,6 +133,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void delete(String username) {
         User user = findByUsername(username);
         for(TennisMatch match : user.getPlayedMatches()){
@@ -148,5 +149,12 @@ public class UserService {
             ));
             repo.save(user);
 
+    }
+
+    @Transactional
+    public void removeMatch(String username, TennisMatch match){
+        User user = repo.findByUsername(username);
+        user.getPlayedMatches().remove(match);
+        repo.save(user);
     }
 }

@@ -133,7 +133,7 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
-        return id == user.id && Objects.equals(username, user.username);
+        return Objects.equals(username, user.username);
     }
 
     @Override

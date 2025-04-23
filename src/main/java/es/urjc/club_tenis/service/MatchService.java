@@ -5,6 +5,7 @@ import es.urjc.club_tenis.dto.match.*;
 import es.urjc.club_tenis.dto.tournament.TournamentDTO;
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.repositories.MatchRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
@@ -92,18 +93,23 @@ public class MatchService {
         return mapper.toDTO(updatedMatch);
     }
 
+    @Transactional
     public void deleteUser(long id, User user){
-        TennisMatch match = repo.findById(id).orElseThrow();
+        TennisMatch match = repo.findById(id).orElse(null);
+        if (match == null){
+            return;
+        }
+
         if(match.getLocal().equals(user)){
-            match.setLocal(User.DELETED_USER);
+            match.setLocal(userService.findByUsername("deleted_user"));
         }
 
         if(match.getVisitor().equals(user)){
-            match.setVisitor(User.DELETED_USER);
+            match.setVisitor(userService.findByUsername("deleted_user"));
         }
 
         if(match.getWinner().equals(user)){
-            match.setWinner(User.DELETED_USER);
+            match.setWinner(userService.findByUsername("deleted_user"));
         }
         repo.save(match);
     }

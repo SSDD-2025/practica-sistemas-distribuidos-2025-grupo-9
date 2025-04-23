@@ -61,6 +61,17 @@ public class DatabasePopulator {
             admin.addRole("ADMIN");
             userService.save(admin);
         }
+
+        User deleted = userService.findByUsername("deleted_user");
+
+        if(deleted == null){
+            deleted = new User("deleted_user","Deleted",passwordEncoder.encode("deleted"),null);
+            deleted.addRole("ADMIN");
+            userService.save(deleted);
+        }else{
+            users.remove(deleted);
+        }
+
         for(int i = 0; i < 15; i++){
             if(userService.findByUsername("user"+i) == null){
                 User newUser = new User("user"+i, "Usuario " + i, passwordEncoder.encode("user"+i), null);
@@ -95,7 +106,8 @@ public class DatabasePopulator {
                 User visitor = users.get((int) (Math.random() * users.size()));
                 User winner = Math.random() > 0.5? local: visitor;
                 TennisMatch match = new TennisMatch(admin, local, visitor, winner, "3-6, 6-4, 7-5", courtService.findAll().getFirst());
-                matchRepository.save(match);
+                TennisMatch save = matchRepository.save(match);
+                userService.addPlayedMatch(save);
             }
         }
     }

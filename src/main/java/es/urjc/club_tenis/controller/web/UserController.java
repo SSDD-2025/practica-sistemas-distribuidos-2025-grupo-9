@@ -11,6 +11,7 @@ import es.urjc.club_tenis.service.MatchService;
 import es.urjc.club_tenis.service.UserService;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
@@ -249,7 +250,7 @@ public class UserController {
     public String deleteUser(Model model, @PathVariable String username,
                              @AuthenticationPrincipal UserDetails userDetails,
                              HttpServletRequest request){
-        logger.info("Hemos llegdo a borrar metodo");
+        logger.info("Deleting User :" + username);
         String currentUsername = userDetails.getUsername();
         User currentUser = userService.findByUsername(currentUsername);
         User deleteUser = userService.findByUsername(username);
@@ -262,16 +263,14 @@ public class UserController {
 
         Set<TennisMatch> matches = userService.findByUsername(username).getPlayedMatches();
 
+        logger.warning("MEEEEEEEEEEEEEEEEEEEEEEEEE: MatchListSIZE: " + matches.size());
         for (TennisMatch match : matches) {
-            matchService.deleteUser(match.getId(), userService.findByUsername(username));
+            matchService.deleteUser(match.getId(), deleteUser);
+            //userService.removeMatch(username, match);
         }
 
         if (currentUser.equals(deleteUser)) {
-
-            userService.delete(username);
             request.getSession().invalidate();
-
-            return "redirect:/";
         }
 
         userService.delete(username);
