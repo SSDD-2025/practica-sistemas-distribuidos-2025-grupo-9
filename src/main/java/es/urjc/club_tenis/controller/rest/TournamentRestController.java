@@ -195,8 +195,9 @@ public class TournamentRestController {
     })
     @PostMapping("/tournament/{id}/addMatch")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public void addMatch(@PathVariable long id, @RequestBody MatchDTO match) {
+    public TournamentDTO addMatch(@PathVariable long id, @RequestBody MatchDTO match) {
         MatchDTO save = matchService.save(match);
         tournamentService.addMatch(id,save);
+        return tournamentService.findById(id);
     }
 }
