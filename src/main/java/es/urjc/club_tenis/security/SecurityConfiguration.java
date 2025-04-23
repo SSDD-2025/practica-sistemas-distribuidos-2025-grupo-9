@@ -75,7 +75,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/signin", "/courts", "/profile/**", "/tournaments", "/tournament/**", "/matches", "/match/**", "/profile-picture/**", "/css/**", "/ball.svg", "/favicon.ico", "/error/**", "/style.css")
                             .permitAll()
-                        .requestMatchers("/match/new", "/match/*/update", "/court/**", "/match")
+                        .requestMatchers("/match/new", "/match/*/update", "/court/**", "/match", "/users/delete/**")
                             .hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/match","/match/*/update","/match/**", "/match/*/delete")
                             .hasAnyRole("USER")
