@@ -194,7 +194,7 @@ public class MatchController {
             if(invalid){
                 model.addAttribute("match", match);
                 model.addAttribute("action", "");
-                model.addAttribute("actionName", "Crear ");
+                model.addAttribute("actionName", "Actualizar ");
                 model.addAttribute("courts", courtService.findAllDTOs());
                 return "match_form";
             }else {

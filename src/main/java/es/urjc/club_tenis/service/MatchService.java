@@ -65,22 +65,31 @@ public class MatchService {
         visitorUser.getPlayedMatches().remove(saved);
         userService.save(localUser);
         userService.save(visitorUser);
+
+        repo.flush();
         repo.deleteById(id);
         return mapper.toDTO(saved);
     }
 
     public MatchDTO modify(long id, MatchDTO updatedMatchDTO){
-        if(repo.existsById(id)){
-            TennisMatch updatedMatch = mapper.toDomain(updatedMatchDTO);
-            Court managedCourt = courtMapper.toDomain(courtService.findById(updatedMatchDTO.court().id()));
-            updatedMatch.setCourt(managedCourt);
+        TennisMatch saved = repo.findById(id).orElseThrow();
+        User localUser = userService.findByUsername(saved.getLocal().getUsername());
+        User visitorUser = userService.findByUsername(saved.getVisitor().getUsername());
+        localUser.getPlayedMatches().remove(saved);
+        visitorUser.getPlayedMatches().remove(saved);
+        userService.save(localUser);
+        userService.save(visitorUser);
 
-            updatedMatch.setId(id);
+        TennisMatch updatedMatch = mapper.toDomain(updatedMatchDTO);
+        Court managedCourt = courtMapper.toDomain(courtService.findById(updatedMatchDTO.court().id()));
+        updatedMatch.setCourt(managedCourt);
 
-            repo.save(updatedMatch);
-            return mapper.toDTO(updatedMatch);
-        }
-        else throw new NoSuchElementException();
+        updatedMatch.setId(id);
+
+        TennisMatch aux = repo.save(updatedMatch);
+
+        userService.addPlayedMatch(aux);
+        return mapper.toDTO(updatedMatch);
     }
 
     public void deleteUser(long id, User user){

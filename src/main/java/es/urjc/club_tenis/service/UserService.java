@@ -57,15 +57,20 @@ public class UserService {
 
     @Transactional
     public void addPlayedMatch(TennisMatch match){
-        addMatch(match.getLocal().getUsername(), match);
-        addMatch(match.getVisitor().getUsername(), match);
+        User local = match.getLocal();
+        User visitor = match.getVisitor();
+        if(local.getPlayedMatches() == null){
+            local.setPlayedMatches(new HashSet<>());
+        }
+        if(visitor.getPlayedMatches() == null){
+            visitor.setPlayedMatches(new HashSet<>());
+        }
+        if(!local.getPlayedMatches().contains(match)) addMatch(match.getLocal().getUsername(), match);
+        if(!visitor.getPlayedMatches().contains(match)) addMatch(match.getVisitor().getUsername(), match);
     }
 
     private void addMatch(String username, TennisMatch match){
         User savedUser = findByUsername(username);
-        if(savedUser.getPlayedMatches() == null){
-            savedUser.setPlayedMatches(new HashSet<>());
-        }
         savedUser.getPlayedMatches().add(match);
         save(savedUser);
     }

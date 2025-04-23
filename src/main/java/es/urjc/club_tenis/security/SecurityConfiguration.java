@@ -73,15 +73,18 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/signin", "/courts", "/profile/**", "/tournaments", "/matches","/match/**", "/profile-picture/**","/css/**", "/ball.svg", "/favicon.ico", "/error/**","/style.css")
+                        .requestMatchers("/", "/signin", "/courts", "/profile/**", "/tournaments", "/tournament/{id}", "/matches", "/match/{id}", "/profile-picture/**", "/css/**", "/ball.svg", "/favicon.ico", "/error/**", "/style.css")
                             .permitAll()
                         .requestMatchers("/match/new", "/match/*/update", "/court/**", "/match")
                             .hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/users", "/users/delete/**", "/tournament/new", "/tournament/*/modify","/tournament/*/addMatch", "/court/*/modify", "/court/*/delete","/court/new")
+                        .requestMatchers(HttpMethod.POST, "/match","/match/*/update","/match/**")
+                            .hasAnyRole("USER")
+                        .requestMatchers("/users", "/users/delete/**", "/tournament/new", "/tournament/*/modify", "/tournament/*/addMatch", "/court/*/modify", "/court/*/delete", "/court/new")
                             .hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/users/delete-confirmation/**").hasRole("ADMIN")
-                        //.anyRequest().permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/delete-confirmation/**")
+                            .hasRole("ADMIN")
                 )
+
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .failureUrl("/login?error")
