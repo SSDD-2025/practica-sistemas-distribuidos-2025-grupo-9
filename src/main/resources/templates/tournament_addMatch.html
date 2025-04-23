@@ -2,6 +2,8 @@
 
 <main class="w-25 m-auto my-5">
   <form action="/tournament/{{id}}/{{action}}" method="post">
+    <input type="hidden" name="_csrf" value="{{token}}"/>
+
     <h1 class="h3 mb-3 fw-normal">{{actionName}} Partido</h1>
 
     {{#tournament}}

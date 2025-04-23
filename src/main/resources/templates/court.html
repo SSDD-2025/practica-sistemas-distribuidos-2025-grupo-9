@@ -2,6 +2,7 @@
 <main class="w-25 m-auto my-5">
     {{#court}}
     <form action="/court/{{id}}/book" method="post">
+        <input type="hidden" name="_csrf" value="{{token}}"/>
         <h1 class="h3 mb-3 fw-normal">{{name}}</h1>
         <h2 class="h4 mb-3 fw-normal">{{price}}</h2>
 

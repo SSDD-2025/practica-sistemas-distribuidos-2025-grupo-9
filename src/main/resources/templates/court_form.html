@@ -1,6 +1,7 @@
 {{>navbar}}
 <main class="w-25 m-auto my-5">
     <form action="/court/{{action}}" method="post">
+        <input type="hidden" name="_csrf" value="{{token}}"/>
         <h1 class="h3 mb-3 fw-normal">{{actionName}} Pista</h1>
         <div class="form-floating my-2">
             <input required type="text" class="form-control" id="name" name="name" placeholder="Nombre" {{#court}}value="{{name}}"{{/court}}>

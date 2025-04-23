@@ -1,6 +1,8 @@
 {{>navbar}}
 <main class="form-signin w-25 m-auto my-5">
     <form action="{{action}}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_csrf" value="{{token}}"/>
+
         <h1 class="h3 mb-3 fw-normal">{{actionName}} Usuario</h1>
         <div class="form-floating my-2">
             <input required type="text" class="form-control {{#invalid}}is-invalid{{/invalid}}" id="username" name="username" placeholder="Username" {{#user}}value="{{username}}"{{/user}}>
