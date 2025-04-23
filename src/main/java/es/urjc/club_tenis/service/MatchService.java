@@ -2,10 +2,13 @@ package es.urjc.club_tenis.service;
 
 import es.urjc.club_tenis.dto.court.CourtMapper;
 import es.urjc.club_tenis.dto.match.*;
+import es.urjc.club_tenis.dto.tournament.TournamentDTO;
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.repositories.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
@@ -19,9 +22,6 @@ public class MatchService {
     private MatchMapper mapper;
 
     @Autowired
-    private TournamentService tournamentService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -31,6 +31,10 @@ public class MatchService {
     private CourtMapper courtMapper;
 
     public Collection<MatchDTO> findAll() { return mapper.toDTOs(repo.findAll());}
+
+    public Page<MatchDTO> findAll(int page){
+        return repo.findAll(PageRequest.of(page - 1, TennisMatch.PAGE_SIZE)).map(mapper::toDTO);
+    }
 
     public MatchDTO findById(long id) {
         return mapper.toDTO(repo.findById(id).orElseThrow());

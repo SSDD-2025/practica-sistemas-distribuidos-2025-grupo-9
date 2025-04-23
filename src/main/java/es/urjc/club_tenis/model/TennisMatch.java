@@ -7,6 +7,8 @@ import java.util.Objects;
 @Entity
 public class TennisMatch {
 
+    public static final int PAGE_SIZE = 10;
+
     @Id
     @GeneratedValue
     private long id;

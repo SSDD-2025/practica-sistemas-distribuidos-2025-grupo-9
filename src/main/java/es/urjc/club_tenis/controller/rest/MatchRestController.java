@@ -20,8 +20,8 @@ public class MatchRestController {
     private MatchService matchService;
 
     @GetMapping("/matches")
-    public Collection<MatchDTO> getMatches(){
-        return matchService.findAll();
+    public Collection<MatchDTO> getMatches(@RequestParam(defaultValue = "1") int page){
+        return matchService.findAll(page).toList();
     }
 
     @GetMapping("/match/{id}")

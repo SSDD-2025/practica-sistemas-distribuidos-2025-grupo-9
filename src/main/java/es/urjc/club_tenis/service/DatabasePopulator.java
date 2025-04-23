@@ -64,6 +64,7 @@ public class DatabasePopulator {
         for(int i = 0; i < 15; i++){
             if(userService.findByUsername("user"+i) == null){
                 User newUser = new User("user"+i, "Usuario " + i, passwordEncoder.encode("user"+i), null);
+                newUser.addRole("USER");
                 users.add(userService.save(newUser));
             }
         }
@@ -89,7 +90,7 @@ public class DatabasePopulator {
 
         //Matches
         if(matchRepository.findAll().isEmpty()) {
-            for(int i = 0; i < 10; i++){
+            for(int i = 0; i < 15; i++){
                 User local = users.get((int) (Math.random() * users.size()));
                 User visitor = users.get((int) (Math.random() * users.size()));
                 User winner = Math.random() > 0.5? local: visitor;

@@ -3,6 +3,7 @@ package es.urjc.club_tenis.controller.web;
 import es.urjc.club_tenis.dto.court.CourtBasicDTO;
 import es.urjc.club_tenis.dto.court.CourtDTO;
 import es.urjc.club_tenis.dto.court.CourtMapper;
+import es.urjc.club_tenis.dto.match.MatchDTO;
 import es.urjc.club_tenis.dto.tournament.TournamentDTO;
 import es.urjc.club_tenis.model.*;
 import es.urjc.club_tenis.service.*;
@@ -29,8 +30,6 @@ public class WebController {
     private MatchService matchService;
     @Autowired
     private CourtService courtService;
-    @Autowired
-    private CourtMapper courtMapper;
 
     @GetMapping("/")
     public String homePage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
@@ -54,16 +53,29 @@ public class WebController {
     }
 
     @GetMapping("/matches")
-    public String getMatches(Model model, @AuthenticationPrincipal UserDetails userDetails){
-        model.addAttribute("matches", matchService.findAll());
+    public String getMatches(Model model, @AuthenticationPrincipal UserDetails userDetails, @RequestParam(defaultValue = "1") int page){
+        User currentUser = null;
         if(userDetails!=null){
             String currentUsername = userDetails.getUsername();
-            User currentUser = userService.findByUsername(currentUsername);
-            model.addAttribute("user", currentUser);
-        }else{
-            model.addAttribute("user", null);
+            currentUser = userService.findByUsername(currentUsername);
         }
+        model.addAttribute("user", currentUser);
 
+        Page<MatchDTO> matches = matchService.findAll(page);
+        model.addAttribute("matches",matches);
+
+        long nMatches = matches.getTotalElements();
+        if(nMatches>10){
+            long nPages = nMatches % TennisMatch.PAGE_SIZE == 0 ? nMatches / TennisMatch.PAGE_SIZE : (nMatches / TennisMatch.PAGE_SIZE) + 1;
+            ArrayList<Integer> pages = new ArrayList<>();
+            for(int i=1; i<=nPages; i++) pages.add(i);
+
+            model.addAttribute("pages",pages);
+            if (nPages > page)
+                model.addAttribute("nextPage", page + 1);
+            if (page > 1)
+                model.addAttribute("previousPage", page - 1);
+        }
         return "matches";
     }
 
