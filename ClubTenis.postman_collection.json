@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "2a36ad8b-7c75-4aac-a606-dcbaa92dab70",
+		"_postman_id": "f87f3689-8d77-4f93-af68-1cda0279beb9",
 		"name": "ClubTenis",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "32812957"
+		"_exporter_id": "44219534",
+		"_collection_link": "https://galactic-star-4993584.postman.co/workspace/Ariel-Carn%C3%A9s's-Workspace~08d053db-9359-4dca-8944-eb6ac1b25d7e/collection/44219534-f87f3689-8d77-4f93-af68-1cda0279beb9?action=share&source=collection_link&creator=44219534"
 	},
 	"item": [
 		{
@@ -161,6 +162,164 @@
 								"api",
 								"court",
 								"20"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Matches",
+			"item": [
+				{
+					"name": "Request Matches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/api/matches",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"matches"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request Matches page 2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/api/matches?page=2",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"matches"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Match 9",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/api/match/9",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"match",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Match",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"owner\": {\r\n        \"id\": 1,\r\n        \"username\": \"admin\"\r\n    },\r\n    \"local\": {\r\n        \"id\": 6,\r\n        \"username\": \"user3\"\r\n    },\r\n    \"visitor\": {\r\n        \"id\": 4,\r\n        \"username\": \"user1\"\r\n    },\r\n    \"court\":{\r\n        \"id\":2\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/api/match",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"match"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modify Match",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"owner\": {\r\n        \"id\": 1,\r\n        \"username\": \"admin\"\r\n    },\r\n    \"winner\": {\r\n        \"id\": 4,\r\n        \"username\": \"user1\"\r\n    },\r\n    \"local\": {\r\n        \"id\": 6,\r\n        \"username\": \"user3\"\r\n    },\r\n    \"visitor\": {\r\n        \"id\": 4,\r\n        \"username\": \"user1\"\r\n    },\r\n    \"court\":{\r\n        \"id\":2\r\n    },\r\n    \"result\": \"6-3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/api/match/16",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"match",
+								"16"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Match",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/api/match/11",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"api",
+								"match",
+								"11"
 							]
 						}
 					},
