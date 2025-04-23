@@ -73,7 +73,7 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/signin", "/courts", "/profile/**", "/tournaments", "/tournament/{id}", "/matches", "/match/{id}", "/profile-picture/**", "/css/**", "/ball.svg", "/favicon.ico", "/error/**", "/style.css")
+                        .requestMatchers("/", "/signin", "/courts", "/profile/**", "/tournaments", "/tournament/{id}", "/matches", "/match/{id}", "/profile-picture/**", "/css/**", "/ball.svg", "/favicon.ico", "/error/**", "/style.css", "/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**", "/webjars/**")
                             .permitAll()
                         .requestMatchers("/match/new", "/match/*/update", "/court/**", "/match")
                             .hasAnyRole("USER", "ADMIN")
