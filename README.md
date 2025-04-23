@@ -199,9 +199,18 @@ mvn spring-boot:run
   * Commits más Significativos:
   * Ficheros en los que participa:
 * HUGO FERNANDEZ SISQUELLA
-  * Tareas:
+  * Tareas: Mi participación en esta fase del proyecto ha sido la creación y desarrollo de código relacionado con la entidad Tournament.
   * Commits más Significativos:
+    * [Added TournamentRestController and updated related files to use DTOs](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/c58a045eb6b04cd82884482d9a573af6f147dc5c)
+    * [Update endpoints TournamentRestController](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/e76d2e08354f5732af1940f97e69ed38c090fc5a)
+    * [Some modifications for Tournament pagination](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/82c80329b03ffac3351c05e214c7b2f6bd80dc90)
+    * [Added postman collection for tournaments](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/commit/99b0fd8b41c6e4180dc97607b871ec38a52792c8)
   * Ficheros en los que participa:
+    * [TournamentRestController](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/controller/rest/TournamentRestController.java)
+    * [TournamentService](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/service/TournamentService.java)
+    * [TournamentController](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/controller/web/TournamentController.java)
+    * [WebController](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/controller/web/WebController.java)
+    * [DatabasePopulator](https://github.com/SSDD-2025/practica-sistemas-distribuidos-2025-grupo-9/blob/main/src/main/java/es/urjc/club_tenis/service/DatabasePopulator.java)
 * RODRIGO LÓPEZ BARCA
   * Tareas: En esta fase del proyecto me he dedicado a la creacion del controlador REST para la api de la entidad Court, tambien he actualizado la entidad para el uso de DTOs. 
   * Commits más Significativos:
