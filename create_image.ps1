@@ -1,0 +1,1 @@
+docker build -t rodrilb/clubtenis:1.0.0 .
