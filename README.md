@@ -123,23 +123,23 @@ mvn spring-boot:run
 ## Docker 
 Para crear la imamgen Docker se puede hacer de varias formas:
 1. Ejecutando un comando maven para construir la imagen desde la consola:
-  ````shell
-  mvn spring-boot:build-image -Dspring-boot.build-image.imageName=rodrilb/clubtenis:1.0.0
-  ````
+   ````shell
+   mvn spring-boot:build-image -Dspring-boot.build-image.imageName=rodrilb/clubtenis:1.0.0
+   ````
 2. Con el DockerFile proporcionado:
-  ````shell
-  docker build -t rodrilb/clubtenis:1.0.0 .
-  ````
+   ````shell
+   docker build -t rodrilb/clubtenis:1.0.0 .
+   ````
 Para ejecutar la aplicacion con docker se puede hacer de varias formas:
 1. Con la imagen publicada en DockerHub bajo el nombre: rodrilb/clubtenis
    1. Ejecutando una base de datos en local con:
-    ```shell
-    docker run --rm -e MYSQL_ROOT_PASSWORD=admin  -e MYSQL_DATABASE=clubtenis -p 3306:3306 -d mysql:9.2
-    ```
+      ```shell
+      docker run --rm -e MYSQL_ROOT_PASSWORD=admin  -e MYSQL_DATABASE=clubtenis -p 3306:3306 -d mysql:9.2
+      ```
    2. Ejecutando luego la aplicación:
-    ````shell
-   docker run rodrilb/clubtenis:1.0.0
-    ````
+      ````shell
+      docker run rodrilb/clubtenis:1.0.0
+      ````
 2. Con el docker compose:
    1. Con el docker compose de producción, este usa una imagen de DockerHub:
       ````shell
