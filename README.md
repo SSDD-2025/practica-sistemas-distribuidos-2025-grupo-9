@@ -119,6 +119,12 @@ docker run --rm -e MYSQL_ROOT_PASSWORD=admin  -e MYSQL_DATABASE=clubtenis -p 330
 mvn spring-boot:run
 ```
 5. Accede a la aplicación a traves de: https://localhost:8443
+
+## Instrucciones de Ejecución de la aplicación dockerizada
+## Documentación para construcción de la imagen docker
+## Documentación para desplegar en las máquinas virtuales
+## URL de la aplicación desplegada en la maquina virtual
+
 ## Integrantes
 * RUBÉN BARGUEÑO PRIETO
   * E-mail: r.bargueno.2020@alumnos.urjc.es
