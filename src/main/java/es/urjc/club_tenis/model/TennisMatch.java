@@ -7,7 +7,7 @@ import java.util.Objects;
 @Entity
 public class TennisMatch {
 
-    public static final int PAGE_SIZE = 10;
+    public static final int PAGE_SIZE = 5;
 
     @Id
     @GeneratedValue

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>es.urjc</groupId>
 	<artifactId>practica-sistemas-distribuidos-2025-grupo-9</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>practica-sistemas-distribuidos-2025-grupo-9</name>
 	<description>Project for Spring Boot</description>
 	<url/>
