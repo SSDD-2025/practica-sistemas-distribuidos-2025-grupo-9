@@ -119,6 +119,41 @@ docker run --rm -e MYSQL_ROOT_PASSWORD=admin  -e MYSQL_DATABASE=clubtenis -p 330
 mvn spring-boot:run
 ```
 5. Accede a la aplicación a traves de: https://localhost:8443
+
+## Docker 
+Para crear la imamgen Docker se puede hacer de varias formas:
+1. Ejecutando un comando maven para construir la imagen desde la consola:
+  ````shell
+  mvn spring-boot:build-image -Dspring-boot.build-image.imageName=rodrilb/clubtenis:1.0.0
+  ````
+2. Con el DockerFile proporcionado:
+  ````shell
+  docker build -t rodrilb/clubtenis:1.0.0 .
+  ````
+Para ejecutar la aplicacion con docker se puede hacer de varias formas:
+1. Con la imagen publicada en DockerHub bajo el nombre: rodrilb/clubtenis
+   1. Ejecutando una base de datos en local con:
+    ```shell
+    docker run --rm -e MYSQL_ROOT_PASSWORD=admin  -e MYSQL_DATABASE=clubtenis -p 3306:3306 -d mysql:9.2
+    ```
+   2. Ejecutando luego la aplicación:
+    ````shell
+   docker run rodrilb/clubtenis:1.0.0
+    ````
+2. Con el docker compose:
+   1. Con el docker compose de producción, este usa una imagen de DockerHub:
+      ````shell
+      docker compose -f docker-compose.prod.yaml up
+      ````
+   2. Con el docker compose local, este construye una imagen desde los archivos locales:
+      ````shell
+      docker compose -f docker-compose.local.yaml up
+      ```` 
+## Despliegue en las maquinas virtuales
+
+
+### URL de la aplicación desplegada:
+
 ## Integrantes
 * RUBÉN BARGUEÑO PRIETO
   * E-mail: r.bargueno.2020@alumnos.urjc.es
