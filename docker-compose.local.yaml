@@ -1,6 +1,6 @@
 services:
   web:
-    build: .
+    build: docker
     ports:
       - 8443:8443
     environment:
