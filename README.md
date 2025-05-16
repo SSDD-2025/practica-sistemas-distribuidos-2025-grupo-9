@@ -150,9 +150,18 @@ Para ejecutar la aplicacion con docker se puede hacer de varias formas:
       docker compose -f docker-compose.local.yaml up
       ```` 
 ## Despliegue en las maquinas virtuales
+Para desplegar la aplicación en remoto:
+1. Primero hay que conectarse a las maquinas virtauales mediante ssh
+2. Una vez conectados desde la maquina virtual sidi09-2 ejecutamos la bbdd:
+   ````shell
+   docker run --rm -e MYSQL_ROOT_PASSWORD=admin  -e MYSQL_DATABASE=clubtenis -p 3306:3306 -d mysql:9.2
+   ````
+3. Una vez desplegada la bbdd desde sidi09-1 ejecutamos la aplicación:
+   ````shell
+   docker run -e SPRING_DATASOURCE_URL=jdbc:mysql://{{sidi09-2-IP}}/clubtenis
+   ````
 
-
-### URL de la aplicación desplegada:
+### [URL de la aplicación desplegada](https://sidi09-1.sidi.etsii.urjc.es:8443)
 
 ## Integrantes
 * RUBÉN BARGUEÑO PRIETO
