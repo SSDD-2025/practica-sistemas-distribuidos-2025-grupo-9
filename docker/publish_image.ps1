@@ -1,0 +1,1 @@
+docker push rodrilb/clubtenis:1.0.0

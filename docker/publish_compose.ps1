@@ -1,0 +1,1 @@
+docker compose -f docker-compose.prod.yaml publish rodrilb/clubtenis-compose:1.0.0 --with-env
