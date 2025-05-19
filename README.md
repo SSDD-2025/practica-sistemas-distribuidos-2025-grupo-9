@@ -158,7 +158,11 @@ Para desplegar la aplicación en remoto:
    ````
 3. Una vez desplegada la bbdd desde sidi09-1 ejecutamos la aplicación:
    ````shell
-   docker run -e SPRING_DATASOURCE_URL=jdbc:mysql://{{sidi09-2-IP}}/clubtenis
+   docker run -p 8443:8443 \
+  -e SPRING_DATASOURCE_URL=jdbc:mysql://192.168.110.194:3306/clubtenis \
+  -e SPRING_DATASOURCE_USERNAME=root \
+  -e SPRING_DATASOURCE_PASSWORD=admin \
+  rodrilb/clubtenis:1.0.0
    ````
 
 ### [URL de la aplicación desplegada](https://sidi09-1.sidi.etsii.urjc.es:8443)
