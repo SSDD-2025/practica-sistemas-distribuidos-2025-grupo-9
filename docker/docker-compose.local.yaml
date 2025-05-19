@@ -1,6 +1,8 @@
 services:
   web:
-    build: docker
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     ports:
       - 8443:8443
     environment:
