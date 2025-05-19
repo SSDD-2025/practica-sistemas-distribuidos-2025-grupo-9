@@ -121,7 +121,7 @@ mvn spring-boot:run
 5. Accede a la aplicación a traves de: https://localhost:8443
 
 ## Docker 
-Para crear la imamgen Docker se puede hacer de varias formas:
+Para crear la imagen Docker se puede hacer de varias formas:
 1. Ejecutando un comando maven para construir la imagen desde la consola:
    ````shell
    mvn spring-boot:build-image -Dspring-boot.build-image.imageName=rodrilb/clubtenis:1.0.0
@@ -151,7 +151,7 @@ Para ejecutar la aplicacion con docker se puede hacer de varias formas:
       ```` 
 ## Despliegue en las maquinas virtuales
 Para desplegar la aplicación en remoto:
-1. Primero hay que conectarse a las maquinas virtauales mediante ssh
+1. Primero hay que conectarse a las maquinas virtuales mediante ssh
 2. Una vez conectados desde la maquina virtual sidi09-2 ejecutamos la bbdd:
    ````shell
    docker run --rm -e MYSQL_ROOT_PASSWORD=admin  -e MYSQL_DATABASE=clubtenis -p 3306:3306 -d mysql:9.2
