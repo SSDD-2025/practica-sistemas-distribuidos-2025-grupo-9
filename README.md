@@ -138,7 +138,7 @@ Para ejecutar la aplicacion con docker se puede hacer de varias formas:
       ```
    2. Ejecutando luego la aplicación:
       ````shell
-      docker run rodrilb/clubtenis:1.0.0
+      docker run -p 8443:8443 rodrilb/clubtenis:1.0.0
       ````
 2. Con el docker compose:
    1. Con el docker compose de producción, este usa una imagen de DockerHub:
