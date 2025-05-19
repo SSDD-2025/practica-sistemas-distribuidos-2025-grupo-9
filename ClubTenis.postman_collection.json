@@ -16,12 +16,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/courts?page=1",
+							"raw": "https://{{host_ip}}/api/courts?page=1",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"courts"
@@ -45,12 +44,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/court/1",
+							"raw": "https://{{host_ip}}/api/court/1",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"court",
@@ -69,12 +67,11 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/court?name=PruebaAPI&price=5&start=8:00&end=20:00",
+							"raw": "https://{{host_ip}}/api/court?name=PruebaAPI&price=5&start=8:00&end=20:00",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"court"
@@ -110,12 +107,11 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/court/1?name=Prueba Update&price=5&start=8:00&end=22:00",
+							"raw": "https://{{host_ip}}/api/court/1?name=Prueba Update&price=5&start=8:00&end=22:00",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"court",
@@ -152,12 +148,11 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/court/20",
+							"raw": "https://{{host_ip}}/api/court/20",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"court",
@@ -178,12 +173,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/matches",
+							"raw": "https://{{host_ip}}/api/matches",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"matches"
@@ -198,12 +192,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/matches?page=2",
+							"raw": "https://{{host_ip}}/api/matches?page=2",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"matches"
@@ -224,12 +217,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/match/9",
+							"raw": "https://{{host_ip}}/api/match/9",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"match",
@@ -260,12 +252,11 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:8443/api/match",
+							"raw": "https://l{{host_ip}}/api/match",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"l{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"match"
@@ -289,12 +280,11 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:8443/api/match/16",
+							"raw": "https://{{host_ip}}/api/match/16",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"match",
@@ -310,12 +300,11 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/match/11",
+							"raw": "https://{{host_ip}}/api/match/11",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"match",
@@ -331,7 +320,7 @@
 			"name": "Users",
 			"item": [
 				{
-					"name": "Get Users Copy",
+					"name": "Get Users",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -339,12 +328,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/users",
+							"raw": "https://{{host_ip}}/api/users",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"users"
@@ -354,7 +342,7 @@
 					"response": []
 				},
 				{
-					"name": "Get User Copy",
+					"name": "Get User(7)",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -362,23 +350,22 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/user/user3",
+							"raw": "https://{{host_ip}}/api/user/user7",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"user",
-								"user3"
+								"user7"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Create User Copy",
+					"name": "Create User",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -395,12 +382,11 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:8443/api/user",
+							"raw": "https://{{host_ip}}/api/user",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"user"
@@ -410,7 +396,7 @@
 					"response": []
 				},
 				{
-					"name": "Update User Copy",
+					"name": "Update User",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -430,12 +416,11 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:8443/api/user/user0",
+							"raw": "https://{{host_ip}}/api/user/user0",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"user",
@@ -446,7 +431,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete User(prueba) Copy",
+					"name": "Delete User(prueba)",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -454,12 +439,11 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/user/prueba",
+							"raw": "https://{{host_ip}}/api/user/prueba",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"user",
@@ -470,7 +454,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete User(user1) Copy",
+					"name": "Delete User(user1)",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -478,12 +462,11 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/user/user1",
+							"raw": "https://{{host_ip}}/api/user/user1",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"user",
@@ -494,7 +477,7 @@
 					"response": []
 				},
 				{
-					"name": "Login User(user1) Copy",
+					"name": "Login User(user1)",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -511,12 +494,11 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:8443/api/auth/login",
+							"raw": "https://{{host_ip}}/api/auth/login",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"auth",
@@ -527,7 +509,7 @@
 					"response": []
 				},
 				{
-					"name": "Login User(user2) Copy",
+					"name": "Login User(user2)",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -544,12 +526,11 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:8443/api/auth/login",
+							"raw": "https://{{host_ip}}/api/auth/login",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"auth",
@@ -560,7 +541,7 @@
 					"response": []
 				},
 				{
-					"name": "Get ProfilePicture Copy",
+					"name": "Get ProfilePicture",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -568,12 +549,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/user/user2/profile-picture",
+							"raw": "https://{{host_ip}}/api/user/user2/profile-picture",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"user",
@@ -585,7 +565,7 @@
 					"response": []
 				},
 				{
-					"name": "UpdateProfilePicture Copy",
+					"name": "UpdateProfilePicture",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -603,12 +583,11 @@
 							]
 						},
 						"url": {
-							"raw": "https://localhost:8443/api/user/user2/profile-picture",
+							"raw": "https://{{host_ip}}/api/user/user2/profile-picture",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"user",
@@ -620,7 +599,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Users Page 2 Copy",
+					"name": "Get Users Page 2",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -628,12 +607,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/users?page=2",
+							"raw": "https://{{host_ip}}/api/users?page=2",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"users"
@@ -659,16 +637,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/tournaments/",
+							"raw": "https://{{host_ip}}/api/tournaments",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
-								"tournaments",
-								""
+								"tournaments"
 							]
 						}
 					},
@@ -683,12 +659,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/tournament/1",
+							"raw": "https://{{host_ip}}/api/tournament/1",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"tournament",
@@ -707,12 +682,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/tournament/2",
+							"raw": "https://{{host_ip}}/api/tournament/2",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"tournament",
@@ -740,12 +714,11 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:8443/api/tournament/1",
+							"raw": "https://{{host_ip}}/api/tournament/1",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"tournament",
@@ -765,7 +738,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"owner\": {\r\n        \"id\": 1,\r\n        \"username\": \"admin\",\r\n        \"name\": \"Admin\"\r\n    },\r\n    \"local\": {\r\n        \"id\": 6,\r\n        \"username\": \"user3\",\r\n        \"name\": \"Usuario 3\"\r\n    },\r\n    \"visitor\": {\r\n        \"id\": 4,\r\n        \"username\": \"user1\",\r\n        \"name\": \"Usuario 1\"\r\n    },\r\n    \"court\":{\r\n        \"id\":2\r\n    },\r\n    \"result\": \"6-3, 6-1\"\r\n}\r\n",
+							"raw": "{\r\n    \"owner\": {\r\n        \"id\": 1,\r\n        \"username\": \"admin\",\r\n        \"name\": \"Admin\"\r\n    },\r\n    \"local\": {\r\n        \"id\": 6,\r\n        \"username\": \"user3\",\r\n        \"name\": \"Usuario 3\"\r\n    },\r\n    \"visitor\": {\r\n        \"id\": 7,\r\n        \"username\": \"user4\",\r\n        \"name\": \"Usuario 4\"\r\n    },\r\n    \"court\":{\r\n        \"id\":2\r\n    },\r\n    \"result\": \"6-3, 6-1\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -773,12 +746,11 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:8443/api/tournament/1/addMatch",
+							"raw": "https://{{host_ip}}/api/tournament/1/addMatch",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"tournament",
@@ -807,12 +779,11 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:8443/api/tournament/1",
+							"raw": "https://{{host_ip}}/api/tournament/1",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"tournament",
@@ -840,12 +811,11 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:8443/api/auth/login",
+							"raw": "https://{{host_ip}}/api/auth/login",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"auth",
@@ -864,12 +834,11 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:8443/api/tournament/11",
+							"raw": "https://{{host_ip}}/api/tournament/11",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{host_ip}}"
 							],
-							"port": "8443",
 							"path": [
 								"api",
 								"tournament",
@@ -899,12 +868,11 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:8443/api/auth/login",
+					"raw": "https://{{host_ip}}/api/auth/login",
 					"protocol": "https",
 					"host": [
-						"localhost"
+						"{{host_ip}}"
 					],
-					"port": "8443",
 					"path": [
 						"api",
 						"auth",
@@ -932,12 +900,11 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:8443/api/auth/logout",
+					"raw": "https://{{host_ip}}/api/auth/logout",
 					"protocol": "https",
 					"host": [
-						"localhost"
+						"{{host_ip}}"
 					],
-					"port": "8443",
 					"path": [
 						"api",
 						"auth",
@@ -946,6 +913,41 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host_ip",
+			"value": "sidi09-1.sidi.etsii.urjc.es:8443",
+			"type": "string"
+		},
+		{
+			"key": "host_ip",
+			"value": "localhost:8443",
+			"type": "string",
+			"disabled": true
 		}
 	]
 }
