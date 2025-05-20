@@ -124,7 +124,7 @@ mvn spring-boot:run
 Para crear la imagen Docker se puede hacer de varias formas:
 1. Ejecutando un comando maven para construir la imagen desde la consola:
    ````shell
-   mvn spring-boot:build-image -Dspring-boot.build-image.imageName=rodrilb/clubtenis:1.0.0
+   mvn spring-boot:build-image "-Dspring-boot.build-image.imageName=rodrilb/clubtenis:1.0.0"
    ````
 2. Con el DockerFile proporcionado:
    ````shell
